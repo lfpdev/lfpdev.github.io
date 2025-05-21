@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="企业内部应用企业微信提供了通讯录管理、客户联系、身份验证、应用管理、消息推送、素材管理、OA、效率工具、企业支付、企业互联、会话内容存档、电子发票、家校沟通、家校应用、政民沟通等API，企业可以使用这些API，为企业接入更多个性化的办公应用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="企微自建应用-考勤">
+<meta property="og:url" content="http://example.com/p/851fe353eea0/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="企业内部应用企业微信提供了通讯录管理、客户联系、身份验证、应用管理、消息推送、素材管理、OA、效率工具、企业支付、企业互联、会话内容存档、电子发票、家校沟通、家校应用、政民沟通等API，企业可以使用这些API，为企业接入更多个性化的办公应用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202312270951830.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202312270957989.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202312271002127.png">
+<meta property="article:published_time" content="2023-12-24T14:44:48.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.769Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202312270951830.png">
+
+<link rel="canonical" href="http://example.com/p/851fe353eea0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>企微自建应用-考勤 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/851fe353eea0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          企微自建应用-考勤
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-12-24 22:44:48" itemprop="dateCreated datePublished" datetime="2023-12-24T22:44:48+08:00">2023-12-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/OA/" itemprop="url" rel="index"><span itemprop="name">OA</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="企业内部应用"><a href="#企业内部应用" class="headerlink" title="企业内部应用"></a><a target="_blank" rel="noopener" href="https://developer.work.weixin.qq.com/document/path/90556">企业内部应用</a></h2><p>企业微信提供了通讯录管理、客户联系、身份验证、应用管理、消息推送、素材管理、OA、效率工具、企业支付、企业互联、会话内容存档、电子发票、家校沟通、家校应用、政民沟通等API，企业可以使用这些API，为企业接入更多个性化的办公应用</p>
+<span id="more"></span>
+
+<h3 id="身份验证"><a href="#身份验证" class="headerlink" title="身份验证"></a>身份验证</h3><h4 id="网页授权登录"><a href="#网页授权登录" class="headerlink" title="网页授权登录"></a>网页授权登录</h4><h5 id="OAuth的授权登录方式"><a href="#OAuth的授权登录方式" class="headerlink" title="OAuth的授权登录方式"></a>OAuth的授权登录方式</h5><p>从企业微信终端打开的网页可获取成员的身份信息，从而免去登录的环节</p>
+<p>企业应用中的URL链接（包括自定义菜单或者消息中的链接），均可通过OAuth2.0验证接口来获取成员的UserId身份信息</p>
+<h5 id="OAuth2"><a href="#OAuth2" class="headerlink" title="OAuth2"></a>OAuth2</h5><p>允许用户在不告知第三方自己的账号密码情况下，通过授权方式，让第三方服务可以获取自己的资源信息。<a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc6749">RFC 6749</a></p>
+<h6 id="Authorization-Code模式"><a href="#Authorization-Code模式" class="headerlink" title="Authorization Code模式"></a>Authorization Code模式</h6><p>流程如下</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202312270951830.png"></p>
+<p>包含四个角色</p>
+<ul>
+<li>ResourceOwner为资源所有者，即为用户</li>
+<li>User-Agent为浏览器</li>
+<li>AuthorizationServer为认证服务器，可以理解为用户资源托管方，比如企业微信服务端</li>
+<li>Client为第三方服务，比如企业自建应用</li>
+</ul>
+<p>调用流程为：</p>
+<ul>
+<li><p>A) 用户访问第三方服务，第三方服务通过<strong>构造</strong>OAuth2链接（参数包括当前第三方服务的身份ID，以及重定向URI），将用户引导到认证服务器的授权页</p>
+<blockquote>
+<p>用户访问企业的自建应用时，设置的入口链接如果是 授权链接，则可以引导到企微认证服务器授权页</p>
+</blockquote>
+</li>
+<li><p>B) 用户选择是否同意授权</p>
+<blockquote>
+<p>若选择默认方式，可以不弹出授权页面，直接重定向到 redirection_uri</p>
+</blockquote>
+</li>
+<li><p>C) 若用户同意授权，则认证服务器将用户<strong>重定向</strong>到第一步指定的重定向URI，同时附上一个<strong>授权码</strong>。</p>
+<blockquote>
+<p>如果可信域名和授权链接 redirection_uri 写的本机，会访问到本地，可以看到 code</p>
+</blockquote>
+</li>
+<li><p>D) 第三方服务收到授权码，带上授权码来源的重定向URI，向认证服务器<strong>申请凭证</strong>。</p>
+<blockquote>
+<p>获取的 access_token 可以关联到重定向URI</p>
+</blockquote>
+</li>
+<li><p>E) 认证服务器检查授权码和重定向URI的有效性，通过后颁发AccessToken（调用凭证）</p>
+</li>
+</ul>
+<blockquote>
+<p>D)与E)的调用为后台调用，不通过浏览器进行</p>
+</blockquote>
+<h5 id="企微OAuth2流程图"><a href="#企微OAuth2流程图" class="headerlink" title="企微OAuth2流程图"></a>企微OAuth2流程图</h5><p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202312270957989.png"></p>
+<h6 id="网页授权的可信域名"><a href="#网页授权的可信域名" class="headerlink" title="网页授权的可信域名"></a>网页授权的可信域名</h6><ul>
+<li><p>REDIRECT_URL中的域名，需要先配置为应用的“可信域名”，否则跳转时会提示“redirect_uri参数错误”</p>
+</li>
+<li><p><strong>配置的可信域名，必须与访问链接的域名完全一致；若访问链接URL带了端口号，端口号也需要登记到可信域名中</strong></p>
+<blockquote>
+<p>假定重定向访问的链接是：<a target="_blank" rel="noopener" href="http://mail.qq.com:8080/cgi-bin/helloworld">http://mail.qq.com:8080/cgi-bin/helloworld</a></p>
+<p>则可信域名需要配置为 mail.qq.com:8080</p>
+</blockquote>
+</li>
+</ul>
+<h6 id="静默授权与手动授权"><a href="#静默授权与手动授权" class="headerlink" title="静默授权与手动授权"></a>静默授权与手动授权</h6><ul>
+<li><p>静默授权：用户点击链接后，页面直接302跳转至 redirect_uri?code&#x3D;CODE&amp;state&#x3D;STATE</p>
+</li>
+<li><p>手动授权：用户点击链接后，会弹出一个中间页，让用户选择是否授权，用户确认授权后再302跳转至 redirect_uri?code&#x3D;CODE&amp;state&#x3D;STATE</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202312271002127.png"></p>
+</li>
+</ul>
+<h6 id="个人敏感信息授权管理"><a href="#个人敏感信息授权管理" class="headerlink" title="个人敏感信息授权管理"></a>个人敏感信息授权管理</h6><ul>
+<li>用户首次进入oauth2页面进行手动授权后，30天内再次进入应用页面不会再弹出授权页，默认授权用户当前授权的敏感信息。若30天内用户需要修改个人敏感信息授权，可进入应用详情页的“个人敏感信息授权管理”页面，重新更改个人敏感信息授权</li>
+</ul>
+<h6 id="缓存方案建议"><a href="#缓存方案建议" class="headerlink" title="缓存方案建议"></a>缓存方案建议</h6><p>通过OAuth2.0验证接口获取成员身份会有一定的时间开销。对于频繁获取成员身份的场景，建议采用如下方案：</p>
+<ol>
+<li><p>企业应用中的URL链接直接填写企业自己的页面地址</p>
+<blockquote>
+<p>即授权链接的url <a target="_blank" rel="noopener" href="http://open.weixin.qq.com/connect/oauth2/authorize">http://open.weixin.qq.com/connect/oauth2/authorize</a>? 填写自己的页面地址，自己判断是否去企微重新获取</p>
+</blockquote>
+</li>
+<li><p>成员操作跳转到步骤1的企业页面时，企业后台校验是否有标识成员身份的cookie信息，此cookie由企业生成</p>
+</li>
+<li><p>如果没有匹配的cookie，则重定向到OAuth验证链接，获取成员的身份信息后，由企业后台植入标识成员身份的cookie信息</p>
+</li>
+<li><p>根据cookie获取成员身份后，再进入相应的页面</p>
+</li>
+</ol>
+<h3 id="服务端API业务流程"><a href="#服务端API业务流程" class="headerlink" title="服务端API业务流程"></a>服务端API业务流程</h3><h4 id="获取-access-token"><a href="#获取-access-token" class="headerlink" title="获取 access_token"></a>获取 access_token</h4><p>调用企微API接口的第一步，需要通过 access_token 来鉴权调用者身份</p>
+<ul>
+<li><p>不同的业务API可能需要不同来源的 access_token，需要明确 access_token 的来源</p>
+</li>
+<li><p>每个应用有独立的secret，获取到的access_token只能本应用使用，进行缓存时需要区分应用来进行存储</p>
+<blockquote>
+<p>access_token至少保留512字节的存储空间。</p>
+</blockquote>
+</li>
+<li><p>不能频繁调用gettoken接口，否则会受到频率拦截。当access_token失效或过期时，需要重新获取。</p>
+</li>
+<li><p>access_token的有效期通过返回的expires_in来传达，正常情况下为7200秒（2小时），有效期内重复获取返回相同结果，过期后获取会返回新的access_token。</p>
+<p>企业微信可能会出于运营需要，提前使access_token失效，开发者应实现access_token失效时重新获取的逻辑</p>
+</li>
+<li><p>不能将 access_token 返回给前端，需要保存在后台，所有访问企业微信api的请求由后台发起</p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="title function_">getOrRefreshToken</span>(<span class="params">params: &#123;</span></span><br><span class="line"><span class="params">  refresh: boolean,</span></span><br><span class="line"><span class="params">&#125;</span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; refresh &#125; = params;</span><br><span class="line">  <span class="keyword">if</span> (refresh) &#123; <span class="comment">// 判断请求返回的code，如果是token失效，则强制刷新</span></span><br><span class="line">    <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="title function_">getToken</span>()</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">_accessToken</span>) &#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="title function_">getToken</span>()</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">_accessToken</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">private <span class="keyword">async</span> <span class="title function_">getToken</span>(<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> ret = <span class="keyword">await</span> httpClient.<span class="title function_">get</span>(<span class="string">&#x27;https://qyapi.weixin.qq.com/cgi-bin/gettoken&#x27;</span>, &#123;</span><br><span class="line">    <span class="attr">params</span>: &#123;</span><br><span class="line">      <span class="attr">corpid</span>: <span class="variable language_">this</span>.<span class="property">corpId</span>,</span><br><span class="line">      <span class="attr">corpsecret</span>: <span class="variable language_">this</span>.<span class="property">corpSecret</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (ret[<span class="string">&#x27;errcode&#x27;</span>] === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_accessToken</span> = ret[<span class="string">&#x27;access_token&#x27;</span>]</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;accessToken = &#x27;</span>, <span class="variable language_">this</span>.<span class="property">_accessToken</span>)</span><br><span class="line">    <span class="comment">// this._expiresIn = this.getSecond() + ret[&#x27;expires_in&#x27;] - this.refreshTokenTimeInMins * 60 // second</span></span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="title class_">Error</span>(<span class="string">`access token 获取失败，<span class="subst">$&#123;ret[<span class="string">&#x27;errmsg&#x27;</span>]&#125;</span>`</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="同步组织架构"><a href="#同步组织架构" class="headerlink" title="同步组织架构"></a>同步组织架构</h4><ul>
+<li><p>后端程序启动时需要先通过 access_token 获取一遍组织架构信息</p>
+</li>
+<li><p>企业自建应用 不受 通讯录管理的 安全机制限制</p>
+</li>
+<li><p>只有<strong>通讯录同步助手</strong>（一种应用类型）才受安全机制限制</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://developer.work.weixin.qq.com/community/article/detail?content_id=16502625007577453547">成员ID列表 api forbidden 48002 问题</a></p>
+</blockquote>
+</li>
+</ul>
+<h5 id="获取子部门ID列表"><a href="#获取子部门ID列表" class="headerlink" title="获取子部门ID列表"></a><a target="_blank" rel="noopener" href="https://developer.work.weixin.qq.com/document/path/95350">获取子部门ID列表</a></h5><p>不填部门id，获取全量组织架构</p>
+<h5 id="获取部门成员详情"><a href="#获取部门成员详情" class="headerlink" title="获取部门成员详情"></a><a target="_blank" rel="noopener" href="https://developer.work.weixin.qq.com/document/path/90200">获取部门成员详情</a></h5><ul>
+<li>根据获取的部门ID获取该部门的成员信息</li>
+<li>只能获取应用配置的<strong>可见范围</strong>内的成员信息</li>
+<li>不递归获取子部门的成员</li>
+</ul>
+<p>判断是不是当前部门的leader</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">userInfo[<span class="string">&#x27;is_leader_in_dept&#x27;</span>][userInfo[<span class="string">&#x27;department&#x27;</span>].<span class="title function_">findIndex</span>(<span class="function">(<span class="params">e</span>) =&gt;</span> e === depId)] === <span class="number">1</span> ? <span class="string">&#x27;true&#x27;</span> : <span class="string">&#x27;false&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="本地保存"><a href="#本地保存" class="headerlink" title="本地保存"></a>本地保存</h5><p>将组织架构信息保存到本地</p>
+<h4 id="获取访问用户身份"><a href="#获取访问用户身份" class="headerlink" title="获取访问用户身份"></a>获取访问用户身份</h4><ul>
+<li><p>根据 code 获取成员信息</p>
+<p>code 通过<a target="_blank" rel="noopener" href="https://developer.work.weixin.qq.com/document/path/91022">构造网页授权链接</a>获取</p>
+</li>
+</ul>
+<p>参数</p>
+<ul>
+<li><p>code</p>
+<p>通过成员授权获取到的code，最大为512字节。每次成员授权带上的code将不一样，code只能使用一次，5分钟未被使用自动过期</p>
+</li>
+</ul>
+<p>业务逻辑</p>
+<ul>
+<li><p>获取到用户 userid 后，通过同步到本地的组织架构信息，查询该 userid 的信息，例如自己配置的用户角色等</p>
+</li>
+<li><p>返回 token，作为前端后续调用自己后端服务的凭证</p>
+<blockquote>
+<p>将获取到的 userid 信息，作为返回 token 的 payload，包括 userid，role等</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="成员管理"><a href="#成员管理" class="headerlink" title="成员管理"></a>成员管理</h4><h5 id="读取成员"><a href="#读取成员" class="headerlink" title="读取成员"></a>读取成员</h5><blockquote>
+<p>没有入职及离职时间，可在创建成员时通过新增扩展字段-入职时间来设置</p>
+</blockquote>
+<h4 id="消息推送"><a href="#消息推送" class="headerlink" title="消息推送"></a>消息推送</h4><h5 id="发送应用消息"><a href="#发送应用消息" class="headerlink" title="发送应用消息"></a>发送应用消息</h5><p>打卡、审批等操作，在自己的后端处理完业务逻辑之后，可以向企微用户发送通知消息</p>
+<h6 id="文本消息"><a href="#文本消息" class="headerlink" title="文本消息"></a>文本消息</h6><h6 id="文本卡片消息"><a href="#文本卡片消息" class="headerlink" title="文本卡片消息"></a>文本卡片消息</h6><h6 id="按钮交互型"><a href="#按钮交互型" class="headerlink" title="按钮交互型"></a>按钮交互型</h6><ul>
+<li><p>需要提前配置回调地址</p>
+<blockquote>
+<p>如果报错 <a target="_blank" rel="noopener" href="https://developer.work.weixin.qq.com/community/question/detail?content_id=16438786334007475075">43012</a>，则需要配置</p>
+<p>注意 nginx转发路由也要拼接</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="企业管理后台配置"><a href="#企业管理后台配置" class="headerlink" title="企业管理后台配置"></a>企业管理后台配置</h3><h4 id="通讯录secret"><a href="#通讯录secret" class="headerlink" title="通讯录secret"></a>通讯录secret</h4><p>在 安全与管理-&gt; 管理工具 -&gt; 通讯录同步-&gt; </p>
+<ol>
+<li><p>开启接口同步</p>
+</li>
+<li><p>查看 secret</p>
+</li>
+<li><p>配置可信IP</p>
+<blockquote>
+<p>后端的外网ip地址</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="应用管理"><a href="#应用管理" class="headerlink" title="应用管理"></a>应用管理</h4><h4 id="自建应用"><a href="#自建应用" class="headerlink" title="自建应用"></a>自建应用</h4><p>创建应用后可以看到 AgentId、Secret</p>
+<blockquote>
+<p>这个 secret 是应用的secret，获取 access_token</p>
+</blockquote>
+<h5 id="可见范围"><a href="#可见范围" class="headerlink" title="可见范围"></a>可见范围</h5><ul>
+<li>用来添加组织架构</li>
+</ul>
+<blockquote>
+<p>通过 access_token 同步该组织架构中的成员</p>
+</blockquote>
+<h5 id="应用主页"><a href="#应用主页" class="headerlink" title="应用主页"></a>应用主页</h5><ul>
+<li><p>设置从工作台点击进入的网页</p>
+<blockquote>
+<p>如果要获取 code，则需要构建一个 网页授权链接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http://open.weixin.qq.com/connect/oauth2/authorize?</span><br><span class="line">appid=ww970b9d959208f458&amp;</span><br><span class="line">redirect_uri=https://www.dawei.cn:12345&amp;</span><br><span class="line">response_type=code&amp;</span><br><span class="line">scope=snsapi_base&amp;</span><br><span class="line">state=%7B%22school_id%22%3A%22school_qiwei%22%7D#wechat_redirect</span><br></pre></td></tr></table></figure>
+
+<p>其中 redirect_uri（IP+Port）需要配置为可信域名</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="接收消息"><a href="#接收消息" class="headerlink" title="接收消息"></a>接收消息</h5><ul>
+<li><p>如果要发送应用消息中的模板卡片消息，则需要配置一个回调地址</p>
+<ul>
+<li><p>url 配置为后端入口</p>
+</li>
+<li><p>token、EncodingAESKey 自动生成，用于校验收到的信息</p>
+<blockquote>
+<p>node 用腾讯的 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/@wecom/crypto">@wecom&#x2F;crypto</a> </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; getSignature, decrypt &#125; <span class="keyword">from</span> <span class="string">&#x27;@wecom/crypto&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="title function_">handleGetCallback</span>(<span class="params">query: GetCallbackDto</span>) &#123;</span><br><span class="line"><span class="keyword">const</span> &#123; msg_signature, timestamp, nonce, echostr &#125; = query;</span><br><span class="line"><span class="keyword">const</span> sign = <span class="title function_">getSignature</span>(<span class="title class_">Conf</span>.<span class="property">qiwei</span>.<span class="property">callbackToken</span>, timestamp, nonce, echostr)</span><br><span class="line"><span class="keyword">if</span> (sign !== msg_signature) &#123;</span><br><span class="line"><span class="keyword">throw</span> <span class="title class_">Error</span>(<span class="string">&#x27;illegal msg&#x27;</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> &#123; message &#125; = <span class="title function_">decrypt</span>(<span class="title class_">Conf</span>.<span class="property">qiwei</span>.<span class="property">callbackEncoding</span>, echostr)</span><br><span class="line"><span class="keyword">return</span> message.<span class="title function_">trim</span>()</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 注意如果框架有统一的返回格式，返回结果需要特殊处理，只能返回解密后的message字符串</span></span><br></pre></td></tr></table></figure>
+
+<p>如果出现 <a target="_blank" rel="noopener" href="https://developer.work.weixin.qq.com/community/question/detail?content_id=16491236268921406225">openapi 回调地址不通过</a>，可通过工具 <a target="_blank" rel="noopener" href="https://developer.work.weixin.qq.com/resource/devtool">建立连接-&gt;测试回调模式</a> 来查看返回的结果是不是正确的</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="企业可信IP"><a href="#企业可信IP" class="headerlink" title="企业可信IP"></a>企业可信IP</h5><ul>
+<li><p>需要把后端服务的外网IP加入</p>
+<blockquote>
+<p>如果不知道外网ip，直接调用接口，报错信息会给出当前网络的外网ip</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="网页授权及JS-SDK"><a href="#网页授权及JS-SDK" class="headerlink" title="网页授权及JS-SDK"></a>网页授权及JS-SDK</h5><h6 id="可信域名"><a href="#可信域名" class="headerlink" title="可信域名"></a>可信域名</h6><p>需要配置为OAuth2.0网页授权功能的回调域名</p>
+<blockquote>
+<p>不能包含协议头，不支持IP地址及短链域名</p>
+</blockquote>
+<ul>
+<li><p>配置完需要验证，下载一个文件，放到根目录</p>
+<blockquote>
+<p>如果后端有http服务，例如 nest，可以将文件放在服务器的静态目录<code>public</code>下，这样企微可以通过配置的可信域名访问到本地的文件，就可以验证通过</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  配置静态资源</span></span><br><span class="line">app.<span class="title function_">useStaticAssets</span>(<span class="title function_">join</span>(__dirname, <span class="string">&#x27;../public&#x27;</span>), &#123;</span><br><span class="line"> <span class="attr">prefix</span>: <span class="string">&#x27;/&#x27;</span>,</span><br><span class="line"> <span class="attr">setHeaders</span>: <span class="function"><span class="params">res</span> =&gt;</span> &#123;</span><br><span class="line">   res.<span class="title function_">set</span>(<span class="string">&#x27;Cache-Control&#x27;</span>, <span class="string">&#x27;max-age=2592000&#x27;</span>)</span><br><span class="line"> &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></blockquote>
+</li>
+</ul>
+<h4 id="后端自己测试"><a href="#后端自己测试" class="headerlink" title="后端自己测试"></a>后端自己测试</h4><ol>
+<li><p>将可信域名配置为后端的地址 <a href="http://www.dawei.cn:12345，将验证文件放在项目的静态目录下，完成验证。">www.dawei.cn:12345，将验证文件放在项目的静态目录下，完成验证。</a></p>
+<blockquote>
+<p>这里需要 https监听的端口</p>
+</blockquote>
+</li>
+<li><p>授权链接中的 redict_url 设为后端地址 <a target="_blank" rel="noopener" href="http://www.dawei.cn:12345/">www.dawei.cn:12345</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://open.weixin.qq.com/connect/oauth2/authorize?appid=ww970b9d95920458&redirect_uri=https://www.dawei.cn:12345&response_type=code&scope=snsapi_base&state=%7B%22school_id%22:%22school_qiwei%22%7D#wechat_redirect">http://open.weixin.qq.com/connect/oauth2/authorize?appid=ww970b9d95920458&amp;redirect_uri=https://www.dawei.cn:12345&amp;response_type=code&amp;scope=snsapi_base&amp;state=%7B%22school_id%22%3A%22school_qiwei%22%7D#wechat_redirect</a></p>
+</blockquote>
+</li>
+<li><p>在企微客户端的用户窗口，发送<code>网页授权链接</code>，点击链接，企微就会访问到后端，拿到带有 code 的信息，再用code去 <a target="_blank" rel="noopener" href="https://developer.work.weixin.qq.com/document/path/91023">获取访问用户身份</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">::ffff:172.18.228.110 &quot;GET /?code=_k2rDYZzyNMvcdxxOsEEBOoDFmMjpPIljQEVD13Q&amp;state=%7B%22school_id%22%3A%22school_qiwei%22%7D&quot; undefined Mozilla/5.0 (iPhone; CPU iPhone OS 16_7_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko)  Mobile/15E148 wxwork/4.1.20 MicroMessenger/7.0.1 Language/zh ColorScheme/Light undefined</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>生产环境，前端在进入应用的时候会携带code</p>
+<p><a target="_blank" rel="noopener" href="https://dawei.net:12345/?code=QjK-z8Cczypi1m8cWtB_JjO06-yjfv2HitxubUw&state=%7B%22school_id%22:%22school_qiwei%22%7D">https://dawei.net:12345/?code=QjK-z8Cczypi1m8cWtB_JjO06-yjfv2HitxubUw&amp;state=%7B%22school_id%22%3A%22school_qiwei%22%7D</a></p>
+</blockquote>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/2584ef9d4502/" rel="prev" title="支付宝APP支付">
+      <i class="fa fa-chevron-left"></i> 支付宝APP支付
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/41f3b3cd8cd9/" rel="next" title="表结构设计总结">
+      表结构设计总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BC%81%E4%B8%9A%E5%86%85%E9%83%A8%E5%BA%94%E7%94%A8"><span class="nav-text">企业内部应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81"><span class="nav-text">身份验证</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BD%91%E9%A1%B5%E6%8E%88%E6%9D%83%E7%99%BB%E5%BD%95"><span class="nav-text">网页授权登录</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#OAuth%E7%9A%84%E6%8E%88%E6%9D%83%E7%99%BB%E5%BD%95%E6%96%B9%E5%BC%8F"><span class="nav-text">OAuth的授权登录方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#OAuth2"><span class="nav-text">OAuth2</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Authorization-Code%E6%A8%A1%E5%BC%8F"><span class="nav-text">Authorization Code模式</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%81%E5%BE%AEOAuth2%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">企微OAuth2流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%BD%91%E9%A1%B5%E6%8E%88%E6%9D%83%E7%9A%84%E5%8F%AF%E4%BF%A1%E5%9F%9F%E5%90%8D"><span class="nav-text">网页授权的可信域名</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%9D%99%E9%BB%98%E6%8E%88%E6%9D%83%E4%B8%8E%E6%89%8B%E5%8A%A8%E6%8E%88%E6%9D%83"><span class="nav-text">静默授权与手动授权</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E4%B8%AA%E4%BA%BA%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%8E%88%E6%9D%83%E7%AE%A1%E7%90%86"><span class="nav-text">个人敏感信息授权管理</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%BC%93%E5%AD%98%E6%96%B9%E6%A1%88%E5%BB%BA%E8%AE%AE"><span class="nav-text">缓存方案建议</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AFAPI%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">服务端API业务流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96-access-token"><span class="nav-text">获取 access_token</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E7%BB%84%E7%BB%87%E6%9E%B6%E6%9E%84"><span class="nav-text">同步组织架构</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%AD%90%E9%83%A8%E9%97%A8ID%E5%88%97%E8%A1%A8"><span class="nav-text">获取子部门ID列表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E9%83%A8%E9%97%A8%E6%88%90%E5%91%98%E8%AF%A6%E6%83%85"><span class="nav-text">获取部门成员详情</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E4%BF%9D%E5%AD%98"><span class="nav-text">本地保存</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E8%AE%BF%E9%97%AE%E7%94%A8%E6%88%B7%E8%BA%AB%E4%BB%BD"><span class="nav-text">获取访问用户身份</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%88%90%E5%91%98%E7%AE%A1%E7%90%86"><span class="nav-text">成员管理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AF%BB%E5%8F%96%E6%88%90%E5%91%98"><span class="nav-text">读取成员</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81"><span class="nav-text">消息推送</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E5%BA%94%E7%94%A8%E6%B6%88%E6%81%AF"><span class="nav-text">发送应用消息</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E6%B6%88%E6%81%AF"><span class="nav-text">文本消息</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E5%8D%A1%E7%89%87%E6%B6%88%E6%81%AF"><span class="nav-text">文本卡片消息</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8C%89%E9%92%AE%E4%BA%A4%E4%BA%92%E5%9E%8B"><span class="nav-text">按钮交互型</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%81%E4%B8%9A%E7%AE%A1%E7%90%86%E5%90%8E%E5%8F%B0%E9%85%8D%E7%BD%AE"><span class="nav-text">企业管理后台配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%9A%E8%AE%AF%E5%BD%95secret"><span class="nav-text">通讯录secret</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E7%AE%A1%E7%90%86"><span class="nav-text">应用管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%BB%BA%E5%BA%94%E7%94%A8"><span class="nav-text">自建应用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%AF%E8%A7%81%E8%8C%83%E5%9B%B4"><span class="nav-text">可见范围</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E4%B8%BB%E9%A1%B5"><span class="nav-text">应用主页</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF"><span class="nav-text">接收消息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%81%E4%B8%9A%E5%8F%AF%E4%BF%A1IP"><span class="nav-text">企业可信IP</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BD%91%E9%A1%B5%E6%8E%88%E6%9D%83%E5%8F%8AJS-SDK"><span class="nav-text">网页授权及JS-SDK</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%8F%AF%E4%BF%A1%E5%9F%9F%E5%90%8D"><span class="nav-text">可信域名</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8E%E7%AB%AF%E8%87%AA%E5%B7%B1%E6%B5%8B%E8%AF%95"><span class="nav-text">后端自己测试</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

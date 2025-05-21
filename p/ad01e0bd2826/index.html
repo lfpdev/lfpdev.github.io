@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="国际短信须知https:&#x2F;&#x2F;www.twilio.com&#x2F;docs&#x2F;sms&#x2F;tutorials&#x2F;sending-international-sms-guide 类型A2P应用程序对个人 发件人不希望收件人回复  营销消息、约会提醒  P2P个人对个人 两个或更多人用于来回通信  客户服务消息、与拼车司机发短信或与送餐快递员沟通订单状态">
+<meta property="og:type" content="article">
+<meta property="og:title" content="twilio短信">
+<meta property="og:url" content="http://example.com/p/ad01e0bd2826/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="国际短信须知https:&#x2F;&#x2F;www.twilio.com&#x2F;docs&#x2F;sms&#x2F;tutorials&#x2F;sending-international-sms-guide 类型A2P应用程序对个人 发件人不希望收件人回复  营销消息、约会提醒  P2P个人对个人 两个或更多人用于来回通信  客户服务消息、与拼车司机发短信或与送餐快递员沟通订单状态">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.773Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/p/ad01e0bd2826/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>twilio短信 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/ad01e0bd2826/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          twilio短信
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-30 00:00:00" itemprop="dateCreated datePublished" datetime="2022-04-30T00:00:00+08:00">2022-04-30</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SMS/" itemprop="url" rel="index"><span itemprop="name">SMS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="国际短信须知"><a href="#国际短信须知" class="headerlink" title="国际短信须知"></a>国际短信须知</h2><p><a target="_blank" rel="noopener" href="https://www.twilio.com/docs/sms/tutorials/sending-international-sms-guide">https://www.twilio.com/docs/sms/tutorials/sending-international-sms-guide</a></p>
+<h3 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h3><h4 id="A2P"><a href="#A2P" class="headerlink" title="A2P"></a>A2P</h4><p>应用程序对个人</p>
+<p>发件人不<strong>希望</strong>收件人回复</p>
+<blockquote>
+<p>营销消息、约会提醒</p>
+</blockquote>
+<h4 id="P2P"><a href="#P2P" class="headerlink" title="P2P"></a>P2P</h4><p>个人对个人</p>
+<p>两个或更多人用于来回通信</p>
+<blockquote>
+<p>客户服务消息、与拼车司机发短信或与送餐快递员沟通订单状态</p>
+</blockquote>
+<span id="more"></span>
+<h3 id="编码类型"><a href="#编码类型" class="headerlink" title="编码类型"></a>编码类型</h3><p>消息的字符和长度</p>
+<h4 id="GSM-7"><a href="#GSM-7" class="headerlink" title="GSM-7"></a>GSM-7</h4><p>默认的 SMS 编码标准，它将最常用的字符打包成 7 位。您可以在此处找到完整的 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/GSM_03.38#GSM_7-bit_default_alphabet_and_extension_table_of_3GPP_TS_23.038_.2F_GSM_03.38">GSM-7 字符集</a>。非 GSM 字符包括智能引号、表情符号和日文汉字等字符。每个使用 GSM-7 编码的消息段限制为 160 个字符。</p>
+<h4 id="UCS-2"><a href="#UCS-2" class="headerlink" title="UCS-2"></a>UCS-2</h4><p>是用于表示任何非 GSM-7 字符的标准。UCS-2 用 2 个字节表示所有字符。</p>
+<h2 id="发送状态"><a href="#发送状态" class="headerlink" title="发送状态"></a>发送状态</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="https://support.twilio.com/hc/en-us/articles/223134347-What-are-the-Possible-SMS-and-MMS-Message-Statuses-and-What-do-They-Mean-">doc</a></p>
+</blockquote>
+<h3 id="出站状态"><a href="#出站状态" class="headerlink" title="出站状态"></a>出站状态</h3><h4 id="accepted"><a href="#accepted" class="headerlink" title="accepted"></a>accepted</h4><h4 id="scheduled"><a href="#scheduled" class="headerlink" title="scheduled"></a>scheduled</h4><h4 id="queued"><a href="#queued" class="headerlink" title="queued"></a>queued</h4><h4 id="sending"><a href="#sending" class="headerlink" title="sending"></a>sending</h4><h4 id="sent"><a href="#sent" class="headerlink" title="sent"></a>sent</h4><h3 id="交付状态"><a href="#交付状态" class="headerlink" title="交付状态"></a>交付状态</h3><h4 id="sent-1"><a href="#sent-1" class="headerlink" title="sent"></a>sent</h4><p>等待回执，twilio已发送，等待运营商的回执</p>
+<h4 id="delivery-unknown"><a href="#delivery-unknown" class="headerlink" title="delivery_unknown"></a>delivery_unknown</h4><h4 id="delivered"><a href="#delivered" class="headerlink" title="delivered"></a>delivered</h4><p>收到了来自运营商的消息传递确认</p>
+<h4 id="undelivered"><a href="#undelivered" class="headerlink" title="undelivered"></a>undelivered</h4><p>twilio已发送，收到了运营商消息未发送的回执</p>
+<blockquote>
+<p>可能被运营商拦截了</p>
+<p>依然被扣费</p>
+</blockquote>
+<h4 id="failed"><a href="#failed" class="headerlink" title="failed"></a>failed</h4><p>twilio 消息发送失败，不扣费</p>
+<h2 id="非美国地区使用"><a href="#非美国地区使用" class="headerlink" title="非美国地区使用"></a>非美国地区使用</h2><h3 id="FQDN"><a href="#FQDN" class="headerlink" title="FQDN"></a>FQDN</h3><p>twilio 的 restapi 根据配置的网络接入点和区域生成</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;product&#125;.&#123;edge-location&#125;.&#123;region&#125;.twilio.com</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>sms</p>
+<p>api.singapore.us1.twilio.com</p>
+<blockquote>
+<p>默认的 api.twilio.com 通过 <code>ashburn</code> 边缘位置隐式路由到 <code>us1</code>  区域</p>
+</blockquote>
+</li>
+<li><p>指定 region 时要同时指定 edge。否则 region 无效，仍然路由到 <code>us1</code> 区域</p>
+</li>
+</ul>
+<h3 id="Edge"><a href="#Edge" class="headerlink" title="Edge"></a><a target="_blank" rel="noopener" href="https://www.twilio.com/docs/global-infrastructure/understanding-edge-locations">Edge</a></h3><p>通过边缘接入点控制应用程序的进入和退出 Twilio 平台的地理位置，默认接入点是 <code>ashburn</code></p>
+<p>任何边缘位置都可以与任何区域结合使用。优先选择距离最近的位置接入 twilio。内部的数据中心通过 twilio 内部网络连接，具有高可用性和低延迟</p>
+<blockquote>
+<p>使用距离最近的 Edge，会降低服务和 twilio 建立 TLS 的时间</p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.twilio.com/docs/global-infrastructure/edge-locations">可选列表</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.twilio.com/docs/global-infrastructure/edge-locations#what-twilio-products-support-edge-locations">服务支持列表</a></p>
+<h3 id="Region"><a href="#Region" class="headerlink" title="Region"></a><a target="_blank" rel="noopener" href="https://www.twilio.com/docs/global-infrastructure/understanding-twilio-regions">Region</a></h3><p>twilio 位于世界各地的独立数据中心。twilio 在这些数据中心部署相关服务。默认数据中心是美国东部 <code>us1</code>。</p>
+<p>如果我们的应用程序给不同的地方提供服务，使用默认的美国数据中心会导致严重的延迟</p>
+<p>不同数据中心提供的功能可能不同</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.twilio.com/docs/global-infrastructure/regional-product-and-feature-availability">可用性列表</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.twilio.com/docs/global-infrastructure/edge-locations/legacy-regions">可选列表</a></p>
+</blockquote>
+<h2 id="消息片段"><a href="#消息片段" class="headerlink" title="消息片段"></a>消息片段</h2><ul>
+<li>建议不超过320个字符</li>
+</ul>
+<h3 id="检测"><a href="#检测" class="headerlink" title="检测"></a>检测</h3><p><a target="_blank" rel="noopener" href="https://twiliodeved.github.io/message-segment-calculator/">https://twiliodeved.github.io/message-segment-calculator/</a></p>
+<h3 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h3><h4 id="GSM-7-1"><a href="#GSM-7-1" class="headerlink" title="GSM-7"></a><a target="_blank" rel="noopener" href="https://www.twilio.com/docs/glossary/what-is-gsm-7-character-encoding#how-twilio-encodes-your-messages">GSM-7</a></h4><p>消息中仅包含GSM-7字符时，每160个字符为一个片段</p>
+<h4 id="UCS-2-1"><a href="#UCS-2-1" class="headerlink" title="UCS-2"></a>UCS-2</h4><p>消息中包含非 GSM-7 字符时，使用 UCS-2 编码。每70个字符为一个片段</p>
+<p>Twilio 预先添加了一个六 (6) 字节的<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/User_Data_Header">用户数据标头</a>，以指示接收设备如何重新组装消息。因此对于多段消息，每段仅留下<strong>153 个 GSM-7 字符</strong>或<strong>67 个 UCS-2 字符</strong>。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://www.twilio.com/docs/glossary/what-sms-character-limit">SMS Character Limit</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.twilio.com/blog/2017/03/what-the-heck-is-a-segment.html">What The Heck Is A Segment?</a></li>
+</ol>
+<h2 id="号码种类"><a href="#号码种类" class="headerlink" title="号码种类"></a>号码种类</h2><h3 id="comparion"><a href="#comparion" class="headerlink" title="comparion"></a>comparion</h3><p><a target="_blank" rel="noopener" href="https://support.twilio.com/hc/en-us/articles/360038173654-Comparison-of-SMS-messaging-in-the-US-and-Canada-for-long-codes-short-codes-and-toll-free-phone-numbers">Comparison of SMS messaging in the US and Canada</a></p>
+<h3 id="long-code"><a href="#long-code" class="headerlink" title="long code"></a>long code</h3><ul>
+<li><p>标准电话号码</p>
+<table>
+<thead>
+<tr>
+<th><strong>Number</strong></th>
+<th><strong>Type</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>894546</td>
+<td>Short Code (spells “TWILIO”)</td>
+</tr>
+<tr>
+<td>(415) 555-2671</td>
+<td>US long code National</td>
+</tr>
+<tr>
+<td>+14155552671</td>
+<td>US long code E.164</td>
+</tr>
+<tr>
+<td>020 7183 8750</td>
+<td>UK long code National</td>
+</tr>
+<tr>
+<td>+442071838750</td>
+<td>UK long code E.164</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a>参考</h4><ol>
+<li><a target="_blank" rel="noopener" href="https://www.twilio.com/docs/glossary/what-long-code-phone-number">what-long-code-phone-number</a></li>
+</ol>
+<h3 id="short-code"><a href="#short-code" class="headerlink" title="short code"></a>short code</h3><ul>
+<li><p>高吞吐量、双向收发</p>
+<p>不受运营商过滤</p>
+</li>
+<li><p>5-6位数字</p>
+</li>
+</ul>
+<p>适用于</p>
+<ol>
+<li>Marketing and promotions.</li>
+<li>Alerts and notifications.</li>
+<li>Two-factor authentication.</li>
+</ol>
+<h4 id="参考-2"><a href="#参考-2" class="headerlink" title="参考"></a>参考</h4><ol>
+<li><a target="_blank" rel="noopener" href="https://www.twilio.com/docs/glossary/what-is-a-short-code">what-is-a-short-code</a></li>
+</ol>
+<h3 id="Toll-Free-number"><a href="#Toll-Free-number" class="headerlink" title="Toll-Free  number"></a>Toll-Free  number</h3><ul>
+<li><p>仅支持美国和加拿大地区的号码</p>
+<ul>
+<li><p>美国及加拿大支持双向收发</p>
+<p><a target="_blank" rel="noopener" href="https://support.twilio.com/hc/en-us/articles/223136047-Configure-a-Twilio-Phone-Number-to-Receive-and-Respond-to-Messages">收短信需要配置</a></p>
+</li>
+<li><p>其他国家仅支持单向发送</p>
+</li>
+</ul>
+</li>
+<li><p>需要认证</p>
+<p>自2022年10月1日起，加拿大将全面屏蔽未经核实的流量（短信），美国将加强过滤和每日限制</p>
+<ul>
+<li>每日限制 2000 条，一周12000条，一月25000条</li>
+<li>被过滤或超过限制将返回错误码 30032</li>
+</ul>
+</li>
+</ul>
+<h4 id="参考-3"><a href="#参考-3" class="headerlink" title="参考"></a>参考</h4><ol>
+<li><a target="_blank" rel="noopener" href="https://support.twilio.com/hc/en-us/articles/5377174717595-Toll-Free-Message-Verification-for-US-Canada">Toll-Free Message Verification for US&#x2F;Canada</a></li>
+<li><a target="_blank" rel="noopener" href="https://support.twilio.com/hc/en-us/articles/223183068-Twilio-international-phone-number-availability-and-their-capabilities">Twilio international phone number availability and their capabilities</a></li>
+<li><a target="_blank" rel="noopener" href="https://support.twilio.com/hc/en-us/articles/223183168-Buying-a-toll-free-number-with-Twilio">Buying a toll free number with Twilio</a></li>
+</ol>
+<h2 id="Price"><a href="#Price" class="headerlink" title="Price"></a>Price</h2><p>pay-as-you-go 按量收费</p>
+<h3 id="美国"><a href="#美国" class="headerlink" title="美国"></a><a target="_blank" rel="noopener" href="https://www.twilio.com/sms/pricing/us">美国</a></h3><ul>
+<li>toll-free number 收发一条（segment）短信收 <code>$0.0079</code></li>
+</ul>
+<h3 id="澳大利亚"><a href="#澳大利亚" class="headerlink" title="澳大利亚"></a><a target="_blank" rel="noopener" href="https://www.twilio.com/sms/pricing/at">澳大利亚</a></h3><ul>
+<li>mobile number 发送一条收 <code>$0.0979</code></li>
+</ul>
+<h2 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h2><h3 id="Account-suspended-due-to-a-compliance-violation"><a href="#Account-suspended-due-to-a-compliance-violation" class="headerlink" title="Account suspended due to a compliance violation"></a>Account suspended due to a compliance violation</h3><p>从试用期转正式购买，需要验证，否则会被封</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/31c9c61a4f71/" rel="prev" title="短信">
+      <i class="fa fa-chevron-left"></i> 短信
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/ade6ddd24633/" rel="next" title="twilio发送短信">
+      twilio发送短信 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BD%E9%99%85%E7%9F%AD%E4%BF%A1%E9%A1%BB%E7%9F%A5"><span class="nav-text">国际短信须知</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B"><span class="nav-text">类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A2P"><span class="nav-text">A2P</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#P2P"><span class="nav-text">P2P</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E7%B1%BB%E5%9E%8B"><span class="nav-text">编码类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GSM-7"><span class="nav-text">GSM-7</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UCS-2"><span class="nav-text">UCS-2</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E9%80%81%E7%8A%B6%E6%80%81"><span class="nav-text">发送状态</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BA%E7%AB%99%E7%8A%B6%E6%80%81"><span class="nav-text">出站状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#accepted"><span class="nav-text">accepted</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scheduled"><span class="nav-text">scheduled</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#queued"><span class="nav-text">queued</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sending"><span class="nav-text">sending</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sent"><span class="nav-text">sent</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E4%BB%98%E7%8A%B6%E6%80%81"><span class="nav-text">交付状态</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sent-1"><span class="nav-text">sent</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#delivery-unknown"><span class="nav-text">delivery_unknown</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#delivered"><span class="nav-text">delivered</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undelivered"><span class="nav-text">undelivered</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#failed"><span class="nav-text">failed</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9D%9E%E7%BE%8E%E5%9B%BD%E5%9C%B0%E5%8C%BA%E4%BD%BF%E7%94%A8"><span class="nav-text">非美国地区使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FQDN"><span class="nav-text">FQDN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Edge"><span class="nav-text">Edge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Region"><span class="nav-text">Region</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E7%89%87%E6%AE%B5"><span class="nav-text">消息片段</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A3%80%E6%B5%8B"><span class="nav-text">检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A0%81"><span class="nav-text">编码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GSM-7-1"><span class="nav-text">GSM-7</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UCS-2-1"><span class="nav-text">UCS-2</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%B7%E7%A0%81%E7%A7%8D%E7%B1%BB"><span class="nav-text">号码种类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#comparion"><span class="nav-text">comparion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#long-code"><span class="nav-text">long code</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83-1"><span class="nav-text">参考</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#short-code"><span class="nav-text">short code</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83-2"><span class="nav-text">参考</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Toll-Free-number"><span class="nav-text">Toll-Free  number</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83-3"><span class="nav-text">参考</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Price"><span class="nav-text">Price</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BE%8E%E5%9B%BD"><span class="nav-text">美国</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BE%B3%E5%A4%A7%E5%88%A9%E4%BA%9A"><span class="nav-text">澳大利亚</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FAQ"><span class="nav-text">FAQ</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Account-suspended-due-to-a-compliance-violation"><span class="nav-text">Account suspended due to a compliance violation</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

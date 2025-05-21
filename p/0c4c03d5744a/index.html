@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="queryRunner如果 RDBMS 支持连接池，则每个新的 queryRunner 实例从连接池中获取一个连接。 对于不支持连接池的数据库，它会在整个数据源中使用同一个连接queryRunner 提供单个数据库连接，可组织管理事务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="queryRunner管理事务">
+<meta property="og:url" content="http://example.com/p/0c4c03d5744a/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="queryRunner如果 RDBMS 支持连接池，则每个新的 queryRunner 实例从连接池中获取一个连接。 对于不支持连接池的数据库，它会在整个数据源中使用同一个连接queryRunner 提供单个数据库连接，可组织管理事务">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-03-17T15:46:31.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.778Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/p/0c4c03d5744a/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>queryRunner管理事务 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/0c4c03d5744a/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          queryRunner管理事务
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-03-17 23:46:31" itemprop="dateCreated datePublished" datetime="2024-03-17T23:46:31+08:00">2024-03-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TypeORM/" itemprop="url" rel="index"><span itemprop="name">TypeORM</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="queryRunner"><a href="#queryRunner" class="headerlink" title="queryRunner"></a><a target="_blank" rel="noopener" href="https://typeorm.io/query-runner#">queryRunner</a></h1><p>如果 RDBMS 支持连接池，则每个新的 queryRunner 实例从连接池中获取一个连接。 对于不支持连接池的数据库，它会在整个数据源中使用同一个连接<br>queryRunner 提供单个数据库连接，可组织管理事务</p>
+<span id="more"></span>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建实例</span></span><br><span class="line"><span class="keyword">const</span> qr = dataSource.<span class="title function_">createQueryRunner</span>();</span><br><span class="line"><span class="comment">// 从连接池中获取连接</span></span><br><span class="line"><span class="keyword">await</span> qr.<span class="title function_">connect</span>();</span><br><span class="line"><span class="comment">// 通过 manager 执行数据库操作</span></span><br><span class="line"><span class="keyword">const</span> users = <span class="keyword">await</span> queryRunner.<span class="property">manager</span>.<span class="title function_">find</span>(<span class="title class_">User</span>);</span><br><span class="line"><span class="comment">// 释放连接，释放后，qr 不能再继续执行数据库操作</span></span><br><span class="line"><span class="keyword">await</span> qr.<span class="title function_">release</span>();</span><br></pre></td></tr></table></figure>
+
+<p>组织管理事务</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 开启事务</span></span><br><span class="line"><span class="keyword">await</span> queryRunner.<span class="title function_">startTransaction</span>();</span><br><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">  <span class="comment">// 一系列操作</span></span><br><span class="line">  <span class="keyword">await</span> queryRunner.<span class="property">manager</span>.<span class="title function_">save</span>(user1);</span><br><span class="line">  <span class="keyword">await</span> queryRunner.<span class="property">manager</span>.<span class="title function_">save</span>(user2);</span><br><span class="line">  <span class="keyword">await</span> queryRunner.<span class="property">manager</span>.<span class="title function_">save</span>(photos);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 提交事务</span></span><br><span class="line">  <span class="keyword">await</span> queryRunner.<span class="title function_">commitTransaction</span>();</span><br><span class="line">&#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">  <span class="comment">// 回滚事务</span></span><br><span class="line">  <span class="keyword">await</span> queryRunner.<span class="title function_">rollbackTransaction</span>();</span><br><span class="line">&#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">  <span class="comment">// 释放连接</span></span><br><span class="line">  <span class="keyword">await</span> queryRunner.<span class="title function_">release</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>创建 queryRunner 到建立连接的过程</p>
+<blockquote>
+<p>typerom v0.3.17</p>
+<p>mysql 2.18.1</p>
+</blockquote>
+<h3 id="typeorm"><a href="#typeorm" class="headerlink" title="typeorm"></a>typeorm</h3><h4 id="第一步-创建-queryRunner"><a href="#第一步-创建-queryRunner" class="headerlink" title="第一步 创建 queryRunner"></a>第一步 创建 queryRunner</h4><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> qr = dataSource.<span class="title function_">createQueryRunner</span>();</span><br></pre></td></tr></table></figure>
+
+<h5 id="data-source-DataSource-ts"><a href="#data-source-DataSource-ts" class="headerlink" title="data-source&#x2F;DataSource.ts"></a>data-source&#x2F;DataSource.ts</h5><p>数据源</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自己实例化或通过 nestjs 注入获取 dataSource 实例</span></span><br><span class="line"><span class="title function_">constructor</span>(<span class="params">options: DataSourceOptions</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">name</span> = options.<span class="property">name</span> || <span class="string">&quot;default&quot;</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">options</span> = options</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">logger</span> = <span class="keyword">new</span> <span class="title class_">LoggerFactory</span>().<span class="title function_">create</span>(</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">options</span>.<span class="property">logger</span>,</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">options</span>.<span class="property">logging</span>,</span><br><span class="line">    )</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">driver</span> = <span class="keyword">new</span> <span class="title class_">DriverFactory</span>().<span class="title function_">create</span>(<span class="variable language_">this</span>) <span class="comment">// 实例化时创建 driver，传入 dataSource 实例</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">manager</span> = <span class="variable language_">this</span>.<span class="title function_">createEntityManager</span>()</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">namingStrategy</span> =</span><br><span class="line">        options.<span class="property">namingStrategy</span> || <span class="keyword">new</span> <span class="title class_">DefaultNamingStrategy</span>()</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">metadataTableName</span> = options.<span class="property">metadataTableName</span> || <span class="string">&quot;typeorm_metadata&quot;</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">queryResultCache</span> = options.<span class="property">cache</span></span><br><span class="line">        ? <span class="keyword">new</span> <span class="title class_">QueryResultCacheFactory</span>(<span class="variable language_">this</span>).<span class="title function_">create</span>()</span><br><span class="line">    : <span class="literal">undefined</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">relationLoader</span> = <span class="keyword">new</span> <span class="title class_">RelationLoader</span>(<span class="variable language_">this</span>)</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">relationIdLoader</span> = <span class="keyword">new</span> <span class="title class_">RelationIdLoader</span>(<span class="variable language_">this</span>)</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">isInitialized</span> = <span class="literal">false</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">createQueryRunner</span>(<span class="attr">mode</span>: <span class="title class_">ReplicationMode</span> = <span class="string">&quot;master&quot;</span>): <span class="title class_">QueryRunner</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> queryRunner = <span class="variable language_">this</span>.<span class="property">driver</span>.<span class="title function_">createQueryRunner</span>(mode) <span class="comment">// 通过 driver 获取 queryRunner</span></span><br><span class="line">    <span class="keyword">const</span> manager = <span class="variable language_">this</span>.<span class="title function_">createEntityManager</span>(queryRunner)</span><br><span class="line">    <span class="title class_">Object</span>.<span class="title function_">assign</span>(queryRunner, &#123; <span class="attr">manager</span>: manager &#125;)</span><br><span class="line">    <span class="keyword">return</span> queryRunner</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="driver-mysql"><a href="#driver-mysql" class="headerlink" title="driver&#x2F;mysql"></a>driver&#x2F;mysql</h5><h6 id="MysqlDriver-ts"><a href="#MysqlDriver-ts" class="headerlink" title="MysqlDriver.ts"></a>MysqlDriver.ts</h6><p>mysql 驱动</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">constructor</span>(<span class="params">connection: DataSource</span>) &#123; <span class="comment">// 数据源实例即连接</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">connection</span> = connection</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">options</span> = &#123;</span><br><span class="line">        <span class="attr">legacySpatialSupport</span>: <span class="literal">true</span>,</span><br><span class="line">        ...connection.<span class="property">options</span>, <span class="comment">// 将传递给数据源的配置传给 mysql driver</span></span><br><span class="line">    &#125; <span class="keyword">as</span> <span class="title class_">MysqlConnectionOptions</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">isReplicated</span> = <span class="variable language_">this</span>.<span class="property">options</span>.<span class="property">replication</span> ? <span class="literal">true</span> : <span class="literal">false</span></span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">loadDependencies</span>()</span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">database</span> = <span class="title class_">DriverUtils</span>.<span class="title function_">buildDriverOptions</span>(</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">options</span>.<span class="property">replication</span></span><br><span class="line">        ? <span class="variable language_">this</span>.<span class="property">options</span>.<span class="property">replication</span>.<span class="property">master</span></span><br><span class="line">        : <span class="variable language_">this</span>.<span class="property">options</span>,</span><br><span class="line">    ).<span class="property">database</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">createQueryRunner</span>(<span class="params">mode: ReplicationMode</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">MysqlQueryRunner</span>(<span class="variable language_">this</span>, mode) <span class="comment">// 实例化 queryRunner</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="MysqlQueryRunner-ts"><a href="#MysqlQueryRunner-ts" class="headerlink" title="MysqlQueryRunner.ts"></a>MysqlQueryRunner.ts</h6><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 最终获取的 queryRunner</span></span><br><span class="line"><span class="title function_">constructor</span>(<span class="params">driver: MysqlDriver, mode: ReplicationMode</span>) &#123;</span><br><span class="line">    <span class="variable language_">super</span>()</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">driver</span> = driver</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">connection</span> = driver.<span class="property">connection</span></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">broadcaster</span> = <span class="keyword">new</span> <span class="title class_">Broadcaster</span>(<span class="variable language_">this</span>)</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">mode</span> = mode</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="第二步-建立连接"><a href="#第二步-建立连接" class="headerlink" title="第二步 建立连接"></a>第二步 建立连接</h4><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">await</span> qr.<span class="title function_">connect</span>();</span><br></pre></td></tr></table></figure>
+
+<h5 id="driver-mysql-1"><a href="#driver-mysql-1" class="headerlink" title="driver&#x2F;mysql&#x2F;"></a>driver&#x2F;mysql&#x2F;</h5><h6 id="MysqlQueryRunner-ts-1"><a href="#MysqlQueryRunner-ts-1" class="headerlink" title="MysqlQueryRunner.ts"></a>MysqlQueryRunner.ts</h6><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">connect</span>(): <span class="title class_">Promise</span>&lt;<span class="built_in">any</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">databaseConnection</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="title class_">Promise</span>.<span class="title function_">resolve</span>(<span class="variable language_">this</span>.<span class="property">databaseConnection</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">databaseConnectionPromise</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">databaseConnectionPromise</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">mode</span> === <span class="string">&quot;slave&quot;</span> &amp;&amp; <span class="variable language_">this</span>.<span class="property">driver</span>.<span class="property">isReplicated</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">databaseConnectionPromise</span> = <span class="variable language_">this</span>.<span class="property">driver</span></span><br><span class="line">            .<span class="title function_">obtainSlaveConnection</span>()</span><br><span class="line">            .<span class="title function_">then</span>(<span class="function">(<span class="params">connection</span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="variable language_">this</span>.<span class="property">databaseConnection</span> = connection</span><br><span class="line">                <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">databaseConnection</span></span><br><span class="line">            &#125;)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// master</span></span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">databaseConnectionPromise</span> = <span class="variable language_">this</span>.<span class="property">driver</span></span><br><span class="line">            .<span class="title function_">obtainMasterConnection</span>()</span><br><span class="line">            .<span class="title function_">then</span>(<span class="function">(<span class="params">connection</span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="variable language_">this</span>.<span class="property">databaseConnection</span> = connection</span><br><span class="line">                <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">databaseConnection</span></span><br><span class="line">            &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="variable language_">this</span>.<span class="property">databaseConnectionPromise</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h6 id="MysqlDriver-ts-1"><a href="#MysqlDriver-ts-1" class="headerlink" title="MysqlDriver.ts"></a>MysqlDriver.ts</h6><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">obtainMasterConnection</span>(): <span class="title class_">Promise</span>&lt;<span class="built_in">any</span>&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Promise</span>&lt;<span class="built_in">any</span>&gt;(<span class="function">(<span class="params">ok, fail</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">poolCluster</span>) &#123;</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">poolCluster</span>.<span class="title function_">getConnection</span>(</span><br><span class="line">                <span class="string">&quot;MASTER&quot;</span>,</span><br><span class="line">                <span class="function">(<span class="params">err: <span class="built_in">any</span>, dbConnection: <span class="built_in">any</span></span>) =&gt;</span> &#123;</span><br><span class="line">                    err</span><br><span class="line">                        ? <span class="title function_">fail</span>(err)</span><br><span class="line">                        : <span class="title function_">ok</span>(<span class="variable language_">this</span>.<span class="title function_">prepareDbConnection</span>(dbConnection))</span><br><span class="line">                &#125;,</span><br><span class="line">            )</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">pool</span>) &#123;</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">pool</span>.<span class="title function_">getConnection</span>(<span class="function">(<span class="params">err: <span class="built_in">any</span>, dbConnection: <span class="built_in">any</span></span>) =&gt;</span> &#123; <span class="comment">// 从 mysql/Pool.ts 获取连接</span></span><br><span class="line">                err ? <span class="title function_">fail</span>(err) : <span class="title function_">ok</span>(<span class="variable language_">this</span>.<span class="title function_">prepareDbConnection</span>(dbConnection))</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="title function_">fail</span>(</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">TypeORMError</span>(</span><br><span class="line">                    <span class="string">`Connection is not established with mysql database`</span>,</span><br><span class="line">                ),</span><br><span class="line">            )</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h3><h4 id="获取连接"><a href="#获取连接" class="headerlink" title="获取连接"></a>获取连接</h4><h5 id="lib-Pool-js"><a href="#lib-Pool-js" class="headerlink" title="lib&#x2F;Pool.js"></a>lib&#x2F;Pool.js</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 连接池对象</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Pool</span>(<span class="params">options</span>) &#123;</span><br><span class="line">  <span class="title class_">EventEmitter</span>.<span class="title function_">call</span>(<span class="variable language_">this</span>);</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">config</span> = options.<span class="property">config</span>;</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">config</span>.<span class="property">connectionConfig</span>.<span class="property">pool</span> = <span class="variable language_">this</span>;</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">_acquiringConnections</span> = [];</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">_allConnections</span> = []; <span class="comment">// 所有连接</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">_freeConnections</span> = []; <span class="comment">// 空闲连接</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">_connectionQueue</span> = []; <span class="comment">// 连接请求队列</span></span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">_closed</span> = <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 获取连接</span></span><br><span class="line"><span class="title class_">Pool</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">getConnection</span> = <span class="keyword">function</span> (<span class="params">cb</span>) &#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">_closed</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> err = <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;Pool is closed.&quot;</span>);</span><br><span class="line">    err.<span class="property">code</span> = <span class="string">&quot;POOL_CLOSED&quot;</span>;</span><br><span class="line">    process.<span class="title function_">nextTick</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="title function_">cb</span>(err);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> connection;</span><br><span class="line">  <span class="keyword">var</span> pool = <span class="variable language_">this</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">_freeConnections</span>.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    connection = <span class="variable language_">this</span>.<span class="property">_freeConnections</span>.<span class="title function_">shift</span>();</span><br><span class="line">    <span class="variable language_">this</span>.<span class="title function_">acquireConnection</span>(connection, cb);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">config</span>.<span class="property">connectionLimit</span> === <span class="number">0</span> ||</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_allConnections</span>.<span class="property">length</span> &lt; <span class="variable language_">this</span>.<span class="property">config</span>.<span class="property">connectionLimit</span></span><br><span class="line">  ) &#123;</span><br><span class="line">    connection = <span class="keyword">new</span> <span class="title class_">PoolConnection</span>(<span class="variable language_">this</span>, &#123;</span><br><span class="line">      <span class="attr">config</span>: <span class="variable language_">this</span>.<span class="property">config</span>.<span class="title function_">newConnectionConfig</span>(),</span><br><span class="line">    &#125;); <span class="comment">// 这就是最终的连接</span></span><br><span class="line"></span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_acquiringConnections</span>.<span class="title function_">push</span>(connection);</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">_allConnections</span>.<span class="title function_">push</span>(connection);</span><br><span class="line"></span><br><span class="line">    connection.<span class="title function_">connect</span>(</span><br><span class="line">      &#123; <span class="attr">timeout</span>: <span class="variable language_">this</span>.<span class="property">config</span>.<span class="property">acquireTimeout</span> &#125;,</span><br><span class="line">      <span class="keyword">function</span> <span class="title function_">onConnect</span>(<span class="params">err</span>) &#123;</span><br><span class="line">        <span class="title function_">spliceConnection</span>(pool.<span class="property">_acquiringConnections</span>, connection);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (pool.<span class="property">_closed</span>) &#123;</span><br><span class="line">          err = <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;Pool is closed.&quot;</span>);</span><br><span class="line">          err.<span class="property">code</span> = <span class="string">&quot;POOL_CLOSED&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">          pool.<span class="title function_">_purgeConnection</span>(connection);</span><br><span class="line">          <span class="title function_">cb</span>(err);</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        pool.<span class="title function_">emit</span>(<span class="string">&quot;connection&quot;</span>, connection);</span><br><span class="line">        pool.<span class="title function_">emit</span>(<span class="string">&quot;acquire&quot;</span>, connection);</span><br><span class="line">        <span class="title function_">cb</span>(<span class="literal">null</span>, connection);</span><br><span class="line">      &#125;</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!<span class="variable language_">this</span>.<span class="property">config</span>.<span class="property">waitForConnections</span>) &#123;</span><br><span class="line">    <span class="comment">// 不等待直接返回异常</span></span><br><span class="line">    process.<span class="title function_">nextTick</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      <span class="keyword">var</span> err = <span class="keyword">new</span> <span class="title class_">Error</span>(<span class="string">&quot;No connections available.&quot;</span>);</span><br><span class="line">      err.<span class="property">code</span> = <span class="string">&quot;POOL_CONNLIMIT&quot;</span>;</span><br><span class="line">      <span class="title function_">cb</span>(err);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">this</span>.<span class="title function_">_enqueueCallback</span>(cb); <span class="comment">// 等待，则加入队列</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h5 id="lib-PoolConnection-js"><a href="#lib-PoolConnection-js" class="headerlink" title="lib&#x2F;PoolConnection.js"></a>lib&#x2F;PoolConnection.js</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 连接对象</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">PoolConnection</span>(<span class="params">pool, options</span>) &#123;</span><br><span class="line">  <span class="title class_">Connection</span>.<span class="title function_">call</span>(<span class="variable language_">this</span>, options);</span><br><span class="line">  <span class="variable language_">this</span>.<span class="property">_pool</span> = pool;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (<span class="title class_">Events</span>.<span class="property">usingDomains</span>) &#123;</span><br><span class="line">    <span class="variable language_">this</span>.<span class="property">domain</span> = pool.<span class="property">domain</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">this</span>.<span class="title function_">on</span>(<span class="string">&quot;end&quot;</span>, <span class="variable language_">this</span>.<span class="property">_removeFromPool</span>);</span><br><span class="line">  <span class="variable language_">this</span>.<span class="title function_">on</span>(<span class="string">&quot;error&quot;</span>, <span class="keyword">function</span> (<span class="params">err</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (err.<span class="property">fatal</span>) &#123;</span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">_removeFromPool</span>();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="程序无响应问题"><a href="#程序无响应问题" class="headerlink" title="程序无响应问题"></a>程序无响应问题</h2><p>通过 queryRunner 手动管理事务，压测时遇到程序无响应问题，具体情况</p>
+<ol>
+<li>程序可以收到请求，但是代码走到 typeorm 就无响应了</li>
+<li>数据库可以正常响应其他客户端的查询请求</li>
+</ol>
+<h3 id="最小化代码"><a href="#最小化代码" class="headerlink" title="最小化代码"></a>最小化代码</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="title function_">update</span>(<span class="params">data: UpdateConfigItemListDto</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; category_id, item_list &#125; = data;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> qr = <span class="variable language_">this</span>.<span class="property">dataSource</span>.<span class="title function_">createQueryRunner</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">await</span> qr.<span class="title function_">connect</span>()</span><br><span class="line">        <span class="keyword">await</span> qr.<span class="title function_">startTransaction</span>() <span class="comment">// 开启事务</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> newItemList = <span class="keyword">await</span> <span class="title class_">Promise</span>.<span class="title function_">all</span>(itemList.<span class="title function_">map</span>(<span class="keyword">async</span> item =&gt; &#123;</span><br><span class="line">            <span class="keyword">const</span> &#123; value, id, code &#125; = item</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// 处理历史记录</span></span><br><span class="line">                <span class="keyword">const</span> dr = <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="title function_">handleHistoryNum</span>(id, qr)</span><br><span class="line">                <span class="comment">// 删除最早的历史记录</span></span><br><span class="line">                dr &amp;&amp; <span class="keyword">await</span> qr.<span class="property">manager</span>.<span class="title function_">update</span>(<span class="title class_">ConfigItemValue</span>, &#123;</span><br><span class="line">                    <span class="attr">id</span>: dr.<span class="property">id</span>,</span><br><span class="line">                &#125;, &#123;</span><br><span class="line">                    <span class="attr">deleted</span>: <span class="literal">true</span>,</span><br><span class="line">                &#125;)</span><br><span class="line">                <span class="comment">// 插入当前记录</span></span><br><span class="line">                <span class="keyword">await</span> qr.<span class="property">manager</span>.<span class="title function_">insert</span>(<span class="title class_">ConfigItemValue</span>, &#123;</span><br><span class="line">                    <span class="attr">config_item_id</span>: id,</span><br><span class="line">                    value,</span><br><span class="line">                    category_id,</span><br><span class="line">                    <span class="attr">created_by</span>: payload?.<span class="property">user_id</span></span><br><span class="line">                &#125;)</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> &#123; id, code, value &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">                <span class="variable language_">this</span>.<span class="property">logger</span>.<span class="title function_">error</span>(<span class="string">`update config item:<span class="subst">$&#123;id&#125;</span> value:<span class="subst">$&#123;value&#125;</span> error:`</span>, error)</span><br><span class="line">                <span class="keyword">throw</span> error</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">await</span> qr.<span class="title function_">commitTransaction</span>()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> newItemList</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        <span class="keyword">await</span> qr.<span class="title function_">rollbackTransaction</span>()</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">HttpErrorResponse</span>(<span class="title class_">ApiErrorCode</span>.<span class="property">MYSQL_ERROR</span>, <span class="string">`更新配置异常`</span>)</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="keyword">await</span> qr.<span class="title function_">release</span>()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="title function_">handleHistoryNum</span>(<span class="params">id: number, qr: QueryRunner</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> num = <span class="keyword">await</span> qr.<span class="property">manager</span>.<span class="title function_">getRepository</span>(<span class="title class_">ConfigItemValue</span>)</span><br><span class="line">    <span class="comment">// bug</span></span><br><span class="line">    <span class="comment">// const num = await this.dataSource.getRepository(ConfigItemValue)</span></span><br><span class="line">    .<span class="title function_">count</span>(&#123;</span><br><span class="line">        <span class="attr">where</span>: &#123;</span><br><span class="line">            id,</span><br><span class="line">            <span class="attr">deleted</span>: <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="comment">// 其他逻辑</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 返回最早的历史记录</span></span><br><span class="line">    <span class="keyword">return</span> row</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>可能的原因</p>
+<ol>
+<li>数据库连接被占满</li>
+<li>死锁</li>
+<li>服务器或应用级别存在资源竞争</li>
+</ol>
+<p>疑惑：即使连接被占满、死锁，随着时间拉长，死锁被回滚、事务执行完之后也应该释放连接，不应该一直无响应</p>
+<h4 id="mysql-日志"><a href="#mysql-日志" class="headerlink" title="mysql 日志"></a>mysql 日志</h4><p>通过 <code>SHOW ENGINE INNODB STATUS\G</code> 看到死锁</p>
+<h4 id="获取连接池信息"><a href="#获取连接池信息" class="headerlink" title="获取连接池信息"></a>获取连接池信息</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 怀疑是连接占满了，添加打印连接池信息的日志</span></span><br><span class="line"><span class="built_in">setInterval</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;Pool Info ==&gt;&quot;</span>, <span class="variable language_">this</span>.<span class="property">dataSource</span>.<span class="property">driver</span>[<span class="string">&quot;pool&quot;</span>]);</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="mysql-连接池配置"><a href="#mysql-连接池配置" class="headerlink" title="mysql 连接池配置"></a><a target="_blank" rel="noopener" href="https://github.com/lfpdev/mysql?tab=readme-ov-file#pool-options">mysql 连接池配置</a></h4><ul>
+<li><p>waitForConnections</p>
+<p>当连接数为 0 时，连接池的行为</p>
+<ul>
+<li><p>true 默认</p>
+<p>将新的连接请求放入队列中</p>
+</li>
+<li><p>false</p>
+<p>立即返回异常</p>
+</li>
+</ul>
+</li>
+<li><p>acquireTimeout</p>
+<p>获取连接的超时时间，单位毫秒，默认 10000</p>
+</li>
+<li><p>connectionLimit</p>
+<p>最大连接个数</p>
+</li>
+</ul>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><p>高并发下，数据库连接很快被占满，当连接被占满时</p>
+<ol>
+<li>因为配置 mysql 的参数 waitForConnections 默认为 true，所以新的连接请求会被放入<strong>队列</strong>中等待</li>
+<li><code>handleHistoryNum</code> 方法中获取 num 是通过 <code>this.dataSource</code> 获取连接的，起初是想让查询请求放在事务外执行，但是方法中开启事务之后，所有的操作都放在事务中执行了，导致事务中还需要获取一个连接，而此时连接被占满，该连接请求被放入队列中，进而导致当前事务无法提交，连接无法释放，发生死锁</li>
+</ol>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><ol>
+<li>事务中又获取连接，导致死循环，连接无法释放，程序一直卡死</li>
+<li>开启事务之后，所有数据库操作都通过 qr.manager 执行</li>
+<li>及时释放连接</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/8341738bcb17/" rel="prev" title="JMeter 有用的脚本">
+      <i class="fa fa-chevron-left"></i> JMeter 有用的脚本
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/8d191b3e072f/" rel="next" title="扫码登录">
+      扫码登录 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#queryRunner"><span class="nav-text">queryRunner</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#typeorm"><span class="nav-text">typeorm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5-%E5%88%9B%E5%BB%BA-queryRunner"><span class="nav-text">第一步 创建 queryRunner</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#data-source-DataSource-ts"><span class="nav-text">data-source&#x2F;DataSource.ts</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#driver-mysql"><span class="nav-text">driver&#x2F;mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#MysqlDriver-ts"><span class="nav-text">MysqlDriver.ts</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#MysqlQueryRunner-ts"><span class="nav-text">MysqlQueryRunner.ts</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5-%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5"><span class="nav-text">第二步 建立连接</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#driver-mysql-1"><span class="nav-text">driver&#x2F;mysql&#x2F;</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#MysqlQueryRunner-ts-1"><span class="nav-text">MysqlQueryRunner.ts</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#MysqlDriver-ts-1"><span class="nav-text">MysqlDriver.ts</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql"><span class="nav-text">mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E8%BF%9E%E6%8E%A5"><span class="nav-text">获取连接</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#lib-Pool-js"><span class="nav-text">lib&#x2F;Pool.js</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#lib-PoolConnection-js"><span class="nav-text">lib&#x2F;PoolConnection.js</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E6%97%A0%E5%93%8D%E5%BA%94%E9%97%AE%E9%A2%98"><span class="nav-text">程序无响应问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E5%B0%8F%E5%8C%96%E4%BB%A3%E7%A0%81"><span class="nav-text">最小化代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%9E%90"><span class="nav-text">分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql-%E6%97%A5%E5%BF%97"><span class="nav-text">mysql 日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E8%BF%9E%E6%8E%A5%E6%B1%A0%E4%BF%A1%E6%81%AF"><span class="nav-text">获取连接池信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql-%E8%BF%9E%E6%8E%A5%E6%B1%A0%E9%85%8D%E7%BD%AE"><span class="nav-text">mysql 连接池配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-text">结论</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

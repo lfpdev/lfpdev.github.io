@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="find在指定目录下查找文件 如何不设置任何参数，则 find 命令将在当前目录下查找子目录与文件，并且将查找到的子目录和文件全部显示出来 语法1find [option] [path...] [expression...]   optiosn 后的参数被视为path，直到第一个以-开头的参数及之后的参数被视为expression  如果没有给出路径，则使用当前目录  如果没有给出表达式，则使用表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="find命令">
+<meta property="og:url" content="http://example.com/p/7c754dacc879/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="find在指定目录下查找文件 如何不设置任何参数，则 find 命令将在当前目录下查找子目录与文件，并且将查找到的子目录和文件全部显示出来 语法1find [option] [path...] [expression...]   optiosn 后的参数被视为path，直到第一个以-开头的参数及之后的参数被视为expression  如果没有给出路径，则使用当前目录  如果没有给出表达式，则使用表">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210722094207.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210722094217.png">
+<meta property="article:published_time" content="2021-08-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.761Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210722094207.png">
+
+<link rel="canonical" href="http://example.com/p/7c754dacc879/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>find命令 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/7c754dacc879/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          find命令
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-09-01 00:00:00" itemprop="dateCreated datePublished" datetime="2021-09-01T00:00:00+08:00">2021-09-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="find"><a href="#find" class="headerlink" title="find"></a>find</h1><p>在指定目录下查找文件</p>
+<p>如何不设置任何参数，则 find 命令将在当前目录下查找子目录与文件，并且将查找到的子目录和文件全部显示出来</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a><strong>语法</strong></h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find [option] [path...] [expression...]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>optiosn 后的参数被视为path，直到第一个以<code>-</code>开头的参数及之后的参数被视为expression</p>
+</li>
+<li><p>如果没有给出路径，则使用当前目录</p>
+</li>
+<li><p>如果没有给出表达式，则使用表达式<code>print</code></p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="option"><a href="#option" class="headerlink" title="option"></a>option</h3><ul>
+<li>H</li>
+<li>L</li>
+<li>P</li>
+<li>D</li>
+<li>Olevel</li>
+</ul>
+<h3 id="path"><a href="#path" class="headerlink" title="path"></a>path</h3><p>多个路径用空格隔开</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find ./test ./dir2 -type f -name &quot;abc*&quot;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="expression"><a href="#expression" class="headerlink" title="expression"></a>expression</h3><ul>
+<li>一种查询规范,描述如何匹配文件以及如何处理匹配的文件，一个表达式是由一系列事物组成，包括 Tests、Actions、Global options、Positional options、Operators</li>
+</ul>
+<p>常用表达式组成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">-amin&lt;分钟&gt;：#查找在指定时间被存取过的文件或目录，单位分钟</span><br><span class="line">-mmin&lt;分钟&gt;：#查找在指定时间被更改过的文件或目录，单位分钟</span><br><span class="line">-mtime&lt;24小时数&gt;：#查找在指定时间被更改过的文件或目录，单位24小时</span><br><span class="line">-atime&lt;24小时数&gt;：#查找在指定时间被写入过的文件或目录，单位24小时</span><br><span class="line">-cmin&lt;分钟&gt;：#查找在指定时间之内被更改过的文件或目录</span><br><span class="line">-ctime&lt;24小时数&gt;：#查找在指定时间之时被更改的文件或目录，单位以24小时计算</span><br><span class="line">-daystart：#从今天开始计算时间</span><br><span class="line">-depth：#从指定目录下最深层的子目录开始查找</span><br><span class="line">-exec&lt;执行指令&gt;：#如果find命令返回值为True，就执行该指令</span><br><span class="line">-false：#将find命令返回值都设为False</span><br><span class="line">-fstype&lt;文件系统类型&gt;：#只查找此指定文件系统类型下的文件或目录</span><br><span class="line">-gid&lt;群组识别码&gt;：#查找匹配此群组识别码的文件或目录</span><br><span class="line">-group&lt;群组名称&gt;：#查找匹配此群组名称的文件或目录</span><br><span class="line">-help或——help：#帮助信息</span><br><span class="line">-links&lt;连接数目&gt;：#查找匹配指定的硬连接数目的文件或目录</span><br><span class="line">-maxdepth&lt;目录层级&gt;：#设置查找的最大目录层级</span><br><span class="line">-mindepth&lt;目录层级&gt;：#设置查找的最小目录层级</span><br><span class="line">-name&lt;范本样式&gt;：#指定字符串作为寻找文件或目录的范本</span><br><span class="line">-path&lt;范本样式&gt;：#指定字符串作为寻找目录的范本样式</span><br><span class="line">-perm&lt;权限数值&gt;：#查找符合指定的权限数值的文件或目录</span><br><span class="line">-size&lt;文件大小&gt;：#查找符合指定的文件大小的文件</span><br><span class="line">-true： #将find命令返回值都设为True</span><br><span class="line">-type&lt;文件类型&gt;：#只查找匹配指定的文件类型的文件</span><br><span class="line">-uid&lt;用户识别码&gt;：#只查找匹配指定的用户识别码的文件或目录</span><br><span class="line">-user&lt;拥有者名称&gt;：#只查找匹配指定的拥有者名称的文件或目录</span><br><span class="line">-version：#显示版本信息</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="GLOBAL-OPTIONS"><a href="#GLOBAL-OPTIONS" class="headerlink" title="GLOBAL OPTIONS"></a>GLOBAL OPTIONS</h4><p>find [option] [path] [<strong>global options</strong>] [test positional options action]</p>
+<h5 id="maxdepth-levels"><a href="#maxdepth-levels" class="headerlink" title="-maxdepth levels"></a>-maxdepth levels</h5><p>最多向下查找 levels 个深度的目录</p>
+<h5 id="mindepth-levels"><a href="#mindepth-levels" class="headerlink" title="-mindepth levels"></a>-mindepth levels</h5><p>查找 距离当前目录至少 levels 个深度的目录</p>
+<h4 id="TEST"><a href="#TEST" class="headerlink" title="TEST"></a>TEST</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">+n    for greater than n</span><br><span class="line">-n     for less than n</span><br><span class="line">n       for exactly n</span><br></pre></td></tr></table></figure>
+
+<p>-2    距离此时两天之内</p>
+<p>+2   两天之前，不包括两天之前的一天（也就是不包括-2和2的）</p>
+<p>2     两天之前的一天内</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210722094207.png"></p>
+<p>当前是24号9点</p>
+<p><code>n = +1</code> 查找22号9点以前的数据</p>
+<p><code>n=1</code> 查找22号9点到23号9点的数据</p>
+<p><code>n=-1</code> 查找23号9点到当前24号9点的数据</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210722094217.png"></p>
+<h5 id="name-pattern"><a href="#name-pattern" class="headerlink" title="-name pattern"></a>-name pattern</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#在/mingongge目录下查找包含mingongge开头的文件名</span><br><span class="line">[root@centos7 ~]# find /mingongge -name &quot;mingongge*.log&quot;</span><br></pre></td></tr></table></figure>
+
+<h5 id="path-pattern"><a href="#path-pattern" class="headerlink" title="-path pattern"></a>-path pattern</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#匹配文件路径或者文件</span></span><br><span class="line">[root@centos7 ~]<span class="comment"># find /usr/ -path &quot;*txt*&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="perm-mode"><a href="#perm-mode" class="headerlink" title="-perm mode"></a>-perm mode</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当前目录下找出权限为777的文件</span><br><span class="line">[root@centos7 ~]# find . -type f -perm 777#找出当前目录下所有者是mingongge的所有文件</span><br></pre></td></tr></table></figure>
+
+<h5 id="regex-pattern"><a href="#regex-pattern" class="headerlink" title="-regex pattern"></a>-regex pattern</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#基于正则表达式匹配文件路径</span><br><span class="line">[root@centos7 ~]# find . -regex &quot;.*(.txt|.log)$&quot;</span><br></pre></td></tr></table></figure>
+
+<h5 id="iregex-pattern"><a href="#iregex-pattern" class="headerlink" title="-iregex pattern"></a>-iregex pattern</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#忽略大小写</span><br><span class="line">[root@centos7 ~]# find . -iregex &quot;.*(.txt|.log)$&quot;</span><br></pre></td></tr></table></figure>
+
+<h5 id="type-c"><a href="#type-c" class="headerlink" title="-type c"></a>-type c</h5><p>文件类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# find . -type f -name &quot;*.log&quot; ! -perm 644</span><br></pre></td></tr></table></figure>
+
+<h5 id="user-uname"><a href="#user-uname" class="headerlink" title="-user uname"></a>-user uname</h5><p>文件所有者为 uname 的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]# find . -type f -user mingongge</span><br></pre></td></tr></table></figure>
+
+<h5 id="size-n-cwbkMG"><a href="#size-n-cwbkMG" class="headerlink" title="-size n[cwbkMG]"></a>-size n[cwbkMG]</h5><p>文件大小</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#查找当前目录下文件大小超过500M的文件</span><br><span class="line">[root@centos7 ~]# find . -type f -size +500M </span><br><span class="line"></span><br><span class="line">#查找当前目录超过500M的文件，并打印出文件的详细属性信息</span><br><span class="line">[root@centos7 ~]# find . -type f -size +800M  -print0 | xargs -0 ls -l </span><br><span class="line"></span><br><span class="line">#查找当前目录超过500M的文件，并打印出文件的具体大小</span><br><span class="line">[root@centos7 ~]# find . -type f -size +500M  -print0 | xargs -0 du -h|sort -nr</span><br></pre></td></tr></table></figure>
+
+<h5 id="atime-n"><a href="#atime-n" class="headerlink" title="-atime n"></a>-atime n</h5><blockquote>
+<p>访问时间：用户最近一次访问时间</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#查找最近10天内被访问过的所有文件</span><br><span class="line">[root@centos7 ~]# find . -type f -atime -10</span><br><span class="line"></span><br><span class="line">#查找超过10天内被访问过的所有文件</span><br><span class="line">[root@centos7 ~]# find . -type f -atime +10</span><br></pre></td></tr></table></figure>
+
+<h5 id="amin-n"><a href="#amin-n" class="headerlink" title="-amin n"></a>-amin n</h5><blockquote>
+<p>访问时间：用户最近一次访问时间</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#查找访问时间超过20分钟的所有文件</span><br><span class="line">[root@centos7 ~]# find . -type f -amin +20</span><br></pre></td></tr></table></figure>
+
+<h5 id="mtime-n"><a href="#mtime-n" class="headerlink" title="-mtime n"></a>-mtime n</h5><blockquote>
+<p>修改时间：文件最后一次被修改的时间</p>
+</blockquote>
+<h5 id="mmin-n"><a href="#mmin-n" class="headerlink" title="-mmin n"></a>-mmin n</h5><blockquote>
+<p>修改时间：文件最后一次被修改的时间</p>
+</blockquote>
+<h5 id="ctime-n"><a href="#ctime-n" class="headerlink" title="-ctime n"></a>-ctime n</h5><blockquote>
+<p>变化时间：文件元数据（例如权限等）</p>
+</blockquote>
+<h5 id="cmin-n"><a href="#cmin-n" class="headerlink" title="-cmin n"></a>-cmin n</h5><blockquote>
+<p>变化时间：文件元数据（例如权限等）</p>
+</blockquote>
+<h4 id="ACTIONS"><a href="#ACTIONS" class="headerlink" title="ACTIONS"></a>ACTIONS</h4><h5 id="delete"><a href="#delete" class="headerlink" title="-delete"></a>-delete</h5><h5 id="exec-command"><a href="#exec-command" class="headerlink" title="-exec command ;"></a>-exec command ;</h5><p>执行命令，<code>;</code>之前的参数都是被执行命令的参数</p>
+<blockquote>
+<p><code>\;</code> 需要转义，使之传递给 find 命令</p>
+</blockquote>
+<p><code>&#123;&#125;</code> ，占位符，被替换为 find 找到的所有文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#找出当前目录下所有者为root的文件，并把所有者更改为mingongge这个用户</span></span><br><span class="line">[root@centos7 ~]<span class="comment"># find .-type f -user root -exec chown mingongge &#123;&#125; ;</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">#找出当前用户家目录下所有的.log文件并执行删除动作</span></span><br><span class="line">[root@centos7 ~]<span class="comment"># find $HOME/. -name &quot;*.log&quot; -exec rm &#123;&#125; ;</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">#查找当前目录下所有.log文件并将他们拼接起来然后写入到mingongge.txt这个文件中</span></span><br><span class="line">[root@centos7 ~]<span class="comment"># find . -type f -name &quot;*.log&quot; -exec cat &#123;&#125; ;&gt; /mingongge.txt</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">#查找出10天前的.log文件，然后全部移动到mingongge目录下</span></span><br><span class="line">[root@centos7 ~]<span class="comment"># find . -type f -mtime +10 -name &quot;*.log&quot; -exec cp &#123;&#125; mingongge ;</span></span><br><span class="line"> </span><br><span class="line"><span class="comment">#找出当前目录下所有.log文件，然后以“File:文件名”的格式打印输出到屏幕上</span></span><br><span class="line">[root@centos7 ~]<span class="comment"># find . -type f -name &quot;*.log&quot; -exec printf &quot;File: %sn&quot; &#123;&#125; ;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="OPERATORS"><a href="#OPERATORS" class="headerlink" title="OPERATORS"></a>OPERATORS</h4><h5 id="expr"><a href="#expr" class="headerlink" title="! expr"></a>! expr</h5><p>否定表达式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#找出/mingongge下不是以.log结尾的文件</span></span><br><span class="line">[root@centos7 ~]<span class="comment"># find /mingongge ! -name &quot;*.log&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="not-expr"><a href="#not-expr" class="headerlink" title="-not expr"></a>-not expr</h5><p>同 !</p>
+<h5 id="expr1-a-expr2"><a href="#expr1-a-expr2" class="headerlink" title="expr1 -a expr2"></a>expr1 -a expr2</h5><p>逻辑 and</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#当前目录及子目录下查找所有以.txt和.log结尾的文件</span></span><br><span class="line">[root@centos7 ~]<span class="comment"># find . -name &quot;*.txt&quot; -a -name &quot;*.log&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="expr1-o-expr2"><a href="#expr1-o-expr2" class="headerlink" title="expr1 -o expr2"></a>expr1 -o expr2</h5><p>逻辑或</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@centos7 ~]<span class="comment"># find . -name &quot;*.txt&quot; -o -name &quot;*.log&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><h3 id="当前目录搜索所有文件，文件内容包含xxx"><a href="#当前目录搜索所有文件，文件内容包含xxx" class="headerlink" title="当前目录搜索所有文件，文件内容包含xxx"></a>当前目录搜索所有文件，文件内容包含xxx</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -type f -name &quot;*&quot; | xargs grep &quot;192.168.1.111&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="查找系统中前5的大文件"><a href="#查找系统中前5的大文件" class="headerlink" title="查找系统中前5的大文件"></a>查找系统中前5的大文件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># find / -type f -print0 | xargs -0 du -h | sort -rh | head -n 5</span><br></pre></td></tr></table></figure>
+
+<h3 id="错误提示重定向"><a href="#错误提示重定向" class="headerlink" title="错误提示重定向"></a>错误提示重定向</h3><p>普通用户查找的时候会出现很多权限不够的错误提示，可以把它们重定向到其他地方</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name <span class="string">&quot;xx&quot;</span> 2&gt;/dev/null</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除7天之前的日志"><a href="#删除7天之前的日志" class="headerlink" title="删除7天之前的日志"></a>删除7天之前的日志</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find 对应目录 -mtime +天数 -name &quot;文件名&quot; -exec rm -rf &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>最后的<code>;</code>不能丢</p>
+</blockquote>
+<p><strong>示例</strong></p>
+<ul>
+<li>当前目录下查找30天之前的普通文件，并删除</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . -type f -mtime +30 -exec rm -rf &#123;&#125; \; </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>&#x2F;opt&#x2F;soft&#x2F;log&#x2F; 目录下，删除30天之前的，以 log 结尾的文件</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find /opt/soft/log/ -mtime +30 -name <span class="string">&quot;*.log&quot;</span> -<span class="built_in">exec</span> <span class="built_in">rm</span> -rf &#123;&#125; \;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/14c5c16ba689/" rel="prev" title="正则表达式">
+      <i class="fa fa-chevron-left"></i> 正则表达式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/f45219c111e4/" rel="next" title="JS中的正则表达式">
+      JS中的正则表达式 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#find"><span class="nav-text">find</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#option"><span class="nav-text">option</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#path"><span class="nav-text">path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#expression"><span class="nav-text">expression</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GLOBAL-OPTIONS"><span class="nav-text">GLOBAL OPTIONS</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#maxdepth-levels"><span class="nav-text">-maxdepth levels</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mindepth-levels"><span class="nav-text">-mindepth levels</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TEST"><span class="nav-text">TEST</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#name-pattern"><span class="nav-text">-name pattern</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#path-pattern"><span class="nav-text">-path pattern</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#perm-mode"><span class="nav-text">-perm mode</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#regex-pattern"><span class="nav-text">-regex pattern</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#iregex-pattern"><span class="nav-text">-iregex pattern</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#type-c"><span class="nav-text">-type c</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#user-uname"><span class="nav-text">-user uname</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#size-n-cwbkMG"><span class="nav-text">-size n[cwbkMG]</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#atime-n"><span class="nav-text">-atime n</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#amin-n"><span class="nav-text">-amin n</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mtime-n"><span class="nav-text">-mtime n</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#mmin-n"><span class="nav-text">-mmin n</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ctime-n"><span class="nav-text">-ctime n</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#cmin-n"><span class="nav-text">-cmin n</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ACTIONS"><span class="nav-text">ACTIONS</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#delete"><span class="nav-text">-delete</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#exec-command"><span class="nav-text">-exec command ;</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#OPERATORS"><span class="nav-text">OPERATORS</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#expr"><span class="nav-text">! expr</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#not-expr"><span class="nav-text">-not expr</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#expr1-a-expr2"><span class="nav-text">expr1 -a expr2</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#expr1-o-expr2"><span class="nav-text">expr1 -o expr2</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-text">应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BD%93%E5%89%8D%E7%9B%AE%E5%BD%95%E6%90%9C%E7%B4%A2%E6%89%80%E6%9C%89%E6%96%87%E4%BB%B6%EF%BC%8C%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E5%8C%85%E5%90%ABxxx"><span class="nav-text">当前目录搜索所有文件，文件内容包含xxx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E7%B3%BB%E7%BB%9F%E4%B8%AD%E5%89%8D5%E7%9A%84%E5%A4%A7%E6%96%87%E4%BB%B6"><span class="nav-text">查找系统中前5的大文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E6%8F%90%E7%A4%BA%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">错误提示重定向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A47%E5%A4%A9%E4%B9%8B%E5%89%8D%E7%9A%84%E6%97%A5%E5%BF%97"><span class="nav-text">删除7天之前的日志</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

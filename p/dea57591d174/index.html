@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="字符集一组文本和图形符号，每个符号都映射到一个非负整数 给每个字符分配一个唯一的数值，并建立字符和数值之间的双向映射关系，即字符集、编码表  同一个数值在不同的字符集中对应不同的字符 有了字符集需要定义其编码方式，只有转换为字节才能读取、存储、传输  通常所说的 xxx编码 指的是 用xxx字符集表示数据  计算机中的数据都是二进制形式，xxx编码，就是用二进制对应的xxx字符集中的字符表示数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="字符和编码">
+<meta property="og:url" content="http://example.com/p/dea57591d174/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="字符集一组文本和图形符号，每个符号都映射到一个非负整数 给每个字符分配一个唯一的数值，并建立字符和数值之间的双向映射关系，即字符集、编码表  同一个数值在不同的字符集中对应不同的字符 有了字符集需要定义其编码方式，只有转换为字节才能读取、存储、传输  通常所说的 xxx编码 指的是 用xxx字符集表示数据  计算机中的数据都是二进制形式，xxx编码，就是用二进制对应的xxx字符集中的字符表示数据">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210625174434.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210723103124.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210723103035.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210624210443.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210628111704.png">
+<meta property="article:published_time" content="2022-08-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.756Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210625174434.png">
+
+<link rel="canonical" href="http://example.com/p/dea57591d174/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>字符和编码 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/dea57591d174/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          字符和编码
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-08-20 00:00:00" itemprop="dateCreated datePublished" datetime="2022-08-20T00:00:00+08:00">2022-08-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Dev/" itemprop="url" rel="index"><span itemprop="name">Dev</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="字符集"><a href="#字符集" class="headerlink" title="字符集"></a>字符集</h1><p>一组文本和图形符号，每个符号都映射到一个非负整数</p>
+<p>给每个字符分配一个唯一的数值，并建立字符和数值之间的双向映射关系，即字符集、编码表</p>
+<blockquote>
+<p>同一个数值在不同的字符集中对应不同的字符</p>
+<p>有了字符集需要定义其编码方式，只有转换为字节才能读取、存储、传输</p>
+</blockquote>
+<p>通常所说的 xxx编码 指的是 用xxx字符集表示数据</p>
+<blockquote>
+<p>计算机中的数据都是二进制形式，xxx编码，就是用二进制对应的xxx字符集中的字符表示数据</p>
+</blockquote>
+<span id="more"></span>
+<h2 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h2><ul>
+<li><p>给每个字符映射一个唯一的整数——代码点（Code Points）或者叫码点、<strong>码值</strong></p>
+<blockquote>
+<p>根据Unicode定义，总共有<strong>1,114,112</strong>个代码点，编号从<strong>0x0</strong>到<strong>0x10FFFF</strong></p>
+</blockquote>
+</li>
+<li><p>所有代码点构成一个代码空间（Code Space）</p>
+</li>
+<li><p>Unicode标准把代码点分成了<strong>17</strong>个<strong>代码平面</strong>（<strong>Code Plane</strong>），编号为**#0<strong>到</strong>#16<strong>。每个代码平面包含</strong>65,536<strong>（2^16）个代码点（17*65,536&#x3D;1,114,112）。其中，Plane#0叫做基本多语言平面（Basic Multilingual Plane，</strong>BMP**），其余平面叫做补充平面（Supplementary Planes）</p>
+<blockquote>
+<p>BMP 码值范围 0-65535（0-FFFF），2^16，正好可以用2个字节表示</p>
+</blockquote>
+</li>
+<li><p>是一种编码标准（字符集），而非编码实现</p>
+<blockquote>
+<p>编码（实现）：数据从一种形式或格式转换为另一种形式的过程</p>
+</blockquote>
+</li>
+<li><p>表示方式<code>U+[十六进制码值]</code> ，例如 U+6B63</p>
+</li>
+<li><p>CJK <a target="_blank" rel="noopener" href="https://unicode-table.com/cn/blocks/cjk-unified-ideographs/">中日韩统一表意文字</a>，范围 4E00-9FFF</p>
+</li>
+<li><p>Emoji</p>
+<p>Unicode 只规定了 Emoji 的意义，没有规定具体形态，因此同样含义的Emoji 在不同的平台形状不同</p>
+<p>Emoji 码值大都超过 FFFF，在UTF-8编码实现下需要4个字节</p>
+</li>
+<li><p>常见编码方式（实现）</p>
+<p>UTF-8、UTF-16、UTF-32 等及 GB18030</p>
+<blockquote>
+<p>Unicode Transformation Format–UTF，Unicode 转换形式</p>
+<p>ucs-2 是 UTF-16 的前身，不完全支持 unicode</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="ASCII"><a href="#ASCII" class="headerlink" title="ASCII"></a>ASCII</h2><p>American Standard Code for Information Interchange，美国信息交换标准代码</p>
+<p>美国信息交换标准委员会制定的 7 位二进制码，共有 128 种字符，其中包括 32 个通用控制字符、10 个十进制数码、52 个英文大写与小写字母、34 个专用符号（如＄、％、七＝等）。除了 32 个控制字符不能打印外，其余 96 个字符全部可以打印</p>
+<p>对应 Unicode 的前128个字符，128个码值</p>
+<p>书写上可用两位十六进制数表示</p>
+<ul>
+<li><p>ASCII 0~31 </p>
+<p>不可显示也不可打印</p>
+<p>为控制字符（前32个）</p>
+</li>
+<li><p>ASCII 32 </p>
+<p>不可显示，可打印</p>
+<p>为空格</p>
+</li>
+<li><p>ASCII 33~126</p>
+<p>可打印字符</p>
+<p>26个基本拉丁字母、阿拉伯数字和英式标点符号</p>
+<blockquote>
+<p>只能用于显示现代美国英语</p>
+<p>索引表 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/zh-hans/ASCII">https://zh.wikipedia.org/zh-hans/ASCII</a></p>
+</blockquote>
+</li>
+</ul>
+<p>7位字符集</p>
+<blockquote>
+<p>只占用了一个字节的后面7位，最前面的一位统一规定为<code>0</code></p>
+<p>比如空格<code>SPACE</code>是32（二进制<code>00100000</code>），大写的字母<code>A</code>是65（二进制<code>01000001</code>）</p>
+</blockquote>
+<h2 id="ISO-8859-1"><a href="#ISO-8859-1" class="headerlink" title="ISO-8859-1"></a>ISO-8859-1</h2><p>又称 Latin-1</p>
+<p>收录了256个字符，256个码值，对应 Unicode 的前256个字符</p>
+<blockquote>
+<p>以ASCII为基础，在空置的0xA0-0xFF的范围内，加入96个字母及符号，藉以供使用附加符号的拉丁字母语言使用</p>
+</blockquote>
+<p>8位字符集</p>
+<h2 id="GB18030"><a href="#GB18030" class="headerlink" title="GB18030"></a>GB18030</h2><p>最新版 GB18030-2005《信息技术中文编码字符集》是我国制订的以汉字为主并包含多种我国少数民族文字（如藏、蒙古、傣、彝、朝鲜、维吾尔文等）的超大型中文编码字符集强制性标准，其中收入汉字70000余个</p>
+<p>对<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GB_2312">GB 2312-1980</a>完全<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%90%91%E5%90%8E%E5%85%BC%E5%AE%B9">向后兼容</a>，与<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GBK">GBK</a>基本<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%90%91%E5%90%8E%E5%85%BC%E5%AE%B9">向后兼容</a>，并支持<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Unicode">Unicode</a>（<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/GB_13000">GB 13000</a>）的所有码位。有以下特点</p>
+<ul>
+<li>编码空间庞大，最多可定义161万个字符。</li>
+<li>采用变长多字节传输编码，每个字可以由1个、2个或4个字节组成。</li>
+<li>完全支持Unicode，无需动用造字区即可支持中国国内少数民族文字、中日韩和繁体汉字以及emoji等字符。</li>
+</ul>
+<h2 id="Base64"><a href="#Base64" class="headerlink" title="Base64"></a>Base64</h2><p><a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc4648">rfc 4648</a></p>
+<p>收录了64个字符，64个码值</p>
+<blockquote>
+<p>索引表 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Base64">https://en.wikipedia.org/wiki/Base64</a></p>
+<p>加上垫字<code>=</code> 实际有65个字符</p>
+</blockquote>
+<p>基于64个可打印字符将<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BA%8C%E8%BF%9B%E5%88%B6">二进制数据</a>编码为<strong>文本数据</strong>（可打印字符）</p>
+<blockquote>
+<p>不关心原始数据是哪种编码方式，仅针对二进制数据的可视化表示</p>
+<p>便于 json 传输，用于在 Http 环境下传递较长的标识信息</p>
+</blockquote>
+<h3 id="大小计算"><a href="#大小计算" class="headerlink" title="大小计算"></a>大小计算</h3><p>一个base64字符位1字节</p>
+<p>base64字符串长度*（1&#x2F;4）-x 即原始数据的大小（单位 byte）</p>
+<blockquote>
+<p>x 表示base64字符串中&#x3D;的个数，有效值 0，1，2</p>
+</blockquote>
+<h3 id="转换方式"><a href="#转换方式" class="headerlink" title="转换方式"></a>转换方式</h3><p>将24位（3字节）二进制串转换为32位（4字节—4个base64字符）</p>
+<blockquote>
+<p>必须是24位为一组进行转换，因此如果不是24的倍数，需要用0补齐</p>
+<p>2字节，补8个0，转换后用1个垫字<code>=</code>代替</p>
+<p>字节，补16个0，转换后用2个垫字<code>=</code>代替</p>
+</blockquote>
+<ul>
+<li><p>从左到右处理二进制串</p>
+</li>
+<li><p>每6位为一组，前面补0，构成8位（1字节）</p>
+<blockquote>
+<p>base64 转码后，有效数据占3&#x2F;4</p>
+</blockquote>
+</li>
+<li><p>计算8位二进制的十进制值，对照base64表找出对应的字符</p>
+</li>
+</ul>
+<p> ‘Man’ 经过 Base64编码（用Base64字符集表示数据 ‘Man’）</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210625174434.png"></p>
+<p><strong>Ma 转换</strong></p>
+<table>
+<thead>
+<tr>
+<th>文本</th>
+<th>M</th>
+<th>a</th>
+<th>-</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ASCII编码</td>
+<td>77</td>
+<td>97</td>
+<td>-</td>
+</tr>
+<tr>
+<td>二进制位</td>
+<td>010011,01</td>
+<td>0110,0001</td>
+<td>00,000000</td>
+</tr>
+</tbody></table>
+<p>分组补齐 00,010011	00,010110	00,0001,00	00,000000</p>
+<p>base64	T						W				E					 &#x3D;</p>
+<p><strong>M 转换</strong></p>
+<table>
+<thead>
+<tr>
+<th>文本</th>
+<th>M</th>
+<th>-</th>
+<th>-</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ASCII编码</td>
+<td>77</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>二进制位</td>
+<td>010011,01</td>
+<td>0000,0000</td>
+<td>00,000000</td>
+</tr>
+</tbody></table>
+<p>分组补齐 00,010011	00,010000	00,000000	00,000000</p>
+<p>base64	T					&#x3D;				     &#x3D;					 &#x3D;</p>
+<p><strong>转换表</strong></p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210723103124.png"></p>
+<p><strong>参考</strong></p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2008/06/base64.html">http://www.ruanyifeng.com/blog/2008/06/base64.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Base64">https://en.wikipedia.org/wiki/Base64</a></p>
+<h2 id="Base64URL"><a href="#Base64URL" class="headerlink" title="Base64URL"></a>Base64URL</h2><p>标准的Base64编码并不适合直接放在URL里传输，因为URL编码器会把标准Base64中的<code>/</code>和<code>+</code>字符变为形如<code>%XX</code>的形式（Base64 有三个字符<code>+</code>、<code>/</code>和<code>=</code>，在 URL 里面有特殊含义），使的URL变长</p>
+<p>Base64URL编码会去掉Base64编码时末尾填充的<code>=</code>，而且把<code>+</code>和<code>/</code>替换成了<code>-</code>和<code>_</code>，URL保持相同的编码形式，且长度不变</p>
+<p><strong>转换表</strong></p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210723103035.png"></p>
+<p><strong>参考</strong>：</p>
+<p><a target="_blank" rel="noopener" href="https://datatracker.ietf.org/doc/html/rfc4648#section-5">https://datatracker.ietf.org/doc/html/rfc4648#section-5</a></p>
+<h2 id="GSM-7"><a href="#GSM-7" class="headerlink" title="GSM-7"></a>GSM-7</h2><p>是GSM网络中用于SMS （短消息服务）、CB（小区广播）和USSD（非结构化补充服务数据）的字符编码。</p>
+<blockquote>
+<p>但该字符集仅适用于英语和一些西欧语言。中文、韩文或日文等语言必须使用 16 位UCS-2传输字符编码</p>
+</blockquote>
+<h3 id="REGEXP"><a href="#REGEXP" class="headerlink" title="REGEXP"></a>REGEXP</h3><p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/12673120/how-to-detect-non-gsm-7-bit-alphabet-characters-in-input-field/12673229">https://stackoverflow.com/questions/12673120/how-to-detect-non-gsm-7-bit-alphabet-characters-in-input-field/12673229</a></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">isGSMAlphabet</span>(<span class="params">text</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> regexp = <span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="string">&quot;^[A-Za-z0-9 \\r\\n@£$¥èéùìòÇØøÅå\u0394_\u03A6\u0393\u039B\u03A9\u03A0\u03A8\u03A3\u0398\u039EÆæßÉ!\&quot;#$%&amp;&#x27;()*+,\\-./:;&lt;=&gt;?¡ÄÖÑÜ§¿äöñüà^&#123;&#125;\\\\\\[~\\]|\u20AC]*$&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> regexp.<span class="title function_">test</span>(text);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="big5"><a href="#big5" class="headerlink" title="big5"></a>big5</h3><p>中国台湾</p>
+<h1 id="编码"><a href="#编码" class="headerlink" title="编码"></a>编码</h1><p>两种含义</p>
+<ul>
+<li><p>数据从一种形式转换为另一种形式的过程（通常所说的xxx（字符集）编码，指这种含义）</p>
+</li>
+<li><p>定义字符对应数值的存储（传输）方式（与字符集对应的编码，指这种含义）</p>
+<p>定义字符的序列化和排序规则</p>
+<blockquote>
+<p>数值可以表示为二进制、十进制、十六进制等，但存储方式都是二进制。（计算机用高电平和低电平分别表示1和0）</p>
+<p>编码规定一个数值用几个字节去存储，例如十进制2，二进制</p>
+</blockquote>
+</li>
+<li><p>编码后也是一个数值，只是将字符集中的码值换一种方式表示，便于存储和传输</p>
+<blockquote>
+<p>注意区分 码值 和 编码值</p>
+<p>码值：字符集中的数值</p>
+<p>编码值：编码方式中的数值</p>
+</blockquote>
+</li>
+</ul>
+<p>码值只是抽象概念，只有转换为字节才能读取、存储、传输</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210624210443.png"></p>
+<h2 id="UTF-num"><a href="#UTF-num" class="headerlink" title="UTF-num"></a>UTF-num</h2><p>Unicode Transformation Format–UTF，Unicode 转换形式，后面的数字表示一个编码单位（code unit）所占的比特位</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Unicode#Mapping_and_encodings">https://en.wikipedia.org/wiki/Unicode#Mapping_and_encodings</a></p>
+</blockquote>
+<h2 id="UTF-8"><a href="#UTF-8" class="headerlink" title="UTF-8"></a>UTF-8</h2><p>编码单元是1字节8比特，即最少占1字节</p>
+<p>一种针对Unicode的可变长度字符编码，用<strong>一至四个字节</strong>对Unicode字符集中的所有有效码点进行编码</p>
+<p><strong>转换规则</strong></p>
+<ul>
+<li>单字节字符，字节的第一位设为0，后面7位为这个符号的 Unicode码（单字节字符与ASCII编码相同）</li>
+<li><code>n</code> 字节字符，第一个字节的前<code>n</code>位设为<code>1</code>，第<code>n+1</code>位设为<code>0</code>，后面字节的前两位一律设为<code>10</code>，其余二进制位，从该字符的 Unicode码的最后一个二进制位开始，依次从后向前填入，多出的位补<code>0</code></li>
+</ul>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210628111704.png"></p>
+<blockquote>
+<p>大部分中文码值范围 4E00-9FFF，落在 U+0800 到 U+FFFF 区间内，需要占用3字节</p>
+</blockquote>
+<p><strong>示例</strong></p>
+<table>
+<thead>
+<tr>
+<th>Unicode码值</th>
+<th>二进制码值</th>
+<th>UTF-8二进制编码值</th>
+<th>UTF-8编码值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>U+0024</td>
+<td>00000000 00100100</td>
+<td>0010 0100</td>
+<td>24</td>
+</tr>
+<tr>
+<td>U+4E25</td>
+<td>01001110 00100101</td>
+<td>11100100 10111000 10100101</td>
+<td>E4 B8 A5</td>
+</tr>
+</tbody></table>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html">http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html</a></p>
+<h2 id="UTF-16"><a href="#UTF-16" class="headerlink" title="UTF-16"></a>UTF-16</h2><p>编码单元是2字节16比特，即最少占2字节</p>
+<h3 id="代理对surrogate-pair"><a href="#代理对surrogate-pair" class="headerlink" title="代理对surrogate pair"></a>代理对surrogate pair</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 成对的代理项对</span></span><br><span class="line">[\ud800-\udbff][\udc00-\udfff]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/surrogate%20pair/16820063">第一个代理字符为16位编码，范围为U+D800到U+DFFF，第二个代理字符也是一个16位编码，范围为U+DC00 to U+DFFF</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/38324041/answer/75879460">https://www.zhihu.com/question/38324041/answer/75879460</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000017782406">JavaScript 处理 Unicode</a></p>
+<p>计算字符个数</p>
+<ul>
+<li><p>JavaScript 将辅助平面内的字符表示为代理对。通过 String#length 方法为2个字符</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x27;💩&#x27;.length</span><br><span class="line">// 2</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用总字符数减去代理对字符</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> str = <span class="string">&#x27;我不是💩&#x27;</span></span><br><span class="line"><span class="keyword">const</span> strLen = str.<span class="property">length</span></span><br><span class="line"><span class="keyword">const</span> surrogatePairs = str.<span class="title function_">match</span>(<span class="regexp">/[\uD800-\uDBFF][\uDC00-\uDFFF]/g</span>) || [];</span><br><span class="line"><span class="keyword">const</span> len = strLen - surrogatePairs.<span class="property">length</span>;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h1 id="JS-编码"><a href="#JS-编码" class="headerlink" title="JS 编码"></a>JS 编码</h1><blockquote>
+<p><a target="_blank" rel="noopener" href="https://mathiasbynens.be/notes/javascript-encoding">https://mathiasbynens.be/notes/javascript-encoding</a></p>
+</blockquote>
+<p>JavaScript 引擎可以在内部自由使用 UCS-2 或 UTF-16。大多数引擎都使用 UTF-16。这是一个不会影响语言特性的实现细节。</p>
+<p>ECMAScript&#x2F;JavaScript 语言本身根据 UCS-2 而不是 UTF-16 字符</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/16d67c94d155/" rel="prev" title="clamscan">
+      <i class="fa fa-chevron-left"></i> clamscan
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/af633a30f742/" rel="next" title="JSON">
+      JSON <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E9%9B%86"><span class="nav-text">字符集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unicode"><span class="nav-text">Unicode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ASCII"><span class="nav-text">ASCII</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ISO-8859-1"><span class="nav-text">ISO-8859-1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GB18030"><span class="nav-text">GB18030</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Base64"><span class="nav-text">Base64</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%A7%E5%B0%8F%E8%AE%A1%E7%AE%97"><span class="nav-text">大小计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BD%AC%E6%8D%A2%E6%96%B9%E5%BC%8F"><span class="nav-text">转换方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Base64URL"><span class="nav-text">Base64URL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GSM-7"><span class="nav-text">GSM-7</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#REGEXP"><span class="nav-text">REGEXP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#big5"><span class="nav-text">big5</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%96%E7%A0%81"><span class="nav-text">编码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#UTF-num"><span class="nav-text">UTF-num</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UTF-8"><span class="nav-text">UTF-8</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#UTF-16"><span class="nav-text">UTF-16</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E5%AF%B9surrogate-pair"><span class="nav-text">代理对surrogate pair</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JS-%E7%BC%96%E7%A0%81"><span class="nav-text">JS 编码</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

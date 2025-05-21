@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="消费者购买商家的东西，通过第三方平台支付，第三方支付对接各种资金清算机构（如各大银行的支付接口），资金经清算机构清算后转移到收款人账户">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第三方支付">
+<meta property="og:url" content="http://example.com/p/91130ca1cbb7/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="消费者购买商家的东西，通过第三方平台支付，第三方支付对接各种资金清算机构（如各大银行的支付接口），资金经清算机构清算后转移到收款人账户">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202301291522401.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202301291515569.png">
+<meta property="article:published_time" content="2022-03-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.772Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202301291522401.png">
+
+<link rel="canonical" href="http://example.com/p/91130ca1cbb7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>第三方支付 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/91130ca1cbb7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          第三方支付
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-03-28 00:00:00" itemprop="dateCreated datePublished" datetime="2022-03-28T00:00:00+08:00">2022-03-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Payment/" itemprop="url" rel="index"><span itemprop="name">Payment</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>消费者购买商家的东西，通过第三方平台支付，第三方支付对接各种资金清算机构（如各大银行的支付接口），资金经清算机构清算后转移到收款人账户</p>
+<span id="more"></span>
+<h2 id="第三方含义"><a href="#第三方含义" class="headerlink" title="第三方含义"></a>第三方含义</h2><h3 id="业务流程"><a href="#业务流程" class="headerlink" title="业务流程"></a>业务流程</h3><p>消费者和商家之间的中介</p>
+<h3 id="金融行业"><a href="#金融行业" class="headerlink" title="金融行业"></a>金融行业</h3><p>非金融机构支付服务，是指非金融机构在收付款人之间作为中介机构提供下列部分或全部货币资金转移服务</p>
+<ol>
+<li><p>网络支付；</p>
+<p>指依托公共网络或专用网络在收付款人之间转移货币资金的行为，包括货币汇兑、互联网支付、移动电话支付、固定电话支付、数字电视支付等。</p>
+</li>
+<li><p>预付卡的发行与受理；</p>
+<p>指以营利为目的发行的、在发行机构之外购买商品或服务的预付价值，包括采取磁条、芯片等技术以卡片、密码等形式发行的预付卡。</p>
+<ul>
+<li><p>京东E卡</p>
+<p>京东的单用途商业预付卡，仅能购买京东自营商品</p>
+</li>
+</ul>
+</li>
+<li><p>银行卡收单；</p>
+<p>指通过销售点（POS）终端等为银行卡特约商户代收货币资金的行为。</p>
+</li>
+<li><p>中国人民银行确定的其他支付服务。</p>
+</li>
+</ol>
+<h2 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h2><h3 id="2018"><a href="#2018" class="headerlink" title="2018"></a>2018</h3><p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202301291522401.png"></p>
+<h3 id="2022"><a href="#2022" class="headerlink" title="2022"></a>2022</h3><p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202301291515569.png"></p>
+<h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ul>
+<li>银行系统安全等级要求高，支付体验差。第三方支付平台整合各大银行的支付接口，提供方便快捷的支付方式</li>
+</ul>
+<h2 id="应用领域"><a href="#应用领域" class="headerlink" title="应用领域"></a>应用领域</h2><ul>
+<li><p>电子商务</p>
+</li>
+<li><p>跨境支付</p>
+</li>
+<li><p>在线支付</p>
+</li>
+</ul>
+<h2 id="支付平台"><a href="#支付平台" class="headerlink" title="支付平台"></a>支付平台</h2><h3 id="国外"><a href="#国外" class="headerlink" title="国外"></a>国外</h3><ul>
+<li>欧美国家的银行不会向第三方支付机构开放自己的账户资源，即便是PayPal，在客户使用其进行付款时，也要向Visa和万事达卡支付费用，同时还要受到严格的监管</li>
+</ul>
+<h4 id="Paypal"><a href="#Paypal" class="headerlink" title="Paypal"></a>Paypal</h4><h4 id="Stripe"><a href="#Stripe" class="headerlink" title="Stripe"></a>Stripe</h4><h4 id="Braintree"><a href="#Braintree" class="headerlink" title="Braintree"></a>Braintree</h4><h3 id="国内"><a href="#国内" class="headerlink" title="国内"></a>国内</h3><ul>
+<li>需要第三方支付牌照（支付业务许可证）</li>
+<li>中国第三方支付市场的兴起和壮大，完全得益于中国的金融体系，以及央行<strong>支付系统</strong>、银联<strong>网联清算系统</strong>等一系列金融基础设施的建立，各级商业银行承担了账户安全、实名验证、手机绑卡等繁琐的基础工作。如果没有这些体系的支持，第三方支付完全就是无源之水、无本之木。</li>
+<li>支付宝和微信支付，并不完全以支付本身来盈利，而是借助支付工具形成资金池，从而沉淀大量的备付金，再通过类似余额宝、花呗等产品来盈利</li>
+<li>国内第三方平台有：支付宝、微信支付、银联云闪付、电信翼支付、百度钱包、京东金融、小米金融等</li>
+</ul>
+<h4 id="支付宝"><a href="#支付宝" class="headerlink" title="支付宝"></a>支付宝</h4><ul>
+<li>ALL-IN-ONE收单模式</li>
+<li>账户余额转入货币基金（余额宝）</li>
+<li>用户保证体系</li>
+<li>二维码支付</li>
+<li>芝麻信用分、蚂蚁森林、花呗、借呗等产品</li>
+<li>2015年，支付宝向<strong>生活服务平台</strong>转型，陆续打通生活、金融、消费、理财等多个场景</li>
+<li>2017年，蚂蚁宣布未来只做tech（技术），支持金融机构做好fin（金融），由Fintech变成Techfin，为金融机构提供技术、数据分析支撑。<strong>金融科技服务</strong></li>
+</ul>
+<h4 id="微信支付"><a href="#微信支付" class="headerlink" title="微信支付"></a>微信支付</h4><ul>
+<li>2017年9月，对标“余额宝”的“零钱通”上线；</li>
+<li>2018年1月，“信用分”（现在更名为“支付分”）开始公测，显然这是微信版的“芝麻信用分”；</li>
+<li>2020年3月，消费信贷产品“分付”开始测试，其对标的当然是“花呗”。</li>
+</ul>
+<h4 id="国付宝"><a href="#国付宝" class="headerlink" title="国付宝"></a>国付宝</h4><ul>
+<li><p>成立于2011年1月，是一家以第三方支付为基础的科技金融综合服务平台，旗下拥有针对 B2B&#x2F;B2C的网络支付产品、移动支付产品、金融服务产品等，针对跨境商贸领域的跨境支付解决方案等。</p>
+</li>
+<li><p>PayPal全资控股的美银宝信息技术（上海）有限公司间接100%控股国付宝</p>
+</li>
+</ul>
+<h5 id="跨境支付"><a href="#跨境支付" class="headerlink" title="跨境支付"></a>跨境支付</h5><p>进入中国市场不一定会将重心放在中国境内支付，而是会发挥其在跨境支付方面的优势，盯住Visa、万事达卡、美国运通这些<strong>国际卡</strong>组织进入中国<strong>清算市场</strong>后形成的“商机“。其服务的内容包括</p>
+<ol>
+<li>国外用户在中国境内的消费提供支付业务；</li>
+<li>国内个人及企业以后在国际上的跨境支付业务</li>
+</ol>
+<blockquote>
+<p>美国运通已经于2020年6月获得中国银行卡清算牌照，万事达卡与网联的合资企业也即将进入到获批筹备阶段</p>
+</blockquote>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://pdf.dfcfw.com/pdf/H3_AP202008131398231165_1.pdf?1597316861000.pdf">2020年中国聚合支付行业概览</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/30ea77cbe60d/" rel="prev" title="腰肌劳损">
+      <i class="fa fa-chevron-left"></i> 腰肌劳损
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/1901842d8212/" rel="next" title="第四方支付">
+      第四方支付 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%96%B9%E5%90%AB%E4%B9%89"><span class="nav-text">第三方含义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E6%B5%81%E7%A8%8B"><span class="nav-text">业务流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%91%E8%9E%8D%E8%A1%8C%E4%B8%9A"><span class="nav-text">金融行业</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2018"><span class="nav-text">2018</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2022"><span class="nav-text">2022</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8"><span class="nav-text">作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E9%A2%86%E5%9F%9F"><span class="nav-text">应用领域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E4%BB%98%E5%B9%B3%E5%8F%B0"><span class="nav-text">支付平台</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BD%E5%A4%96"><span class="nav-text">国外</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Paypal"><span class="nav-text">Paypal</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Stripe"><span class="nav-text">Stripe</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Braintree"><span class="nav-text">Braintree</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BD%E5%86%85"><span class="nav-text">国内</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E4%BB%98%E5%AE%9D"><span class="nav-text">支付宝</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98"><span class="nav-text">微信支付</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BD%E4%BB%98%E5%AE%9D"><span class="nav-text">国付宝</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B7%A8%E5%A2%83%E6%94%AF%E4%BB%98"><span class="nav-text">跨境支付</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

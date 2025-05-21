@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="简介介绍如何通过 Midjourney 进行文生图，包括提示词、辅助工具等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文生图-Midjourney">
+<meta property="og:url" content="http://example.com/p/be39f81be7c6/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="简介介绍如何通过 Midjourney 进行文生图，包括提示词、辅助工具等">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202408240224428.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202408240317524.png">
+<meta property="article:published_time" content="2024-07-21T08:37:43.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.749Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202408240224428.png">
+
+<link rel="canonical" href="http://example.com/p/be39f81be7c6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>文生图-Midjourney | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/be39f81be7c6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          文生图-Midjourney
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-07-21 16:37:43" itemprop="dateCreated datePublished" datetime="2024-07-21T16:37:43+08:00">2024-07-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AIGC/" itemprop="url" rel="index"><span itemprop="name">AIGC</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>介绍如何通过 Midjourney 进行文生图，包括提示词、辅助工具等</p>
+<span id="more"></span>
+
+<p>AI绘画的主要应用场景</p>
+<ul>
+<li>配图：文字内容的配图</li>
+<li>真实照片+换装（重新打光）：给真实照片上的人物换装，然后再重新打光</li>
+<li>图片按比例放大、横向、纵向的扩展</li>
+<li>生成需要商业授权的人物</li>
+<li>自有IP的形象生成不同角度的图片</li>
+</ul>
+<p>不适合真实场景</p>
+<p>如何分辨是否AI生成</p>
+<ul>
+<li>看光影是否符合实际物理规律</li>
+<li>看人物的手</li>
+</ul>
+<h2 id="Midjourney"><a href="#Midjourney" class="headerlink" title="Midjourney"></a>Midjourney</h2><h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ol>
+<li><p>操作简单，可控制性较差</p>
+<blockquote>
+<p>简单提示词就可以生成质量较好的图，例如：落日，大漠</p>
+</blockquote>
+</li>
+<li><p>图片创意较好，真实性较差</p>
+</li>
+</ol>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><ol>
+<li>适合创作，通过一句提示词生成具有创意的图片（文生图）</li>
+<li>不适合通过提示词对图片进行局部进行修改（图生图方式）</li>
+</ol>
+<p>工作方式：提示词不变，只改变参数，每次生成多个图，从大量的图中挑选满意的图片</p>
+<h3 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h3><ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.midjourney.com/">官方网站</a></p>
+<p><a target="_blank" rel="noopener" href="https://discord.com/">生成图片</a>：通过 discord，新建服务器，邀请midjourney机器人，通过<code>/imagine</code> 命令输入 prompt</p>
+<blockquote>
+<p>邀请midjourney机器人步骤：添加首个APP-&gt;来看看吧-&gt;搜索 midjourney -&gt; 添加APP -&gt; 授权</p>
+<p>其他命令</p>
+<ul>
+<li><code>/settings</code> 设置 midjourney</li>
+<li><code>/describe</code> + MJ生成的图片URL ，获取图片 prompt </li>
+<li><code>/info</code> 当前账号的信息</li>
+</ul>
+</blockquote>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.midjourny.cn/">中文合作网站</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.midjourny.cn/home/#/mj">生成图片</a>：</p>
+<ul>
+<li><p>左侧选择模型，输入框直接输入 prompt 即可</p>
+</li>
+<li><p>输出图片的操作方式</p>
+<ul>
+<li><p>u1-u4</p>
+<p><strong>查看</strong>所选图像的添加更多细节后的图像</p>
+<blockquote>
+<p>下载、进行局部重绘，无损放大，调整创作等</p>
+</blockquote>
+</li>
+<li><p>v1-v4</p>
+<p><strong>生成</strong>和所选图像有细微变化的新图像</p>
+</li>
+</ul>
+</li>
+<li><p>迭代</p>
+<ul>
+<li><p>重新生成</p>
+</li>
+<li><p>优化提示词</p>
+<p>提示词少，MJ发挥的空间会更大</p>
+</li>
+</ul>
+</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.midjourny.cn/tutorial/index.html">教程</a></p>
+</li>
+<li><p>官方API</p>
+</li>
+</ul>
+<h3 id="提示词"><a href="#提示词" class="headerlink" title="提示词"></a>提示词</h3><h4 id="万能公式"><a href="#万能公式" class="headerlink" title="万能公式"></a><a target="_blank" rel="noopener" href="https://www.midjourny.cn/tutorial/10.html">万能公式</a></h4><p>主体描述+环境场景+艺术风格+媒介材料+摄像机视角+精度定义</p>
+<blockquote>
+<p>可简化为：主体+环境+个性化</p>
+</blockquote>
+<ul>
+<li><p>如果是3D渲染，再加上3D软件+渲染器+材质+光照+逼真的渲染风格</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Octane-render OC</span><br><span class="line">虚幻引擎</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="主体描述"><a href="#主体描述" class="headerlink" title="主体描述"></a>主体描述</h5><p>一句话告诉AI你要描述的画面，结构：修饰词+主体+场景+动作</p>
+<p>例如：一个美丽的日本女人英格丽长背心站在白墙旁</p>
+<ul>
+<li><p>可描述的一切确切的符合物理规律的动物、事物都可以作为主体</p>
+<blockquote>
+<p>不符合物理规律的很难生成，例如：苹果形状的水珠</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202408240224428.png"></p>
+</blockquote>
+</li>
+<li><p>主体的材质可以是虚拟的，例如：蓝色的冰构成的树叶</p>
+</li>
+</ul>
+<h5 id="环境场景"><a href="#环境场景" class="headerlink" title="环境场景"></a>环境场景</h5><p>你想象的主体所处的环境，光线、氛围、色系</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">自然景观：极光、日落、瀑布等</span><br><span class="line">纯白色背景、大量留白</span><br><span class="line">光：soft light ， soft shadows，warn colors</span><br></pre></td></tr></table></figure>
+
+<h5 id="个性化"><a href="#个性化" class="headerlink" title="&#x3D;&#x3D;个性化&#x3D;&#x3D;"></a>&#x3D;&#x3D;个性化&#x3D;&#x3D;</h5><h5 id="艺术风格"><a href="#艺术风格" class="headerlink" title="艺术风格"></a>艺术风格</h5><p>设计风格&#x2F;艺术家名字&#x2F;漫画影视作品&#x2F;艺术网站</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">扁平 UI   vs. 三维3D </span><br><span class="line">极简艺术  minimalist art  vs.  复杂 complex</span><br><span class="line">平铺 knolling  vs. 参考 Sheet  / Cheat sheet / reference sheet / Design sheet / music sheet</span><br><span class="line">全息色彩风格 holographic  </span><br><span class="line">立体等距风格 isometric </span><br><span class="line">融合 “A” made of/ out of “B”  </span><br></pre></td></tr></table></figure>
+
+<h5 id="媒介材料"><a href="#媒介材料" class="headerlink" title="媒介材料"></a>媒介材料</h5><p>油画&#x2F;水彩&#x2F;摄影&#x2F;手稿&#x2F;雕塑&#x2F;陶瓷&#x2F;布料&#x2F;黏土&#x2F;石头</p>
+<h5 id="摄影机视角"><a href="#摄影机视角" class="headerlink" title="摄影机视角"></a>摄影机视角</h5><p>特写视图&#x2F;两点透视&#x2F;广角镜头&#x2F;景深&#x2F;正视图&#x2F;全身照</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">向上看，虫眼视角</span><br><span class="line">俯视，鸟瞰视角</span><br><span class="line">鱼眼视角</span><br><span class="line">特写视角</span><br><span class="line">第三人称视角</span><br><span class="line">50 1.2mm</span><br></pre></td></tr></table></figure>
+
+<h5 id="精度定义"><a href="#精度定义" class="headerlink" title="精度定义"></a>精度定义</h5><p>高品质&#x2F;超级细节&#x2F;复杂细节&#x2F;高分辨率&#x2F;HD&#x2F;2K&#x2F;4K&#x2F;尺寸比例</p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">中国古代建筑，逆光，摄影，极简风格，全景，高品质，超级细节 8K</span><br><span class="line">键盘，knolling  ，极简风格，全景，高品质，超级细节 8K   --ar  1:1 --v 6  --q 1</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>knolling 风格</li>
+</ul>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202408240317524.png"></p>
+<h5 id="广告行业"><a href="#广告行业" class="headerlink" title="广告行业"></a>广告行业</h5><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">洗衣机，3D，现代，轴测图，白色阴影，拉丝铝，光亮白色，白色背景，史诗般的，电影般的，产品设计，工业设计，辛烷渲染，4k</span><br><span class="line">吹风机，3D，现代，轴测图，白色阴影，拉丝铝，光亮白色，白色背景， 史诗般的，电影般的，产品设计，工业设计，辛烷渲染，4k</span><br><span class="line">空白模型，白色背景，洗手瓶，在奶油色大理石上，在豪华的浴室里，4k</span><br><span class="line">空白模型，空白广告牌，公交站台，成都街头</span><br><span class="line">客厅，室内设计，波希米亚风格</span><br><span class="line">浴室，室内设计，包豪斯风格，黑色，全息色彩</span><br></pre></td></tr></table></figure>
+
+<h5 id="情景描述"><a href="#情景描述" class="headerlink" title="情景描述"></a>情景描述</h5><p>不需要事物的细节，只描述情景，AI自动生成符合情景的事物细节</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># 参考大师的风格，疯狂提示AI</span></span><br><span class="line">水手与坏人战斗，海贼王风格，漫画书中的一页，精选自Pixiv，地下漫画，概念艺术 --niji 6 --v 6</span><br><span class="line"><span class="section"># 借用摄影、油画的专业词</span></span><br><span class="line">21岁中国美丽女孩，在学校，黑色长发，逆光，高度细节，平滑光线，8k，黄金时刻，用Canon EOS 5D Mark IV拍摄</span><br><span class="line"><span class="section"># 通过改变环境、动作等提示词，生成一系列连续风格的图片</span></span><br><span class="line"><span class="section">## 并没有详细的描述人物的着装、面部表情等，但生成的结果很符合霸道总裁的形象</span></span><br><span class="line">男性，近景镜头，CEO站在在一辆保时捷跑车前面，他的目光盯着远方，手里夹着商业计划书，深刻，动漫风格 --niji 6</span><br><span class="line">帅哥，在野餐花园的草地上，与朋友们分享美食和欢笑，平易近人，户外聚会，温馨氛围，动漫风格 --niji 6</span><br><span class="line">英俊的中年男人，自信，细密的胡须，驾驶船只，掌握方向，动漫风格 --niji 6</span><br><span class="line">男性，帅气的艺术设计师，创意十足，坐在城市公园的长椅上，鲜花盛开，沉浸在捕捉公园绿意盎然和都市生活，动漫风格 --niji 6</span><br></pre></td></tr></table></figure>
+
+<h4 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h4><h5 id="AI生成"><a href="#AI生成" class="headerlink" title="AI生成"></a>AI生成</h5><p>让AI参考优秀的提示词生成</p>
+<h5 id="规避政策"><a href="#规避政策" class="headerlink" title="规避政策"></a>规避政策</h5><ul>
+<li><p>避免人物作者的名字，用书名、电影名、出版社名替代</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">LI:海边日落新海诚</span><br><span class="line">AI:由于您的请求涉及特定的艺术风格，我无法生成这样的图像，因为这违反了我们的内容政策</span><br><span class="line">LI:海边日落，《你的名字》风格</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.midjourny.cn/tutorial/15.html">https://www.midjourny.cn/tutorial/15.html</a></p>
+</blockquote>
+<p>在提示词后添加参数，参数和参数值之间、多个参数之间用空格分隔</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a girl --aspect 1:1 --s 100 --niji 5</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>通过控制变量法，一步步修改参数</li>
+</ul>
+<h5 id="–aspect-–ar"><a href="#–aspect-–ar" class="headerlink" title="–aspect –ar"></a>–aspect –ar</h5><p>调整图片的宽高比例，默认宽高比为 1:1</p>
+<p>要结合提示词修改，例如一个靠墙站着拍照的美女，图片比例就需要是纵向的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--ar 16:9</span><br></pre></td></tr></table></figure>
+
+<h5 id="–seed"><a href="#–seed" class="headerlink" title="–seed"></a>–seed</h5><p>随机数种子，参数值为一个0到4294967295之间的数字，重绘时使用</p>
+<h5 id="–no"><a href="#–no" class="headerlink" title="–no"></a>–no</h5><p>降低元素出现的概率</p>
+<p>输入中文提示词时，会自动翻译为英文，需要通过权重来表示</p>
+<p>权重：控制不同元素在生成图像时的影响程度</p>
+<ul>
+<li>格式：<code>词语::权重值</code></li>
+<li>可选值：默认为1<ul>
+<li><code>-1</code>：出现几率小，类似 <code>--no</code></li>
+<li><code>2</code>：出现几率大</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--no green 移除绿色成分</span><br><span class="line">沙滩 贝壳::-1</span><br></pre></td></tr></table></figure>
+
+<h5 id="–quality-–q"><a href="#–quality-–q" class="headerlink" title="–quality –q"></a>–quality –q</h5><p>调节渲染质量及耗时</p>
+<p>可选值：0.25、0.5、1、2，默认为 1。数字越低，生成图像的<strong>细节</strong>越少，<strong>速度</strong>越快</p>
+<p>在画一些密集性的东西，例如城中村楼房时，将值调大</p>
+<blockquote>
+<p>细节跟图片质量是两个不同的概念，细节少，图片质量不一定差</p>
+</blockquote>
+<h5 id="–chaos-–c"><a href="#–chaos-–c" class="headerlink" title="–chaos –c"></a>–chaos –c</h5><p>调节结果的多样性</p>
+<p>取值范围是 0 至 100，默认0，越小相似度越高</p>
+<blockquote>
+<p>一组事物中，不同元素之间的相似度，例如货架上的一排玩偶，值越大，相互之间的区别就越大</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--chaos 5</span><br></pre></td></tr></table></figure>
+
+<h5 id="–stylize"><a href="#–stylize" class="headerlink" title="–stylize"></a>–stylize</h5><p>调整风格化程度</p>
+<p>取值范围是0到1000，默认100。数值大小表示在生成图像时施加的风格化程度，具体来说就是创意和艺术加工的强度</p>
+<blockquote>
+<p>类似 chatgpt 的 temperature</p>
+</blockquote>
+<p>要结合有关风格的提示词使用</p>
+<ul>
+<li>值越大，越抽象，更有创意</li>
+<li>值越小，越写实，更真实</li>
+</ul>
+<p>结合 <code>--style raw</code> 使用的场景：整体上保持接近描述内容的“原始性”，但又希望在某些细节或某个特定层面上保留一些艺术效果</p>
+<h5 id="–niji"><a href="#–niji" class="headerlink" title="–niji"></a>–niji</h5><p>切换 niji 模型，niji模型擅长创作卡通或动画风格的图像</p>
+<ul>
+<li>niji 5 细节模糊一点，更复古、沧桑</li>
+<li>niji 6 细节更清晰一点，更写实、像宫崎骏画风</li>
+</ul>
+<h5 id="–style-raw"><a href="#–style-raw" class="headerlink" title="–style raw"></a>–style raw</h5><p>倾向于输出较为“原始”的、接近描述内容的结果</p>
+<h5 id="–v"><a href="#–v" class="headerlink" title="–v"></a>–v</h5><p>调整 MJ 模型，默认 6</p>
+<ul>
+<li>5、5.2：低饱和度，具有艺术风格</li>
+<li>6：更真实，细节更好</li>
+</ul>
+<h5 id="–iw"><a href="#–iw" class="headerlink" title="–iw"></a>–iw</h5><p>图生图模式，新图和原图的相似度</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--iw 2 与原图尽可能相似</span><br></pre></td></tr></table></figure>
+
+<h5 id="–sref"><a href="#–sref" class="headerlink" title="–sref"></a>–sref</h5><p>风格参考、风格迁移</p>
+<blockquote>
+<p>参考指定URL的风格</p>
+</blockquote>
+<h6 id="–sw"><a href="#–sw" class="headerlink" title="–sw"></a>–sw</h6><p>参考的比例，取值范围：0到1000，默认100</p>
+<ul>
+<li>值越小越柔和，0：关闭</li>
+<li>值越大细节越多，画面锐度越高</li>
+</ul>
+<h5 id="–cref"><a href="#–cref" class="headerlink" title="–cref"></a>–cref</h5><p>角色参考、角色迁移</p>
+<blockquote>
+<p>参考指定URL的角色</p>
+</blockquote>
+<h6 id="–cw"><a href="#–cw" class="headerlink" title="–cw"></a>–cw</h6><p>参考的比例，取值范围：0到1000，默认100</p>
+<ul>
+<li>0：只有面部迁移（适合修改衣服、发型的情况下使用）</li>
+<li>100:衣服、面容、发型、服装穿搭全部迁移，只改变背景</li>
+</ul>
+<p>格式：<code>--cref（空格）1或多个图片链接（空格）--cw（空格）0-100</code></p>
+<h3 id="辅助工具"><a href="#辅助工具" class="headerlink" title="辅助工具"></a>辅助工具</h3><h4 id="艺术创意"><a href="#艺术创意" class="headerlink" title="艺术创意"></a>艺术创意</h4><p><a target="_blank" rel="noopener" href="https://midlibrary.io/">https://midlibrary.io/</a></p>
+<ul>
+<li><p>找艺术创意</p>
+<blockquote>
+<p>all styles-&gt;找到想要的风格，点击查看提示词</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="色彩"><a href="#色彩" class="headerlink" title="色彩"></a>色彩</h4><p><a target="_blank" rel="noopener" href="https://colorhunt.co/?ref=cybrhome">https://colorhunt.co/?ref=cybrhome</a></p>
+<ul>
+<li><p>选择色彩</p>
+<blockquote>
+<p>截图，下载，以图生图的方式</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="生成器"><a href="#生成器" class="headerlink" title="生成器"></a>生成器</h4><p><a target="_blank" rel="noopener" href="https://promptfolder.com/midjourney-prompt-helper/">https://promptfolder.com/midjourney-prompt-helper/</a></p>
+<ul>
+<li>优化提示词，选择参数，生成MJ提示词</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.aigallery.top/">https://www.aigallery.top/</a></p>
+<ul>
+<li>中文MJ提示词生成器</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/rockbenben/img-prompt">https://github.com/rockbenben/img-prompt</a></p>
+<ul>
+<li>MJ、SD提示词生成器</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/e415902ee1d4/" rel="prev" title="文生文">
+      <i class="fa fa-chevron-left"></i> 文生文
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/489bb49e7a9a/" rel="next" title="文生图-Stable-Diffusion">
+      文生图-Stable-Diffusion <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Midjourney"><span class="nav-text">Midjourney</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-text">特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="nav-text">如何使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA%E8%AF%8D"><span class="nav-text">提示词</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%87%E8%83%BD%E5%85%AC%E5%BC%8F"><span class="nav-text">万能公式</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%BB%E4%BD%93%E6%8F%8F%E8%BF%B0"><span class="nav-text">主体描述</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%9C%BA%E6%99%AF"><span class="nav-text">环境场景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%AA%E6%80%A7%E5%8C%96"><span class="nav-text">&#x3D;&#x3D;个性化&#x3D;&#x3D;</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%89%BA%E6%9C%AF%E9%A3%8E%E6%A0%BC"><span class="nav-text">艺术风格</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AA%92%E4%BB%8B%E6%9D%90%E6%96%99"><span class="nav-text">媒介材料</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%91%84%E5%BD%B1%E6%9C%BA%E8%A7%86%E8%A7%92"><span class="nav-text">摄影机视角</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%B2%BE%E5%BA%A6%E5%AE%9A%E4%B9%89"><span class="nav-text">精度定义</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-text">示例</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%B9%BF%E5%91%8A%E8%A1%8C%E4%B8%9A"><span class="nav-text">广告行业</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%83%85%E6%99%AF%E6%8F%8F%E8%BF%B0"><span class="nav-text">情景描述</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8A%80%E5%B7%A7"><span class="nav-text">技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#AI%E7%94%9F%E6%88%90"><span class="nav-text">AI生成</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%A7%84%E9%81%BF%E6%94%BF%E7%AD%96"><span class="nav-text">规避政策</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0"><span class="nav-text">参数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93aspect-%E2%80%93ar"><span class="nav-text">–aspect –ar</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93seed"><span class="nav-text">–seed</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93no"><span class="nav-text">–no</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93quality-%E2%80%93q"><span class="nav-text">–quality –q</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93chaos-%E2%80%93c"><span class="nav-text">–chaos –c</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93stylize"><span class="nav-text">–stylize</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93niji"><span class="nav-text">–niji</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93style-raw"><span class="nav-text">–style raw</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93v"><span class="nav-text">–v</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93iw"><span class="nav-text">–iw</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93sref"><span class="nav-text">–sref</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E2%80%93sw"><span class="nav-text">–sw</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E2%80%93cref"><span class="nav-text">–cref</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E2%80%93cw"><span class="nav-text">–cw</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7"><span class="nav-text">辅助工具</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%89%BA%E6%9C%AF%E5%88%9B%E6%84%8F"><span class="nav-text">艺术创意</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%89%B2%E5%BD%A9"><span class="nav-text">色彩</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8"><span class="nav-text">生成器</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

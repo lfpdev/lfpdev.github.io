@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="简介在不同终端平台（App、网站、移动端网页、小程序）的服务中接入微信登录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信登录">
+<meta property="og:url" content="http://example.com/p/353a5bdc2106/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="简介在不同终端平台（App、网站、移动端网页、小程序）的服务中接入微信登录">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404221128629.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404232150064.jpg">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404231730913.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404231731948.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404231733006.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404231732983.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404231735099.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404242342683.png">
+<meta property="article:published_time" content="2024-04-26T04:41:53.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.764Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404221128629.png">
+
+<link rel="canonical" href="http://example.com/p/353a5bdc2106/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>微信登录 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/353a5bdc2106/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          微信登录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-04-26 12:41:53" itemprop="dateCreated datePublished" datetime="2024-04-26T12:41:53+08:00">2024-04-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Node-js-Eco/" itemprop="url" rel="index"><span itemprop="name">Node.js Eco</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在不同终端平台（App、网站、移动端网页、小程序）的服务中接入<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/community/develop/doc/000c840489c6380d63389dbb451402">微信登录</a></p>
+<span id="more"></span>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>授权域&#x2F;接口</th>
+<th>用户侧使用流程</th>
+<th>接入流程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>App</td>
+<td>接入微信SDK，并调用snsapi_userinfo</td>
+<td>（1）在App内选择使用微信登录 （2）拉起微信客户端，打开用户授权页，完成登录授权</td>
+<td>（1）注册微信开放平台（open.weixin.qq.com）帐号，并完成开发者资质认证 （2）申请【App移动应用】并审核通过后可以使用，查看<a target="_blank" rel="noopener" href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419317851&token=&lang=zh_CN">开发文档</a></td>
+</tr>
+<tr>
+<td>网站应用</td>
+<td>snsapi_login</td>
+<td>（1）用户使用微信“扫一扫”，在PC端扫码（2）客户端打开授权页，完成登录授权</td>
+<td>（1）注册微信开放平台（open.weixin.qq.com）帐号，并完成开发者资质认证（2）申请【网站应用】并审核通过后可以使用，查看<a target="_blank" rel="noopener" href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419316505&token=&lang=zh_CN">开发文档</a></td>
+</tr>
+<tr>
+<td>微信客户端内H5</td>
+<td>使用公众号的登录能力： snsapi_base snsapi_userinfo</td>
+<td>snsapi_base：静默授权 snsapi_userinfo： （1）用户在H5内点击登录，唤起授权弹窗 （2）用户侧完成登录授权</td>
+<td>（1）注册微信公众号，选择“服务号”类型，并完成微信认证（2）在公众号管理后台设置回调域名（3）接入微信登录能力，查看<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140842">开发文档</a></td>
+</tr>
+<tr>
+<td>小程序</td>
+<td>wx.login wx.getUserInfo</td>
+<td>wx.login：静默授权，开发者可获取openid wx.getUserInfo： （1）用户在小程序内点击组件，唤起登录窗口（2）用户侧完成登录授权</td>
+<td>（1）注册小程序 （2）接入微信登录功能，查看<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html">开发文档</a>，查看<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/community/develop/doc/0006026b3c83c0e244573a0025bc08">登录流程设计指引</a></td>
+</tr>
+</tbody></table>
+<p>多平台服务，可通过 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/community/business/doc/00024a52cec260f09b69c704e5b00d">UnionID</a> 来唯一标识用户</p>
+<blockquote>
+<p>open_id 仅针对某个产品（公众号、小程序），而 union_id 是开放平台下，某个用户的唯一标识（产品需绑定到开放平台）</p>
+</blockquote>
+<h2 id="开放平台登录"><a href="#开放平台登录" class="headerlink" title="开放平台登录"></a>开放平台登录</h2><p>基于OAuth2.0协议标准构建的微信OAuth2.0授权登录系统，允许微信用户使用微信身份安全登录第三方应用或网站。目前支持<code>authorization_code</code>模式，适用于拥有server端的应用授权</p>
+<p>在微信用户授权登录已接入微信OAuth2.0的第三方应用后，第三方可以获取到用户的接口调用凭证（access_token），通过<code>access_token</code> 可以进行微信<strong>开放平台</strong>授权关系接口调用，实现获取微信用户基本开放信息和帮助用户实现基础开放功能等。 </p>
+<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><ol>
+<li><p>在微信<strong>开放平台</strong>注册开发者账号</p>
+<blockquote>
+<p>不需要注册公众号</p>
+</blockquote>
+</li>
+<li><p>注册一个第三方应用（网站应用、移动应用），审核通过并获得相应的AppID和AppSecret</p>
+</li>
+<li><p>申请微信登录且通过审核后，可开始接入流程</p>
+</li>
+</ol>
+<h3 id="流程-网站应用"><a href="#流程-网站应用" class="headerlink" title="流程[网站应用]"></a>流程[<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html">网站应用</a>]</h3><h4 id="时序图"><a href="#时序图" class="headerlink" title="时序图"></a>时序图</h4><h5 id="简易时序图"><a href="#简易时序图" class="headerlink" title="简易时序图"></a>简易时序图</h5><p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404221128629.png"></p>
+<h5 id="详细时序图"><a href="#详细时序图" class="headerlink" title="详细时序图"></a>详细时序图</h5><p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404232150064.jpg"></p>
+<h4 id="获取code"><a href="#获取code" class="headerlink" title="获取code"></a>获取code</h4><p>前端：发起微信登录请求，微信用户授权第三方应用，微信拉起第三方应用或重定向到第三方网站，带上授权临时票据code参数</p>
+<ul>
+<li><p>1-4</p>
+<p>选择微信登录，跳转到 <code>https://open.weixin.qq.com/connect/qrconnect</code>页面</p>
+<p>构造OAuth2链接</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://open.weixin.qq.com/connect/qrconnect?appid=APPID&amp;redirect_uri=REDIRECT_URI&amp;response_type=code&amp;scope=SCOPE&amp;state=STATE#wechat_redirect</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>redirect_uri</p>
+<p>需使用urlEncode对链接进行编码</p>
+</li>
+<li><p>scope</p>
+<p>应用授权作用域，网页应用目前仅填写snsapi_login</p>
+</li>
+<li><p>state</p>
+<p>用于保持请求和回调的状态，授权请求后原样带回给 redirect_uri 页面</p>
+</li>
+</ul>
+<p>例如：腾讯视频、极客时间</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">腾讯视频OAuth2链接</span><br><span class="line">https://open.weixin.qq.com/connect/qrconnect?</span><br><span class="line">appid=wx5ed58254bc0d6b7f&amp;</span><br><span class="line">redirect_uri=https%3A%2F%2Fvideo.qq.com%2Ftransfer_login_page%2Findex.html%3Fvplatform%3D2%26type%3Dwx%26appid%3Dwx5ed58254bc0d6b7f&amp;</span><br><span class="line">response_type=code&amp;</span><br><span class="line">scope=snsapi_login&amp;</span><br><span class="line">state=111&amp;</span><br><span class="line">self_redirect=true&amp;</span><br><span class="line">href=https%3A%2F%2Fvm.gtimg.cn%2Ftencentvideo%2Fvstyle%2Fweb%2Fcommon%2Fstyle%2Fiframe_login_wx.css%3Fmax_age%3D7776001</span><br><span class="line"></span><br><span class="line">极客时间OAuth2链接</span><br><span class="line">https://open.weixin.qq.com/connect/qrconnect?</span><br><span class="line">appid=wx1b4c7610fc671845&amp;</span><br><span class="line">redirect_uri=https%3A%2F%2Faccount.geekbang.org%2Faccount%2Foauth%2Fcallback%3Ftype%3Dwechat%26ident%3D40f331%26login%3D0%26cip%3D0%26redirect%3Dhttps%253A%252F%252Faccount.geekbang.org%252Fthirdlogin%253Fremember%253D1%2526type%253Dwechat%2526is_bind%253D0%2526platform%253Dtime%2526redirect%253Dhttps%25253A%25252F%25252Ftime.geekbang.org%25252Fcolumn%25252F48%2526failedurl%253Dhttps%253A%252F%252Faccount.geekbang.org%252Fsignin%253Fredirect%253Dhttps%25253A%25252F%25252Ftime.geekbang.org%25252Fcolumn%25252F48&amp;</span><br><span class="line">response_type=code&amp;</span><br><span class="line">scope=snsapi_login&amp;</span><br><span class="line">state=9c117d8b3abd7cc0c4bf6109e03e77c5#wechat_redirect</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>​	<img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404231730913.png"></p>
+<p>​	<img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404231731948.png"></p>
+<ul>
+<li><p>5-7</p>
+<p>由微信根据传递的参数，生成一个二维码</p>
+<p>例如：腾讯视频、极客时间</p>
+</li>
+</ul>
+<p>​	<img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404231733006.png"></p>
+<p>​	<img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404231732983.png"></p>
+<ul>
+<li><p>8-11</p>
+<p>向微信开放平台轮询二维码登录请求状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET https://lp.open.weixin.qq.com/connect/l/qrconnect?uuid=001rwTlS2nOK000W&amp;_=1713880629598</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>12-21</p>
+<p>用户用微信APP扫码，授权登录</p>
+<p>第18步</p>
+<ul>
+<li>如果长时间不确认，会返回”二维码已失效，请刷新页面重新扫码”</li>
+</ul>
+<p>第20步</p>
+<ul>
+<li>两个人，后扫码的先确认，登录成功，先扫码的后确认，会返回异常（系统错误，错误码10029）</li>
+</ul>
+</li>
+</ul>
+<p>​	<img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404231735099.png"></p>
+<ul>
+<li><p>22-25</p>
+<p>重定向到 redirect_uri 的网址上，并带上code和state参数，在 redirect_uri 页面中调用服务端接口，传递code</p>
+<blockquote>
+<p>redirect_uri?code&#x3D;CODE&amp;state&#x3D;STATE</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="获取-access-token"><a href="#获取-access-token" class="headerlink" title="获取 access_token"></a>获取 access_token</h4><ul>
+<li>26-30</li>
+</ul>
+<p>服务端：通过code参数加上AppID和AppSecret等，通过API换取access_token</p>
+<h4 id="接口调用"><a href="#接口调用" class="headerlink" title="接口调用"></a>接口调用</h4><ul>
+<li>31-32</li>
+</ul>
+<p>服务端：通过access_token进行接口调用，获取用户基本数据资源或帮助用户实现基本操作</p>
+<p>第36步</p>
+<ul>
+<li>将二维码截图保存，A已经登录成功，B扫码正常，确认登录后，返回登录成功，但实际上PC端还是登录的A账号</li>
+</ul>
+<h2 id="网页授权登录"><a href="#网页授权登录" class="headerlink" title="网页授权登录"></a><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html">网页授权登录</a></h2><p>微信提供了OAuth2的授权登录方式，可以让从<strong>微信客户端</strong>打开的<strong>第三方网页</strong>获取用户基本信息，免去登录环节</p>
+<blockquote>
+<p>整体逻辑同<a target="_blank" rel="noopener" href="https://developer.work.weixin.qq.com/document/path/91335">企业微信网页授权登录</a></p>
+</blockquote>
+<h3 id="准备工作-1"><a href="#准备工作-1" class="headerlink" title="准备工作"></a>准备工作</h3><ol>
+<li><p>注册公众号，完成微信认证</p>
+</li>
+<li><p>开通接口权限：<code>网页服务-&gt;网页授权-&gt;网页授权获取用户基本信息</code>，配置授权回调页面域名</p>
+<blockquote>
+<p>测试公众号配置ip，例如：81.68.126.166:17671，则OAuth2链接中的 redirect_uri 为 <a target="_blank" rel="noopener" href="http://81.68.126.166:17671/">http://81.68.126.166:17671</a></p>
+</blockquote>
+</li>
+</ol>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><h4 id="时序图-1"><a href="#时序图-1" class="headerlink" title="时序图"></a>时序图</h4><p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202404242342683.png"></p>
+<h4 id="获取code-1"><a href="#获取code-1" class="headerlink" title="获取code"></a>获取code</h4><p>构造OAuth2链接</p>
+<p><a target="_blank" rel="noopener" href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&redirect_uri=REDIRECT_URI&response_type=code&scope=SCOPE&state=STATE#wechat_redirect">https://open.weixin.qq.com/connect/oauth2/authorize?appid=APPID&amp;redirect_uri=REDIRECT_URI&amp;response_type=code&amp;scope=SCOPE&amp;state=STATE#wechat_redirect</a></p>
+<ul>
+<li><p>scope</p>
+<p>授权作用域（已认证服务号，默认拥有 snsapi_base和snsapi_userinfo 权限）</p>
+<ul>
+<li>snsapi_base （不弹出授权页面，直接跳转，只能获取用户openid）</li>
+<li>snsapi_userinfo （弹出授权页面，可通过openid拿到昵称、性别、所在地。并且， 即使在未关注的情况下，只要用户授权，也能获取其信息 ）</li>
+</ul>
+</li>
+<li><p>redirect_uri</p>
+<p>重定向地址，使用https链接</p>
+<blockquote>
+<p>可以是一个前端页面，在前端页面中调用后端接口，传递code；也可以是后端入口点，后端直接获取code</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="获取-access-token-1"><a href="#获取-access-token-1" class="headerlink" title="获取 access_token"></a>获取 access_token</h4><p>服务端：通过code参数加上AppID和AppSecret等，通过API换取<strong>网页授权access_token</strong>，与基础支持中的access_token（该access_token用于调用其他接口）不同。</p>
+<p>如果网页授权的作用域为snsapi_base，则本步骤中获取到网页授权access_token的同时，也获取到了openid，snsapi_base式的网页授权流程即到此为止。</p>
+<h4 id="获取用户基本信息"><a href="#获取用户基本信息" class="headerlink" title="获取用户基本信息"></a>获取用户基本信息</h4><p>如果网页授权作用域为snsapi_userinfo，则此时开发者可以通过access_token和openid拉取用户信息</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/8d191b3e072f/" rel="prev" title="扫码登录">
+      <i class="fa fa-chevron-left"></i> 扫码登录
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/210d2628638d/" rel="next" title="大模型简介">
+      大模型简介 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%94%BE%E5%B9%B3%E5%8F%B0%E7%99%BB%E5%BD%95"><span class="nav-text">开放平台登录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B-%E7%BD%91%E7%AB%99%E5%BA%94%E7%94%A8"><span class="nav-text">流程[网站应用]</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E5%9B%BE"><span class="nav-text">时序图</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%AE%80%E6%98%93%E6%97%B6%E5%BA%8F%E5%9B%BE"><span class="nav-text">简易时序图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%AF%A6%E7%BB%86%E6%97%B6%E5%BA%8F%E5%9B%BE"><span class="nav-text">详细时序图</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96code"><span class="nav-text">获取code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96-access-token"><span class="nav-text">获取 access_token</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E8%B0%83%E7%94%A8"><span class="nav-text">接口调用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E9%A1%B5%E6%8E%88%E6%9D%83%E7%99%BB%E5%BD%95"><span class="nav-text">网页授权登录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C-1"><span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-text">流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%B6%E5%BA%8F%E5%9B%BE-1"><span class="nav-text">时序图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96code-1"><span class="nav-text">获取code</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96-access-token-1"><span class="nav-text">获取 access_token</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">获取用户基本信息</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

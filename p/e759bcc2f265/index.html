@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="JMeter一个开源的负载测试工具，可以用于测试静态和动态资源，确定服务器的性能和稳定性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JMeter 安装配置">
+<meta property="og:url" content="http://example.com/p/e759bcc2f265/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="JMeter一个开源的负载测试工具，可以用于测试静态和动态资源，确定服务器的性能和稳定性">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403142026800.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403142035126.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151524861.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151500054.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151502113.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151523802.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151509380.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151511441.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151519728.png">
+<meta property="article:published_time" content="2024-02-25T09:04:28.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.775Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403142026800.png">
+
+<link rel="canonical" href="http://example.com/p/e759bcc2f265/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JMeter 安装配置 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/e759bcc2f265/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JMeter 安装配置
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-02-25 17:04:28" itemprop="dateCreated datePublished" datetime="2024-02-25T17:04:28+08:00">2024-02-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Test/" itemprop="url" rel="index"><span itemprop="name">Test</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="JMeter"><a href="#JMeter" class="headerlink" title="JMeter"></a>JMeter</h1><p>一个开源的负载测试工具，可以用于测试静态和动态资源，确定服务器的性能和稳定性</p>
+<span id="more"></span>
+
+<h2 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h2><p>地址：<a target="_blank" rel="noopener" href="https://jmeter.apache.org/download_jmeter.cgi">https://jmeter.apache.org/download_jmeter.cgi</a></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>需要安装 JDK8</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ java -version</span><br><span class="line">openjdk version <span class="string">&quot;1.8.0_392&quot;</span></span><br><span class="line">OpenJDK Runtime Environment (build 1.8.0_392-8u392-ga-1~20.04-b08)</span><br><span class="line">OpenJDK 64-Bit Server VM (build 25.392-b08, mixed mode)</span><br></pre></td></tr></table></figure>
+
+<p>将下载的 JMeter 压缩包解压到指定目录后，执行 bin 目录下的 <code>jmeter.sh</code> 即可启动</p>
+<blockquote>
+<p>windows 双击<code>jmeter.bat</code> </p>
+</blockquote>
+<p>配置环境变量</p>
+<ul>
+<li><p>在.bashrc 中添加</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$HOME</span>/opt/apache-jmeter/bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure></li>
+<li><p>应用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> .bashrc</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a><a target="_blank" rel="noopener" href="https://jmeter.apache.org/usermanual/index.html">使用</a></h2><h3 id="切换中文"><a href="#切换中文" class="headerlink" title="切换中文"></a>切换中文</h3><p>Options -&gt; Choose Language -&gt; Chinese (Simplified)</p>
+<h3 id="安装插件"><a href="#安装插件" class="headerlink" title="安装插件"></a>安装插件</h3><ol>
+<li><p><a target="_blank" rel="noopener" href="https://jmeter-plugins.org/install/Install/">下载Plugins Manager插件</a>，放到 jmeter目录的 <code>/lib/ext</code> 下面，重启</p>
+</li>
+<li><p>重启后在<code>选项</code>菜单中有一个 Plugins Manager 选项</p>
+</li>
+<li><p>在 Avaliable Plugins 选项下搜索并安装</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403142026800.png"></p>
+</li>
+</ol>
+<h4 id="3-Basic-Graphs"><a href="#3-Basic-Graphs" class="headerlink" title="3 Basic Graphs"></a>3 Basic Graphs</h4><p>显示 TPS 的实时折线图</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403142035126.png"></p>
+<h4 id="5-Additional-Graphs"><a href="#5-Additional-Graphs" class="headerlink" title="5 Additional Graphs"></a>5 Additional Graphs</h4><p>显示吞吐量，连接时间等</p>
+<h4 id="PerfMon-Servers-Performance-Monitoring"><a href="#PerfMon-Servers-Performance-Monitoring" class="headerlink" title="PerfMon(Servers Performance Monitoring)"></a><a target="_blank" rel="noopener" href="https://jmeter-plugins.org/wiki/PerfMon/">PerfMon(Servers Performance Monitoring)</a></h4><p>监控CPU、内存、磁盘IO、网络IO</p>
+<p>需配合 <a target="_blank" rel="noopener" href="https://github.com/undera/perfmon-agent/tree/master?tab=readme-ov-file#perfmon-server-agent">PerfMon Server Agent</a> 使用，但是很久没更新</p>
+<h3 id="各种组件"><a href="#各种组件" class="headerlink" title="各种组件"></a>各种组件</h3><p>JMeter 的组件有线程组、取样器、配置元件、前置处理器、后置处理器、定时器、断言、逻辑控制器、监听器。</p>
+<ul>
+<li>取样器：生成各种协议的请求，主要用于编辑用户请求时的传参数据。</li>
+<li>配置元件：辅助请求，简化请求数据编辑的内容。</li>
+<li>线程组：管理请求的运行时间和数量的限制。进行性能测试时必须设置。</li>
+<li>前置处理器：请求之前的数据管理。</li>
+<li>后置处理器：响应之后的数据管理。</li>
+<li>断言：针对请求后的响应内容做预期结果的判断。</li>
+<li>逻辑控制器：控制各种请求或元件的运行顺序和规则。</li>
+<li>监听器：对最后结果进行展示，可以图形展示，也可以数据形式进行展示。</li>
+<li>定时器：控制请求的运行时间。</li>
+</ul>
+<p>JMeter 的组件其<code>作用域</code>，例如在线程组下添加的配置元件会针对整个线程组中所有的请求，在某个请求下添加的配置元件仅针对该请求</p>
+<h3 id="定义变量"><a href="#定义变量" class="headerlink" title="定义变量"></a>定义变量</h3><h4 id="用户定义的变量"><a href="#用户定义的变量" class="headerlink" title="用户定义的变量"></a>用户定义的变量</h4><ul>
+<li>添加测试服务器的 host 和 port 等信息</li>
+</ul>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151524861.png"></p>
+<h4 id="CSV-数据文件设置"><a href="#CSV-数据文件设置" class="headerlink" title="CSV 数据文件设置"></a>CSV 数据文件设置</h4><p>从CSV文件中读取参数，构造动态变化的业务请求</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151500054.png"></p>
+<p>CSV格式</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">id,name</span><br><span class="line">1,ali</span><br><span class="line">2,pts</span><br><span class="line">3,jmeter</span><br></pre></td></tr></table></figure>
+
+<p>配置</p>
+<ul>
+<li>如果添加了表头，则需要将<code>忽略首行</code>设置为true</li>
+</ul>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151502113.png"></p>
+<h4 id="函数变量"><a href="#函数变量" class="headerlink" title="函数变量"></a><a href="#%E5%87%BD%E6%95%B0">函数变量</a></h4><h4 id="内置变量"><a href="#内置变量" class="headerlink" title="内置变量"></a>内置变量</h4><h5 id="vars"><a href="#vars" class="headerlink" title="vars"></a>vars</h5><p>线程组 局部变量，只能在同一线程组内传递数据</p>
+<p>通常用于在测试执行期间<strong>动态</strong>生成值，例如从响应中提取数据并将其存储在变量中供后续请求使用。</p>
+<p>通过如下方式设置和访问：</p>
+<ul>
+<li>在非 beanshell 环境里使用 <code>$&#123;varName&#125;</code> 语法访问变量的值。</li>
+<li>在 beanshell 环境里使用 <code>vars.get(&quot;varName&quot;)</code> 语法访问变量的值，<code>vars.put(&quot;varName&quot;, &quot;value&quot;)</code> 语法设置变量的值。</li>
+</ul>
+<h5 id="props"><a href="#props" class="headerlink" title="props"></a>props</h5><p>JMeter 全局变量，可以跨线程组传递数据</p>
+<p>通常用于在测试执行期间传递数据</p>
+<p>通过如下方式设置和访问：</p>
+<ul>
+<li>在非 beanshell 环境里使用<code>$&#123;__P(propName)&#125;</code> 语法访问变量的值。</li>
+<li>在 beanshell 环境里使用 <code>props.get(&quot;propName&quot;)</code> 语法访问变量的值， <code>props.put(&quot;propName&quot;, &quot;value&quot;)</code> 语法设置变量的值。</li>
+</ul>
+<h3 id="引用变量"><a href="#引用变量" class="headerlink" title="引用变量"></a>引用变量</h3><p>通过<code>$&#123;variable&#125;</code> 引用</p>
+<p>如果是字符串格式，则用双引号包裹，不影响解析</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151523802.png"></p>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a><a target="_blank" rel="noopener" href="https://jmeter.apache.org/usermanual/functions.html">函数</a></h3><p>通过函数动态生成一些请求参数</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151509380.png"></p>
+<h4 id="time"><a href="#time" class="headerlink" title="time"></a>time</h4><p>动态生成13位时间戳</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151511441.png"></p>
+<h4 id="digest"><a href="#digest" class="headerlink" title="digest"></a><a target="_blank" rel="noopener" href="https://jmeter.apache.org/usermanual/functions.html#__digest">digest</a></h4><p>动态生成摘要</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403151519728.png"></p>
+<h4 id="uuid"><a href="#uuid" class="headerlink" title="uuid"></a><a target="_blank" rel="noopener" href="https://jmeter.apache.org/usermanual/functions.html#__UUID">uuid</a></h4><p>返回一个 uuid v4 版本的随机id</p>
+<p>引用方式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$&#123;__UUID()&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="JSON-Path"><a href="#JSON-Path" class="headerlink" title="JSON Path"></a><a target="_blank" rel="noopener" href="https://github.com/json-path/JsonPath?tab=readme-ov-file#operators">JSON Path</a></h3><p>由一系列的属性名和数组索引组成：以 “$.” 开头，用“.”和“[]”分隔</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;John&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="number">30</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;cars&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Ford&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;models&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="string">&quot;Fiesta&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="string">&quot;Focus&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="string">&quot;Mustang&quot;</span></span><br><span class="line">            <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;BMW&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;models&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">                <span class="string">&quot;320&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="string">&quot;X3&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="string">&quot;X5&quot;</span></span><br><span class="line">            <span class="punctuation">]</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>$.name：获取 “John”</li>
+<li>$.cars[0].name：获取 “Ford”</li>
+<li>$.cars[1].models[2]：获取 “X5”</li>
+</ul>
+<h3 id="Bean-Shell"><a href="#Bean-Shell" class="headerlink" title="Bean Shell"></a>Bean Shell</h3><p>一种完全符合 Java 语法规范的脚本语言。允许用户在 JMeter 中编写自定义脚本</p>
+<p>JMeter 中很多地方都可以使用 BeanShell 脚本，如：采样器(BeanShell Sampler)，前置处理器(BeanShell PreProcessor)，后置处理器(BeanShell PostProcessor)，断言(BeanShell Assertion)，定时器(BeanShell Timer)，监听器(BeanShell Listener)。使用 BeanShell 脚本可以很容易地扩展 JMeter 的功能</p>
+<ul>
+<li>在测试计划中使用复杂的逻辑控制。</li>
+<li>动态地生成HTTP请求参数。</li>
+<li>在测试过程中处理响应数据。</li>
+<li>自定义结果分析器。</li>
+</ul>
+<h4 id="常用内置对象"><a href="#常用内置对象" class="headerlink" title="常用内置对象"></a>常用内置对象</h4><h5 id="log"><a href="#log" class="headerlink" title="log"></a>log</h5><p>记录日志。Jmeter 用 log4j 记录日志，打印的日志会记录到bin&#x2F;jmeter.log文件。输出信息和错误的API 分别是 <code>log.info``()</code> 和 <code>log.error()</code>。</p>
+<blockquote>
+<p>多个字符串需要用<code>+</code> 拼接</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log.info(<span class="string">&quot;a&quot;</span>+vars.get(<span class="string">&quot;token&quot;</span>))</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h5 id="vars-1"><a href="#vars-1" class="headerlink" title="vars"></a>vars</h5><p>操作 JMeter 变量。可以在 HTTP 请求等地方用到</p>
+<p>Jmeter 变量是在线程启动时，拷贝到线程的，类似线程的局部变量。所以一个线程更新了变量，不会影响到另一个线程。</p>
+<p>获取变量：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vars.<span class="keyword">get</span>(<span class="string">&quot;name&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>设置变量。如果变量不存在会创建：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">vars</span>.put(<span class="string">&quot;key&quot;</span>, <span class="string">&quot;value&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h5 id="props-1"><a href="#props-1" class="headerlink" title="props"></a>props</h5><p>操作 JMeter 的配置文件：jmeter.properties。</p>
+<p>获取配置的值：</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">props.<span class="keyword">get</span>(<span class="string">&quot;key&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>设置配置的值：</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">props.<span class="built_in">put</span>(<span class="string">&quot;key&quot;</span>, value)</span><br></pre></td></tr></table></figure>
+
+<h5 id="data"><a href="#data" class="headerlink" title="data"></a>data</h5><p>当前请求的响应数据，可以用String str &#x3D; new String(data, “utf-8”)转成字符串再打印出来。类型是byte[]，即字节数组。</p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><blockquote>
+<p><a target="_blank" rel="noopener" href="https://apifox.com/apiskills/jmeter-beanshell/">https://apifox.com/apiskills/jmeter-beanshell/</a></p>
+</blockquote>
+<p>生成随机数，并设置到 JMeter 变量上</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Random;</span><br><span class="line"></span><br><span class="line"><span class="type">Random</span> <span class="variable">rand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>();</span><br><span class="line"><span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> rand.nextInt(<span class="number">100</span>);</span><br><span class="line">vars.put(<span class="string">&quot;randomNumber&quot;</span>, String.valueOf(num));</span><br></pre></td></tr></table></figure>
+
+<p>计算两个变量的和</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="variable">num1</span> <span class="operator">=</span> Integer.parseInt(vars.get(<span class="string">&quot;num1&quot;</span>));</span><br><span class="line"><span class="type">int</span> <span class="variable">num2</span> <span class="operator">=</span> Integer.parseInt(vars.get(<span class="string">&quot;num2&quot;</span>));</span><br><span class="line"><span class="type">int</span> <span class="variable">sum</span> <span class="operator">=</span> num1 + num2;</span><br><span class="line">vars.put(<span class="string">&quot;sum&quot;</span>, String.valueOf(sum));</span><br></pre></td></tr></table></figure>
+
+<p>构造 HTTP 请求参数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">param1</span> <span class="operator">=</span> URLEncoder.encode(vars.get(<span class="string">&quot;param1&quot;</span>), <span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">param2</span> <span class="operator">=</span> URLEncoder.encode(vars.get(<span class="string">&quot;param2&quot;</span>), <span class="string">&quot;UTF-8&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">params</span> <span class="operator">=</span> <span class="string">&quot;param1=&quot;</span> + param1 + <span class="string">&quot;&amp;param2=&quot;</span> + param2;</span><br><span class="line">vars.put(<span class="string">&quot;params&quot;</span>, params);</span><br></pre></td></tr></table></figure>
+
+<p>获取 HTTP 响应头中的某个值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.http.Header;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.HttpResponse;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.methods.HttpGet;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.client.DefaultHttpClient;</span><br><span class="line"></span><br><span class="line"><span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> vars.get(<span class="string">&quot;url&quot;</span>);</span><br><span class="line"><span class="type">DefaultHttpClient</span> <span class="variable">client</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">DefaultHttpClient</span>();</span><br><span class="line"><span class="type">HttpGet</span> <span class="variable">request</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">HttpGet</span>(url);</span><br><span class="line"><span class="type">HttpResponse</span> <span class="variable">response</span> <span class="operator">=</span> client.execute(request);</span><br><span class="line"><span class="type">Header</span> <span class="variable">header</span> <span class="operator">=</span> response.getFirstHeader(<span class="string">&quot;Content-Type&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">contentType</span> <span class="operator">=</span> header.getValue();</span><br><span class="line">vars.put(<span class="string">&quot;contentType&quot;</span>, contentType);</span><br></pre></td></tr></table></figure>
+
+<p>执行 HTTP 请求并解析响应数据</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.commons.io.IOUtils;</span><br><span class="line"><span class="keyword">import</span> java.net.URL;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.StandardCharsets;</span><br><span class="line"></span><br><span class="line"><span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> vars.get(<span class="string">&quot;url&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">response</span> <span class="operator">=</span> IOUtils.toString(<span class="keyword">new</span> <span class="title class_">URL</span>(url), StandardCharsets.UTF_8);</span><br><span class="line"><span class="comment">// 这边可以放解析响应的逻辑</span></span><br><span class="line">vars.put(<span class="string">&quot;response&quot;</span>, response);</span><br></pre></td></tr></table></figure>
+
+<p>发送电子邮件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.mail.*;</span><br><span class="line"><span class="keyword">import</span> javax.mail.internet.*;</span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="type">String</span> <span class="variable">host</span> <span class="operator">=</span> vars.get(<span class="string">&quot;host&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">port</span> <span class="operator">=</span> vars.get(<span class="string">&quot;port&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">username</span> <span class="operator">=</span> vars.get(<span class="string">&quot;username&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">password</span> <span class="operator">=</span> vars.get(<span class="string">&quot;password&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">from</span> <span class="operator">=</span> vars.get(<span class="string">&quot;from&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">to</span> <span class="operator">=</span> vars.get(<span class="string">&quot;to&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">subject</span> <span class="operator">=</span> vars.get(<span class="string">&quot;subject&quot;</span>);</span><br><span class="line"><span class="type">String</span> <span class="variable">body</span> <span class="operator">=</span> vars.get(<span class="string">&quot;body&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">Properties</span> <span class="variable">props</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Properties</span>();</span><br><span class="line">props.put(<span class="string">&quot;mail.smtp.host&quot;</span>, host);</span><br><span class="line">props.put(<span class="string">&quot;mail.smtp.port&quot;</span>, port);</span><br><span class="line">props.put(<span class="string">&quot;mail.smtp.auth&quot;</span>, <span class="string">&quot;true&quot;</span>);</span><br><span class="line"><span class="type">Session</span> <span class="variable">session</span> <span class="operator">=</span> Session.getInstance(props, <span class="keyword">new</span> <span class="title class_">javax</span>.mail.Authenticator() &#123;</span><br><span class="line">    <span class="keyword">protected</span> PasswordAuthentication <span class="title function_">getPasswordAuthentication</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">PasswordAuthentication</span>(username, password);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="type">Message</span> <span class="variable">message</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MimeMessage</span>(session);</span><br><span class="line">message.setFrom(<span class="keyword">new</span> <span class="title class_">InternetAddress</span>(from));</span><br><span class="line">message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));</span><br><span class="line">message.setSubject(subject);</span><br><span class="line">message.setText(body);</span><br><span class="line">Transport.send(message);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><h3 id="RT"><a href="#RT" class="headerlink" title="RT"></a>RT</h3><p>response time 响应时间</p>
+<p>请求从开始到收到响应花费的时间</p>
+<h3 id="Transaction"><a href="#Transaction" class="headerlink" title="Transaction"></a>Transaction</h3><p>一个完整的请求-响应流程，即一个客户机向服务器发送请求然后服务器做出响应的过程</p>
+<h3 id="VU"><a href="#VU" class="headerlink" title="VU"></a>VU</h3><p>virtual user 虚拟用户数（并发用户），即JMeter 中的一个线程</p>
+<ul>
+<li>注册用户一般指数据库中存在的用户</li>
+<li>在线用户只是”挂”在系统上，对服务器不产生压力</li>
+<li>并发用户会对服务器产生压力</li>
+</ul>
+<h3 id="TPS"><a href="#TPS" class="headerlink" title="TPS"></a>TPS</h3><p>Transactions per Seconds</p>
+<p>单位时间内完成的事务个数，是衡量系统性能的一个非常重要的指标</p>
+<p>请求总数&#x2F;总时长</p>
+<blockquote>
+<p>线程总数&#x2F;启动时间</p>
+<p>线程总数由CPU型号决定</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ lscpu</span><br><span class="line">架构：                              x86_64</span><br><span class="line">CPU 运行模式：                      32-bit, 64-bit</span><br><span class="line">字节序：                            Little Endian</span><br><span class="line">Address sizes:                     39 bits physical, 48 bits virtual</span><br><span class="line">CPU:                               12 <span class="comment"># 该处理器可以并行处理的线程总数为 12</span></span><br><span class="line">在线 CPU 列表：                     	0-11 <span class="comment"># 系统识别到的 CPU 核心编号</span></span><br><span class="line">每个核的线程数：                      2 <span class="comment"># 每个核心支持 2 个线程</span></span><br><span class="line">每个座的核数：                        6 <span class="comment"># 这是一个六核心处理器 </span></span><br><span class="line">座：                                1 <span class="comment"># 这台机器上安装了一个 CPU</span></span><br><span class="line">NUMA 节点：                         1</span><br><span class="line">厂商 ID：                           GenuineIntel</span><br><span class="line">CPU 系列：                          6</span><br><span class="line">型号：                              151</span><br><span class="line">型号名称：                          12th Gen Intel(R) Core(TM) i5-12400</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="性能评价"><a href="#性能评价" class="headerlink" title="性能评价"></a>性能评价</h2><ul>
+<li>系统的性能由TPS决定，跟并发用户数没有多大关系</li>
+<li>一般情况下，大型系统（业务量大、机器多）做压力测试，10000~50000个用户并发，中小型系统做压力测试，5000个用户并发比较常见</li>
+</ul>
+<h2 id="测试指标"><a href="#测试指标" class="headerlink" title="测试指标"></a><a target="_blank" rel="noopener" href="https://help.aliyun.com/zh/pts/test-metrics?spm=a2c4g.11186623.0.0.52f65c45Vs4AG5">测试指标</a></h2><p>一般分为业务指标、资源指标、应用指标、前端指标。</p>
+<ul>
+<li>业务指标：如并发用户数、TPS（系统每秒处理事务数）、成功率、RT。</li>
+<li>资源指标：如CPU资源利用率、内存利用率、I&#x2F;O、内核参数（信号量、打开文件数）等。</li>
+<li>应用指标：如空闲线程数、数据库连接数、GC&#x2F;FULL GC次数、函数耗时等。</li>
+<li>前端指标：如页面加载时间、网络时间（DNS、连接时间、传输时间等）</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/c27009fa758d/" rel="prev" title="分页查询总结">
+      <i class="fa fa-chevron-left"></i> 分页查询总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/2f3af5d11bbc/" rel="next" title="JMeter 测试用例">
+      JMeter 测试用例 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#JMeter"><span class="nav-text">JMeter</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD"><span class="nav-text">下载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%87%E6%8D%A2%E4%B8%AD%E6%96%87"><span class="nav-text">切换中文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="nav-text">安装插件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Basic-Graphs"><span class="nav-text">3 Basic Graphs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-Additional-Graphs"><span class="nav-text">5 Additional Graphs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PerfMon-Servers-Performance-Monitoring"><span class="nav-text">PerfMon(Servers Performance Monitoring)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%84%E7%A7%8D%E7%BB%84%E4%BB%B6"><span class="nav-text">各种组件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F"><span class="nav-text">定义变量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E7%9A%84%E5%8F%98%E9%87%8F"><span class="nav-text">用户定义的变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CSV-%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E8%AE%BE%E7%BD%AE"><span class="nav-text">CSV 数据文件设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%87%BD%E6%95%B0%E5%8F%98%E9%87%8F"><span class="nav-text">函数变量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E5%8F%98%E9%87%8F"><span class="nav-text">内置变量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#vars"><span class="nav-text">vars</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#props"><span class="nav-text">props</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E5%8F%98%E9%87%8F"><span class="nav-text">引用变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%BD%E6%95%B0"><span class="nav-text">函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#time"><span class="nav-text">time</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#digest"><span class="nav-text">digest</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#uuid"><span class="nav-text">uuid</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON-Path"><span class="nav-text">JSON Path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean-Shell"><span class="nav-text">Bean Shell</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E5%86%85%E7%BD%AE%E5%AF%B9%E8%B1%A1"><span class="nav-text">常用内置对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#log"><span class="nav-text">log</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#vars-1"><span class="nav-text">vars</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#props-1"><span class="nav-text">props</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#data"><span class="nav-text">data</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-text">示例</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E5%BF%B5"><span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#RT"><span class="nav-text">RT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transaction"><span class="nav-text">Transaction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#VU"><span class="nav-text">VU</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TPS"><span class="nav-text">TPS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E8%AF%84%E4%BB%B7"><span class="nav-text">性能评价</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%8C%87%E6%A0%87"><span class="nav-text">测试指标</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

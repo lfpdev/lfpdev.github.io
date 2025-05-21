@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="APP支付 在商家移动端APP内使用支付宝支付功能  用户在商家APP内消费，在支付时选择支付宝付款，调起支付宝APP完成支付">
+<meta property="og:type" content="article">
+<meta property="og:title" content="支付宝APP支付">
+<meta property="og:url" content="http://example.com/p/2584ef9d4502/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="APP支付 在商家移动端APP内使用支付宝支付功能  用户在商家APP内消费，在支付时选择支付宝付款，调起支付宝APP完成支付">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202402041754146.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202402051601110.png">
+<meta property="article:published_time" content="2023-11-19T15:24:06.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.770Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202402041754146.png">
+
+<link rel="canonical" href="http://example.com/p/2584ef9d4502/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>支付宝APP支付 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/2584ef9d4502/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          支付宝APP支付
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-11-19 23:24:06" itemprop="dateCreated datePublished" datetime="2023-11-19T23:24:06+08:00">2023-11-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Payment/" itemprop="url" rel="index"><span itemprop="name">Payment</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="APP支付"><a href="#APP支付" class="headerlink" title="APP支付"></a>APP支付</h2><ul>
+<li><p>在商家移动端APP内使用支付宝支付功能</p>
+</li>
+<li><p>用户在商家APP内消费，在支付时选择支付宝付款，调起支付宝APP完成支付</p>
+<span id="more"></span></li>
+</ul>
+<h3 id="开发文档"><a href="#开发文档" class="headerlink" title="开发文档"></a><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/open/repo-0038v9">开发文档</a></h3><h4 id="接入准备"><a href="#接入准备" class="headerlink" title="接入准备"></a>接入准备</h4><ol>
+<li><p>创建<code>网页/移动应用</code></p>
+<ul>
+<li><p>使用企业账号登录支付宝开发平台</p>
+</li>
+<li><p>创建<code>网页/移动应用</code></p>
+<p>自动生成唯一标识 APPID，用于调用API</p>
+</li>
+</ul>
+</li>
+<li><p>开通 APP 支付</p>
+<ul>
+<li>使用应用所属账号登录<strong>商家平台</strong>开通</li>
+<li>如果是个人账号申请，需提供营业执照，且登录账号名称需与营业执照主体一致</li>
+</ul>
+</li>
+<li><p>绑定APP支付</p>
+</li>
+<li><p>配置应用信息</p>
+</li>
+</ol>
+<h5 id="配置应用信息"><a href="#配置应用信息" class="headerlink" title="配置应用信息"></a>配置应用信息</h5><p><a target="_blank" rel="noopener" href="https://open.alipay.com/api/diagnosticTool">配置项检测</a></p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/common/02kf5p">接口加签方式</a></p>
+<p>使用密钥方式，平台<a target="_blank" rel="noopener" href="https://opendocs.alipay.com/common/02kipl">生成RSA2密钥</a></p>
+<p>通过平台生成的私钥是PKCS8格式的，需要<a target="_blank" rel="noopener" href="https://opendocs.alipay.com/common/02khjp">转换</a>为 PKCS1 格式，否则报错ASN1_CHECK_TLEN</p>
+<blockquote>
+<p><strong>应用私钥</strong>：用来给应用消息进行<strong>签名</strong>，请务必要妥善保管，避免遗失或泄露。</p>
+<p><strong>应用公钥</strong>：需要提供给支付宝开放平台，平台会对应用发送的消息进行<strong>签名验证</strong>。</p>
+<p><strong>支付宝公钥</strong>：应用收到支付宝发送的同步、异步消息时，使用支付宝公钥<strong>验证签名</strong>信息。</p>
+</blockquote>
+</li>
+<li><p>支付宝网关</p>
+<p>固定为 <a target="_blank" rel="noopener" href="https://openapi.alipay.com/gateway.do">https://openapi.alipay.com/gateway.do</a></p>
+</li>
+<li><p>应用网关</p>
+<p>接收支付宝异步通知消息，需要传入 http(s) 公网可访问网页地址</p>
+</li>
+<li><p>接口内容<strong>加密</strong>方式【选填】</p>
+<p>对请求业务内容和响应内容进行AES加密</p>
+</li>
+</ul>
+<h4 id="结算"><a href="#结算" class="headerlink" title="结算"></a>结算</h4><p>收款账户：默认收款到签约账号的支付宝余额账户，实时到账</p>
+<h3 id="接入"><a href="#接入" class="headerlink" title="接入"></a>接入</h3><h4 id="交互流程图"><a href="#交互流程图" class="headerlink" title="交互流程图"></a>交互流程图</h4><p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202402041754146.png"></p>
+<ul>
+<li><p>第 1 步用户在商户 App 客户端&#x2F;小程序中购买商品下单</p>
+</li>
+<li><p>第 2 步商户 App 客户端&#x2F;小程序将用户订单信息<strong>发送</strong>到商户服务端</p>
+</li>
+<li><p>第 3 步商户服务端通过支付宝服务端 SDK生成 orderStr（orderStr 中包含了订单信息和签名）</p>
+</li>
+<li><p>第 4 步商户服务端将 orderStr <strong>返回</strong>给商户 App 客户端&#x2F;小程序</p>
+<blockquote>
+<p>服务端根据订单信息生成 orderStr（只是加签数据），不经过支付宝服务端，直接发给App客户端，由App客户端调起支付宝App，根据 orderStr 向支付宝服务端发送请求</p>
+</blockquote>
+</li>
+<li><p>第 5 步商户客户端&#x2F;小程序<strong>发起支付</strong>，调起支付宝，将 orderStr 发送给支付宝。</p>
+</li>
+<li><p>第 6 步支付预下单：支付宝客户端将会按照商家客户端提供的请求参数进行支付预下单。正常场景下，会唤起支付宝收银台等待用户核身；异常场景下，会返回异常信息。</p>
+</li>
+<li><p>第 11 步返回商家 App&#x2F;小程序：用户在支付宝 App 完成支付后，会跳转回商家页面，并返回最终的支付结果（即同步通知）</p>
+</li>
+<li><p>第 13 步支付结果异步通知，支付宝会根据步骤3 传入的异步通知地址 notify_url，发送异步通知</p>
+</li>
+</ul>
+<h4 id="下单"><a href="#下单" class="headerlink" title="下单"></a>下单</h4><h5 id="业务逻辑"><a href="#业务逻辑" class="headerlink" title="业务逻辑"></a>业务逻辑</h5><h6 id="防止重复下单"><a href="#防止重复下单" class="headerlink" title="防止重复下单"></a>防止重复下单</h6><p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7126141514949853192">通过请求中的 request_id 判重</a></p>
+<h5 id="金额"><a href="#金额" class="headerlink" title="金额"></a>金额</h5><ul>
+<li>amount 字段，单位为元</li>
+</ul>
+<h5 id="支付宝订单"><a href="#支付宝订单" class="headerlink" title="支付宝订单"></a>支付宝订单</h5><ul>
+<li>用户在支付宝App输入正确的支付密码后创建</li>
+<li>支付宝订单号 trade_no</li>
+</ul>
+<h5 id="商户订单"><a href="#商户订单" class="headerlink" title="商户订单"></a>商户订单</h5><ul>
+<li>商户App将订单信息发送给商户服务端后创建</li>
+<li>商户订单号 out_trade_no</li>
+</ul>
+<h4 id="支付"><a href="#支付" class="headerlink" title="支付"></a>支付</h4><h5 id="业务逻辑-1"><a href="#业务逻辑-1" class="headerlink" title="业务逻辑"></a>业务逻辑</h5><h6 id="防止重复支付"><a href="#防止重复支付" class="headerlink" title="防止重复支付"></a>防止重复支付</h6><blockquote>
+<p><a target="_blank" rel="noopener" href="https://learnku.com/laravel/t/64089">https://learnku.com/laravel/t/64089</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/7JdYEh57eRUZqKZ7yucseg">https://mp.weixin.qq.com/s/7JdYEh57eRUZqKZ7yucseg</a></p>
+</blockquote>
+<ul>
+<li><p>不同网关重复支付</p>
+<ol>
+<li>加redis锁</li>
+<li>后支付的自动退款</li>
+</ol>
+</li>
+<li><p>相同网关重复支付</p>
+<p>通过支付日志 paymentLog解决</p>
+</li>
+</ul>
+<h5 id="API"><a href="#API" class="headerlink" title="API"></a><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/open/cd12c885_alipay.trade.app.pay">API</a></h5><p>formData</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="string">&#x27;https://openapi.alipaydev.com/gateway.do?method=alipay.trade.pay&amp;app_id=2021000118646670&amp;charset=utf-8&amp;version=1.0&amp;sign_type=RSA2&amp;timestamp=2022-03-23 22:21:56&amp;notify_url=https://api-dev.paihaole.cn/payment/listener/alipay&amp;sign=r1VW6cRRgJqXAquJcTRE+b7Zsyo1bBk0YmINn9hAXwnHNMMVN0q2/sF+4i8hbIkApkAQLS4j0yfFNzvgfx6pSX+hVI8aC7hX50JdtYDWzJJP9mxlEIGJMQ2kFBiGI02GHRanLj8LiKYduy9o2VDYmz75z5hQp35Tff/7eUYeSJHsTL/AcZT2q4AKH0p5MBgciBmIak/8okv1at+8jF85enwMa6uUG0MOmlTAQC9cdUqf4UwaDp783yiBPmBpjLrrjMiTs6nLVVVZDJSEJluKxOWElw2IbJPv4aOi23BW6gChzh+J61A/UgNE9yxxuYdHM9yAh0g/TrS8YTI1jHcyCw==&amp;alipay_sdk=alipay-sdk-nodejs-3.2.0&amp;biz_content=&#123;&quot;out_trade_no&quot;:&quot;AQP164804531604457&quot;,&quot;total_amount&quot;:0.01,&quot;auth_code&quot;:&quot;286806172615687397&quot;,&quot;subject&quot;:&quot;动力引擎-天津店-商品&quot;,&quot;store_id&quot;:&quot;409&quot;,&quot;goods_detail&quot;:[&#123;&quot;goods_id&quot;:&quot;service_353&quot;,&quot;goods_name&quot;:&quot;体验课&quot;,&quot;quantity&quot;:1,&quot;price&quot;:1&#125;],&quot;terminal_id&quot;:&quot;::1&quot;,&quot;query_options&quot;:[&quot;1464-8888890657&quot;],&quot;product_code&quot;:&quot;OFFLINE_PAYMENT&quot;,&quot;scene&quot;:&quot;bar_code&quot;,&quot;timeout_express&quot;:&quot;30m&quot;&#125;&#x27;</span>.<span class="title function_">split</span>(<span class="string">&#x27;&amp;&#x27;</span>)</span><br><span class="line">[</span><br><span class="line">  <span class="string">&#x27;https://openapi.alipaydev.com/gateway.do?method=alipay.trade.pay&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;app_id=2021000118646670&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;charset=utf-8&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;version=1.0&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;sign_type=RSA2&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;timestamp=2022-03-23 22:21:56&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;notify_url=https://api-dev.paihaole.cn/payment/listener/alipay&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;sign=r1VW6cRRgJqXAquJcTRE+b7Zsyo1bBk0YmINn9hAXwnHNMMVN0q2/sF+4i8hbIkApkAQLS4j0yfFNzvgfx6pSX+hVI8aC7hX50JdtYDWzJJP9mxlEIGJMQ2kFBiGI02GHRanLj8LiKYduy9o2VDYmz75z5hQp35Tff/7eUYeSJHsTL/AcZT2q4AKH0p5MBgciBmIak/8okv1at+8jF85enwMa6uUG0MOmlTAQC9cdUqf4UwaDp783yiBPmBpjLrrjMiTs6nLVVVZDJSEJluKxOWElw2IbJPv4aOi23BW6gChzh+J61A/UgNE9yxxuYdHM9yAh0g/TrS8YTI1jHcyCw==&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;alipay_sdk=alipay-sdk-nodejs-3.2.0&#x27;</span>,</span><br><span class="line">  <span class="string">&#x27;biz_content=&#123;&quot;out_trade_no&quot;:&quot;AQP164804531604457&quot;,&quot;total_amount&quot;:0.01,&quot;auth_code&quot;:&quot;286806172615687397&quot;,&quot;subject&quot;:&quot;动力引擎-天津店-商品&quot;,&quot;store_id&quot;:&quot;409&quot;,&quot;goods_detail&quot;:[&#123;&quot;goods_id&quot;:&quot;service_353&quot;,&quot;goods_name&quot;:&quot;体验课&quot;,&quot;quantity&quot;:1,&quot;price&quot;:1&#125;],&quot;terminal_id&quot;:&quot;::1&quot;,&quot;query_options&quot;:[&quot;1464-8888890657&quot;],&quot;product_code&quot;:&quot;OFFLINE_PAYMENT&quot;,&quot;scene&quot;:&quot;bar_code&quot;,&quot;timeout_express&quot;:&quot;30m&quot;&#125;&#x27;</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+
+<h5 id="超时时间"><a href="#超时时间" class="headerlink" title="超时时间"></a>超时时间</h5><h6 id="订单超时时间"><a href="#订单超时时间" class="headerlink" title="订单超时时间"></a>订单超时时间</h6><ul>
+<li>由商户控制，订单超时后由商户服务端向支付宝服务端发起[交易关闭]操作</li>
+</ul>
+<h6 id="支付超时时间"><a href="#支付超时时间" class="headerlink" title="支付超时时间"></a>支付超时时间</h6><ul>
+<li>可在交易创建时指定一个超时时间，设置范围5min-15d</li>
+<li>支付宝默认超时时间为15天（第15天24点后，交易关闭）</li>
+</ul>
+<h4 id="退款"><a href="#退款" class="headerlink" title="退款"></a><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/open/204/01dcc0?pathHash=cf89b2be#%E9%80%80%E6%AC%BE%E6%B5%81%E7%A8%8B">退款</a></h4><p>交易发生后的一段时间内，由于业务原因（如金额错误、用户退款或者对账不平等）需要退款</p>
+<p>默认交易发生后的 12 个月内，商家可退款。退款资金按原路退还至用户账户。</p>
+<p>退款退费：退款时服务费不退回。</p>
+<h5 id="业务逻辑-2"><a href="#业务逻辑-2" class="headerlink" title="业务逻辑"></a>业务逻辑</h5><h6 id="防止重复退款"><a href="#防止重复退款" class="headerlink" title="防止重复退款"></a>防止重复退款</h6><p>通过 refund 表记录</p>
+<h5 id="API-1"><a href="#API-1" class="headerlink" title="API"></a><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/open/6c0cdd7d_alipay.trade.refund">API</a></h5><h5 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h5><h6 id="如何判断退款是否成功"><a href="#如何判断退款是否成功" class="headerlink" title="如何判断退款是否成功"></a><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/support/01rawa">如何判断退款是否成功</a></h6><ul>
+<li>接口返回code为10000仅表示接口<a target="_blank" rel="noopener" href="https://opendocs.alipay.com/support/01rawa">调用成功</a></li>
+</ul>
+<h6 id="异步通知如何判断对应哪笔退款交易"><a href="#异步通知如何判断对应哪笔退款交易" class="headerlink" title="异步通知如何判断对应哪笔退款交易"></a><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/support/01rawf">异步通知如何判断对应哪笔退款交易</a></h6><h4 id="关闭"><a href="#关闭" class="headerlink" title="关闭"></a>关闭</h4><h5 id="API-2"><a href="#API-2" class="headerlink" title="API"></a><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/open/ce0b4954_alipay.trade.close">API</a></h5><p>返回</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">msg</span>: <span class="string">&#x27;Business Failed&#x27;</span>,</span><br><span class="line">  <span class="attr">code</span>: <span class="string">&#x27;40004&#x27;</span>,</span><br><span class="line">  <span class="attr">subMsg</span>: <span class="string">&#x27;交易不存在&#x27;</span>,</span><br><span class="line">  <span class="attr">subCode</span>: <span class="string">&#x27;ACQ.TRADE_NOT_EXIST&#x27;</span>,</span><br><span class="line">  <span class="attr">traceId</span>: <span class="string">&#x27;218f458e16992764550397859e6d83&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="交易状态"><a href="#交易状态" class="headerlink" title="交易状态"></a>交易状态</h4><ul>
+<li>前端查询交易状态都直接向支付宝查询最新的，不要从数据库获取</li>
+</ul>
+<h5 id="状态机"><a href="#状态机" class="headerlink" title="状态机"></a>状态机</h5><ul>
+<li><p>wait_buyer_pay 交易创建</p>
+<blockquote>
+<p>等待用户付款</p>
+</blockquote>
+</li>
+<li><p>trade_success 交易成功</p>
+</li>
+<li><p>trade_finished 交易完成</p>
+<blockquote>
+<p>不可退款</p>
+</blockquote>
+</li>
+<li><p>trade_closed 交易关闭</p>
+</li>
+</ul>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202402051601110.png"></p>
+<ul>
+<li>一直部分退款退完所有交易金额则交易状态转为 TRADE_CLOSED</li>
+<li>如果未退完所有交易金额，超过有效退款时间后交易状态转为 TRADE_FINISHED 不可退款</li>
+</ul>
+<h5 id="支付状态"><a href="#支付状态" class="headerlink" title="支付状态"></a>支付状态</h5><ul>
+<li>异步或查询接口返回的 trade_status（交易状态）为 TRADE_SUCCESS 或 TRADE_FINISHED 时，支付宝才会认定为买家付款成功</li>
+</ul>
+<h6 id="API-3"><a href="#API-3" class="headerlink" title="API"></a><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/open/82ea786a_alipay.trade.query">API</a></h6><p>放弃交易后查询</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">msg</span>: <span class="string">&#x27;Business Failed&#x27;</span>,</span><br><span class="line">  <span class="attr">code</span>: <span class="string">&#x27;40004&#x27;</span>,</span><br><span class="line">  <span class="attr">outTradeNo</span>: <span class="string">&#x27;AOA20231110001750232632264&#x27;</span>,</span><br><span class="line">  <span class="attr">subMsg</span>: <span class="string">&#x27;交易不存在&#x27;</span>,</span><br><span class="line">  <span class="attr">subCode</span>: <span class="string">&#x27;ACQ.TRADE_NOT_EXIST&#x27;</span>,</span><br><span class="line">  <span class="attr">receiptAmount</span>: <span class="string">&#x27;0.00&#x27;</span>,</span><br><span class="line">  <span class="attr">pointAmount</span>: <span class="string">&#x27;0.00&#x27;</span>,</span><br><span class="line">  <span class="attr">buyerPayAmount</span>: <span class="string">&#x27;0.00&#x27;</span>,</span><br><span class="line">  <span class="attr">invoiceAmount</span>: <span class="string">&#x27;0.00&#x27;</span>,</span><br><span class="line">  <span class="attr">traceId</span>: <span class="string">&#x27;21909e0d16995466857567049e43c3&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>退款后查询</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">code</span>: <span class="string">&#x27;10000&#x27;</span>,</span><br><span class="line">  <span class="attr">msg</span>: <span class="string">&#x27;Success&#x27;</span>,</span><br><span class="line">  <span class="attr">buyerLogonId</span>: <span class="string">&#x27;134******66&#x27;</span>,</span><br><span class="line">  <span class="attr">buyerPayAmount</span>: <span class="string">&#x27;0.00&#x27;</span>,</span><br><span class="line">  <span class="attr">buyerUserId</span>: <span class="string">&#x27;2088702467896261&#x27;</span>,</span><br><span class="line">  <span class="attr">invoiceAmount</span>: <span class="string">&#x27;0.00&#x27;</span>,</span><br><span class="line">  <span class="attr">outTradeNo</span>: <span class="string">&#x27;AOA1699460480307&#x27;</span>,</span><br><span class="line">  <span class="attr">pointAmount</span>: <span class="string">&#x27;0.00&#x27;</span>,</span><br><span class="line">  <span class="attr">receiptAmount</span>: <span class="string">&#x27;0.00&#x27;</span>,</span><br><span class="line">  <span class="attr">sendPayDate</span>: <span class="string">&#x27;2023-11-09 00:21:28&#x27;</span>,</span><br><span class="line">  <span class="attr">totalAmount</span>: <span class="string">&#x27;0.01&#x27;</span>,</span><br><span class="line">  <span class="attr">tradeNo</span>: <span class="string">&#x27;2023110922001496261434959156&#x27;</span>,</span><br><span class="line">  <span class="attr">tradeStatus</span>: <span class="string">&#x27;TRADE_CLOSED&#x27;</span>,</span><br><span class="line">  <span class="attr">traceId</span>: <span class="string">&#x27;0b2282e516994613443961354e3323&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="退款状态"><a href="#退款状态" class="headerlink" title="退款状态"></a>退款状态</h5><h6 id="API-4"><a href="#API-4" class="headerlink" title="API"></a><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/open/8c776df6_alipay.trade.fastpay.refund.query">API</a></h6><p>返回</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">code</span>: <span class="string">&#x27;10000&#x27;</span>,</span><br><span class="line">    <span class="attr">msg</span>: <span class="string">&#x27;Success&#x27;</span>,</span><br><span class="line">    <span class="attr">buyerLogonId</span>: <span class="string">&#x27;134******66&#x27;</span>,</span><br><span class="line">    <span class="attr">buyerUserId</span>: <span class="string">&#x27;2088702467896261&#x27;</span>,</span><br><span class="line">    <span class="attr">fundChange</span>: <span class="string">&#x27;Y&#x27;</span>,</span><br><span class="line">    <span class="attr">gmtRefundPay</span>: <span class="string">&#x27;2023-11-09 00:35:12&#x27;</span>,</span><br><span class="line">    <span class="attr">outTradeNo</span>: <span class="string">&#x27;AOA1699460480307&#x27;</span>,</span><br><span class="line">    <span class="attr">refundDetailItemList</span>: [ [<span class="title class_">Object</span>] ],</span><br><span class="line">    <span class="attr">refundFee</span>: <span class="string">&#x27;0.01&#x27;</span>,</span><br><span class="line">    <span class="attr">sendBackFee</span>: <span class="string">&#x27;0.01&#x27;</span>,</span><br><span class="line">    <span class="attr">tradeNo</span>: <span class="string">&#x27;2023110922001496261434959156&#x27;</span>,</span><br><span class="line">    <span class="attr">traceId</span>: <span class="string">&#x27;21974fbc16994613118301255e2ecc&#x27;</span></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="异步通知"><a href="#异步通知" class="headerlink" title="异步通知"></a><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/open/204/105301?pathHash=fef00e6d">异步通知</a></h4><ul>
+<li><p>支付宝通过 POST 请求向下单时传入的 notify_url 发送通知</p>
+</li>
+<li><p>异步地址（notify_url）需保证无任何字符，如空格、HTML 标签，且不能重定向</p>
+</li>
+<li><p>商户服务端需要及时响应</p>
+<table>
+<thead>
+<tr>
+<th>响应值</th>
+<th>描述</th>
+<th>异步是否重试发送</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>fail</td>
+<td>消息获取失败</td>
+<td>重试</td>
+</tr>
+<tr>
+<td>success</td>
+<td>消息获取成功</td>
+<td>不重试</td>
+</tr>
+</tbody></table>
+<p>成功返回 success 字符串，失败返回 fail 字符串，否则支付宝会认为通知失败，会通过一定的策略定期重新发起通知。<strong>通知的间隔频率为：4m、10m、10m、1h、2h、6h、15h</strong>。</p>
+<p>针对同一条异步通知重试时，异步通知参数中的 notify_id 保持不变</p>
+</li>
+</ul>
+<h5 id="触发条件"><a href="#触发条件" class="headerlink" title="触发条件"></a>触发条件</h5><h6 id="状态变化"><a href="#状态变化" class="headerlink" title="&#x3D;&#x3D;状态变化&#x3D;&#x3D;"></a>&#x3D;&#x3D;状态变化&#x3D;&#x3D;</h6><h6 id="trade-finished"><a href="#trade-finished" class="headerlink" title="trade_finished"></a>trade_finished</h6><p>触发条件：</p>
+<ul>
+<li>不支持退款功能且用户付款成功</li>
+<li>支持退款功能且超时未退款</li>
+</ul>
+<h6 id="trade-success"><a href="#trade-success" class="headerlink" title="trade_success"></a>trade_success</h6><p>触发条件：</p>
+<ul>
+<li>支持退款功能且用户付款成功</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">gmt_create</span>: <span class="string">&#x27;2023-11-09 00:41:18&#x27;</span>,</span><br><span class="line">  <span class="attr">charset</span>: <span class="string">&#x27;utf-8&#x27;</span>,</span><br><span class="line">  <span class="attr">seller_email</span>: <span class="string">&#x27;daweikeji@daweiai.email&#x27;</span>,</span><br><span class="line">  <span class="attr">subject</span>: <span class="string">&#x27;大沩科技-售卖机&#x27;</span>,</span><br><span class="line">  <span class="attr">sign</span>: <span class="string">&#x27;ml5rW53kp0aaWxWrfYd8g4yevGU9kXKH+exx21d84VpWoyqOYv+ebIYXYV/eOUwfmsHv2oOt5i9GUYGSe7/S6Apje7q7QkgE7zIu722bGDerh+oZG2uV2hdje8B49k/zembzhpovfITsnVFd0jRcEYAH7VC9HCf+nsyLLrLD28cDCIb36On7mQiKQ0uW6WyUl6uSd6R3mItmQd28ccU3/Ze7VJsJEtYKF4xWQ06uKlvNv/0+F6kjJE38loussGmPKuL7GBwJmnKnVGDheYNnEJwmUjLvmVaO/xrg8yFsyWl8D6yts9u5F/90E0jtwweAAC9KMWnJJIPSxhplrcJ6mQ==&#x27;</span>,</span><br><span class="line">  <span class="attr">buyer_id</span>: <span class="string">&#x27;2088702467896261&#x27;</span>,</span><br><span class="line">  <span class="attr">invoice_amount</span>: <span class="string">&#x27;0.01&#x27;</span>,</span><br><span class="line">  <span class="attr">notify_id</span>: <span class="string">&#x27;2023110901222004119096261416968100&#x27;</span>,</span><br><span class="line">  <span class="attr">fund_bill_list</span>: <span class="string">&#x27;[&#123;&quot;amount&quot;:&quot;0.01&quot;,&quot;fundChannel&quot;:&quot;ALIPAYACCOUNT&quot;&#125;]&#x27;</span>,</span><br><span class="line">  <span class="attr">notify_type</span>: <span class="string">&#x27;trade_status_sync&#x27;</span>,</span><br><span class="line">  <span class="attr">trade_status</span>: <span class="string">&#x27;TRADE_SUCCESS&#x27;</span>,</span><br><span class="line">  <span class="attr">receipt_amount</span>: <span class="string">&#x27;0.01&#x27;</span>,</span><br><span class="line">  <span class="attr">app_id</span>: <span class="string">&#x27;2021004108649284&#x27;</span>,</span><br><span class="line">  <span class="attr">buyer_pay_amount</span>: <span class="string">&#x27;0.01&#x27;</span>,</span><br><span class="line">  <span class="attr">sign_type</span>: <span class="string">&#x27;RSA2&#x27;</span>,</span><br><span class="line">  <span class="attr">seller_id</span>: <span class="string">&#x27;2088641506079905&#x27;</span>,</span><br><span class="line">  <span class="attr">gmt_payment</span>: <span class="string">&#x27;2023-11-09 00:41:18&#x27;</span>,</span><br><span class="line">  <span class="attr">notify_time</span>: <span class="string">&#x27;2023-11-09 00:41:19&#x27;</span>,</span><br><span class="line">  <span class="attr">version</span>: <span class="string">&#x27;1.0&#x27;</span>,</span><br><span class="line">  <span class="attr">out_trade_no</span>: <span class="string">&#x27;AOA20231109004114058985527&#x27;</span>,</span><br><span class="line">  <span class="attr">total_amount</span>: <span class="string">&#x27;0.01&#x27;</span>,</span><br><span class="line">  <span class="attr">trade_no</span>: <span class="string">&#x27;2023110922001496261426916626&#x27;</span>,</span><br><span class="line">  <span class="attr">auth_app_id</span>: <span class="string">&#x27;2021004108649284&#x27;</span>,</span><br><span class="line">  <span class="attr">buyer_logon_id</span>: <span class="string">&#x27;134****2066&#x27;</span>,</span><br><span class="line">  <span class="attr">point_amount</span>: <span class="string">&#x27;0.00&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h6 id="trade-closed"><a href="#trade-closed" class="headerlink" title="trade_closed"></a>trade_closed</h6><p>触发条件</p>
+<ol>
+<li>全额退款</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">gmt_create</span>: <span class="string">&#x27;2023-11-09 00:21:28&#x27;</span>,</span><br><span class="line">  <span class="attr">charset</span>: <span class="string">&#x27;utf-8&#x27;</span>,</span><br><span class="line">  <span class="attr">gmt_payment</span>: <span class="string">&#x27;2023-11-09 00:21:28&#x27;</span>,</span><br><span class="line">  <span class="attr">seller_email</span>: <span class="string">&#x27;daweikeji@daweiai.email&#x27;</span>,</span><br><span class="line">  <span class="attr">notify_time</span>: <span class="string">&#x27;2023-11-09 00:35:12&#x27;</span>,</span><br><span class="line">  <span class="attr">subject</span>: <span class="string">&#x27;大沩科技-售卖机&#x27;</span>,</span><br><span class="line">  <span class="attr">gmt_refund</span>: <span class="string">&#x27;2023-11-09 00:35:11.994&#x27;</span>,</span><br><span class="line">  <span class="attr">sign</span>: <span class="string">&#x27;MCYUw/mpmdfcFsQRVkF1O6BkZuRbgHfkd54kzNPuT+1IohjuAwuQ+gaPT0PBtncbxgtZC4KDb2KJWPjelZuwFDUek/noMj+xLh85riRFEEt80KempQ68S+e9btjlCSASZg7xHKDcmk4vdE+p7BKLAC1k0NJOF5IJeuKzX58nMGAHdbTzn2NKA2ge9srkJaznnlT30zWiKjIp7ZHhA5blgfKvdLT3VSyaRPjxUs7hak4WkUwTmul2fDWwL20q7vCAPrUyUNrEcylnJ6bxSOIwvfF8UeptSLhh4rnN1Ilrh7Ri4TNg7f2Xy0kNN5GzM+S63ebV/d+3BLylblQrMj35kQ==&#x27;</span>,</span><br><span class="line">  <span class="attr">buyer_id</span>: <span class="string">&#x27;2088702467896261&#x27;</span>,</span><br><span class="line">  <span class="attr">out_biz_no</span>: <span class="string">&#x27;RFD20231109003511789560588&#x27;</span>, <span class="comment">// 商家退款号</span></span><br><span class="line">  <span class="attr">version</span>: <span class="string">&#x27;1.0&#x27;</span>,</span><br><span class="line">  <span class="attr">notify_id</span>: <span class="string">&#x27;2023110901222003512096261415550867&#x27;</span>,</span><br><span class="line">  <span class="attr">notify_type</span>: <span class="string">&#x27;trade_status_sync&#x27;</span>,</span><br><span class="line">  <span class="attr">out_trade_no</span>: <span class="string">&#x27;AOA1699460480307&#x27;</span>,</span><br><span class="line">  <span class="attr">total_amount</span>: <span class="string">&#x27;0.01&#x27;</span>, <span class="comment">// 总交易金额</span></span><br><span class="line">  <span class="attr">trade_status</span>: <span class="string">&#x27;TRADE_CLOSED&#x27;</span>,</span><br><span class="line">  <span class="attr">refund_fee</span>: <span class="string">&#x27;0.01&#x27;</span>, <span class="comment">// 总退款金额</span></span><br><span class="line">  <span class="attr">trade_no</span>: <span class="string">&#x27;2023110922001496261434959156&#x27;</span>,</span><br><span class="line">  <span class="attr">auth_app_id</span>: <span class="string">&#x27;2021004108649284&#x27;</span>,</span><br><span class="line">  <span class="attr">gmt_close</span>: <span class="string">&#x27;2023-11-09 00:35:11&#x27;</span>,</span><br><span class="line">  <span class="attr">buyer_logon_id</span>: <span class="string">&#x27;134****2066&#x27;</span>,</span><br><span class="line">  <span class="attr">app_id</span>: <span class="string">&#x27;2021004108649284&#x27;</span>,</span><br><span class="line">  <span class="attr">sign_type</span>: <span class="string">&#x27;RSA2&#x27;</span>,</span><br><span class="line">  <span class="attr">seller_id</span>: <span class="string">&#x27;2088641506079905&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="验证"><a href="#验证" class="headerlink" title="验证"></a><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/open/204/105301#%E5%BC%82%E6%AD%A5%E8%BF%94%E5%9B%9E%E7%BB%93%E6%9E%9C%E9%AA%8C%E7%AD%BE">验证</a></h5><h6 id="验证签名"><a href="#验证签名" class="headerlink" title="验证签名"></a>验证签名</h6><ul>
+<li>使用支付宝sdk 中的 checkNotifySign 方法</li>
+</ul>
+<h6 id="校验数据"><a href="#校验数据" class="headerlink" title="校验数据"></a>校验数据</h6><ol>
+<li><p>过滤重复的通知</p>
+</li>
+<li><p>验证订单信息</p>
+<p>out_trade_no 是否为商家系统中创建的订单号</p>
+<p>total_amount 是否确实为该订单的实际金额</p>
+</li>
+<li><p>验证 app_id 是否为该商家本身</p>
+</li>
+</ol>
+<h5 id="FAQ-1"><a href="#FAQ-1" class="headerlink" title="FAQ"></a>FAQ</h5><p><a target="_blank" rel="noopener" href="https://opendocs.alipay.com/support/01rawc">退款接口是否会触发异步通知</a></p>
+<h4 id="接入FAQ"><a href="#接入FAQ" class="headerlink" title="接入FAQ"></a>接入FAQ</h4><h5 id="接口报错排查"><a href="#接口报错排查" class="headerlink" title="接口报错排查"></a><a target="_blank" rel="noopener" href="https://open.alipay.com/api/errCheck">接口报错排查</a></h5>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/551885b5f292/" rel="prev" title="农行APP支付">
+      <i class="fa fa-chevron-left"></i> 农行APP支付
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/851fe353eea0/" rel="next" title="企微自建应用-考勤">
+      企微自建应用-考勤 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#APP%E6%94%AF%E4%BB%98"><span class="nav-text">APP支付</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3"><span class="nav-text">开发文档</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A5%E5%85%A5%E5%87%86%E5%A4%87"><span class="nav-text">接入准备</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%BA%94%E7%94%A8%E4%BF%A1%E6%81%AF"><span class="nav-text">配置应用信息</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%93%E7%AE%97"><span class="nav-text">结算</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%85%A5"><span class="nav-text">接入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E4%BA%92%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">交互流程图</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8B%E5%8D%95"><span class="nav-text">下单</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91"><span class="nav-text">业务逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%98%B2%E6%AD%A2%E9%87%8D%E5%A4%8D%E4%B8%8B%E5%8D%95"><span class="nav-text">防止重复下单</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%87%91%E9%A2%9D"><span class="nav-text">金额</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%94%AF%E4%BB%98%E5%AE%9D%E8%AE%A2%E5%8D%95"><span class="nav-text">支付宝订单</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%95%86%E6%88%B7%E8%AE%A2%E5%8D%95"><span class="nav-text">商户订单</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%94%AF%E4%BB%98"><span class="nav-text">支付</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91-1"><span class="nav-text">业务逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%98%B2%E6%AD%A2%E9%87%8D%E5%A4%8D%E6%94%AF%E4%BB%98"><span class="nav-text">防止重复支付</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#API"><span class="nav-text">API</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4"><span class="nav-text">超时时间</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%AE%A2%E5%8D%95%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4"><span class="nav-text">订单超时时间</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%94%AF%E4%BB%98%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4"><span class="nav-text">支付超时时间</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%80%E6%AC%BE"><span class="nav-text">退款</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E9%80%BB%E8%BE%91-2"><span class="nav-text">业务逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%98%B2%E6%AD%A2%E9%87%8D%E5%A4%8D%E9%80%80%E6%AC%BE"><span class="nav-text">防止重复退款</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#API-1"><span class="nav-text">API</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#FAQ"><span class="nav-text">FAQ</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E9%80%80%E6%AC%BE%E6%98%AF%E5%90%A6%E6%88%90%E5%8A%9F"><span class="nav-text">如何判断退款是否成功</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5%E5%A6%82%E4%BD%95%E5%88%A4%E6%96%AD%E5%AF%B9%E5%BA%94%E5%93%AA%E7%AC%94%E9%80%80%E6%AC%BE%E4%BA%A4%E6%98%93"><span class="nav-text">异步通知如何判断对应哪笔退款交易</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E9%97%AD"><span class="nav-text">关闭</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#API-2"><span class="nav-text">API</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%A4%E6%98%93%E7%8A%B6%E6%80%81"><span class="nav-text">交易状态</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E6%9C%BA"><span class="nav-text">状态机</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%94%AF%E4%BB%98%E7%8A%B6%E6%80%81"><span class="nav-text">支付状态</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#API-3"><span class="nav-text">API</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%80%80%E6%AC%BE%E7%8A%B6%E6%80%81"><span class="nav-text">退款状态</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#API-4"><span class="nav-text">API</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E9%80%9A%E7%9F%A5"><span class="nav-text">异步通知</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91%E6%9D%A1%E4%BB%B6"><span class="nav-text">触发条件</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E5%8F%98%E5%8C%96"><span class="nav-text">&#x3D;&#x3D;状态变化&#x3D;&#x3D;</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#trade-finished"><span class="nav-text">trade_finished</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#trade-success"><span class="nav-text">trade_success</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#trade-closed"><span class="nav-text">trade_closed</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81"><span class="nav-text">验证</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E7%AD%BE%E5%90%8D"><span class="nav-text">验证签名</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%A0%A1%E9%AA%8C%E6%95%B0%E6%8D%AE"><span class="nav-text">校验数据</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#FAQ-1"><span class="nav-text">FAQ</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A5%E5%85%A5FAQ"><span class="nav-text">接入FAQ</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%8A%A5%E9%94%99%E6%8E%92%E6%9F%A5"><span class="nav-text">接口报错排查</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

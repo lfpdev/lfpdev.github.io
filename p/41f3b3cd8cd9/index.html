@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="设计表设计数据库表结构是实现业务逻辑的基础，需要考虑实体之间的关系、属性和索引等">
+<meta property="og:type" content="article">
+<meta property="og:title" content="表结构设计总结">
+<meta property="og:url" content="http://example.com/p/41f3b3cd8cd9/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="设计表设计数据库表结构是实现业务逻辑的基础，需要考虑实体之间的关系、属性和索引等">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403191248044.png">
+<meta property="article:published_time" content="2024-01-14T07:51:38.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.755Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403191248044.png">
+
+<link rel="canonical" href="http://example.com/p/41f3b3cd8cd9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>表结构设计总结 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/41f3b3cd8cd9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          表结构设计总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-01-14 15:51:38" itemprop="dateCreated datePublished" datetime="2024-01-14T15:51:38+08:00">2024-01-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Database/" itemprop="url" rel="index"><span itemprop="name">Database</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="设计表"><a href="#设计表" class="headerlink" title="设计表"></a>设计表</h2><p>设计数据库表结构是实现业务逻辑的基础，需要考虑实体之间的关系、属性和索引等</p>
+<span id="more"></span>
+<h3 id="表名"><a href="#表名" class="headerlink" title="表名"></a>表名</h3><ol>
+<li>采用26个英文字母(区分大小写)和0-9的自然数和<strong>下划线</strong>组成</li>
+<li>用<strong>单数</strong>形式表示</li>
+</ol>
+<h3 id="字段名"><a href="#字段名" class="headerlink" title="字段名"></a>字段名</h3><ol>
+<li>下划线</li>
+<li>前缀<ol>
+<li>多个表都存在的字段，可以加前缀</li>
+<li>外键加前缀</li>
+<li>通用字段不需要加，例如 created_at,</li>
+</ol>
+</li>
+</ol>
+<h3 id="冗余字段"><a href="#冗余字段" class="headerlink" title="冗余字段"></a>冗余字段</h3><p>存在外键的情况下，冗余被关联表中的字段</p>
+<ol>
+<li><p>可编辑字段不能冗余</p>
+<blockquote>
+<p>用户昵称</p>
+</blockquote>
+</li>
+<li><p>需要保存历史值的字段需要冗余</p>
+<blockquote>
+<p>下订单时商品的历史价格、税率等</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="中间表"><a href="#中间表" class="headerlink" title="中间表"></a>中间表</h3><p>表示两个主体关联关系的字段需要放到中间表中，因为不是两个主体自身的属性。</p>
+<p>一对一，将任一主键作为外键可省略中间表</p>
+<p>一对多，将一放在多那边可省略中间表，如果不确定以后是否会变为多对多关系，可通过中间表关联</p>
+<p>多对多，需要通过中间表来关联</p>
+<h3 id="关联关系"><a href="#关联关系" class="headerlink" title="关联关系"></a>关联关系</h3><h4 id="一对一"><a href="#一对一" class="headerlink" title="一对一"></a>一对一</h4><h4 id="一对多"><a href="#一对多" class="headerlink" title="一对多"></a>一对多</h4><h5 id="PG"><a href="#PG" class="headerlink" title="PG"></a>PG</h5><p>将“多”的数据放入数组，将一对多变为一对一</p>
+<h5 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h5><p>通过多条记录去体现“多”</p>
+<h3 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h3><p>组织和管理数据库中数据的方法</p>
+<h4 id="关联表"><a href="#关联表" class="headerlink" title="关联表"></a>关联表</h4><p>用于表示多对多关系，通过一个中间的关联表来实现</p>
+<h5 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h5><ul>
+<li>包含两个表的主键</li>
+<li>关联查询需要关联多个表<ol>
+<li>中间表的外键添加索引</li>
+<li>指定过滤条件，限制关联的数据量</li>
+</ol>
+</li>
+</ul>
+<h4 id="父子表"><a href="#父子表" class="headerlink" title="父子表"></a>父子表</h4><p>用于表示和存储具有层级关系或树状结构的数据</p>
+<h5 id="特点-1"><a href="#特点-1" class="headerlink" title="特点"></a>特点</h5><p>优点</p>
+<ol>
+<li>结构简单，易实现</li>
+</ol>
+<p>缺点</p>
+<ol>
+<li>深层结构查询效率低</li>
+</ol>
+<h5 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h5><p>层级结构相对简单，或树的深度不太深的场景</p>
+<ol>
+<li>组织架构</li>
+<li>产品类别</li>
+<li>目录结构</li>
+</ol>
+<h5 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h5><p>通常用一张表来存储节点和节点之间的层级关系</p>
+<blockquote>
+<p>避免循环引用：一个节点不能是自己的子节点</p>
+</blockquote>
+<ul>
+<li><p>ID</p>
+<p>当前节点ID</p>
+</li>
+<li><p>Parent ID</p>
+<p>当前节点的父节点，如果该字段为 null 或 0&#x2F;-1，则表示该节点是根节点</p>
+</li>
+<li><p>其他字段</p>
+</li>
+</ul>
+<h5 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h5><h6 id="查询直接子节点"><a href="#查询直接子节点" class="headerlink" title="查询直接子节点"></a>查询直接子节点</h6><p>node.pid &#x3D; curNode.id </p>
+<h6 id="查询所有子孙节点"><a href="#查询所有子孙节点" class="headerlink" title="查询所有子孙节点"></a>查询所有子孙节点</h6><ul>
+<li><p>sql递归查询【不推荐，影响性能】</p>
+</li>
+<li><p>一把查出来，在程序中用递归查询</p>
+<p>node.pid &#x3D; curNode.id </p>
+<blockquote>
+<p>把查询的节点的<strong>id作为pid</strong>，找pid相等的行，即当前节点的子节点</p>
+<p>可以多加一个字段，表示当前记录的root，在一把查的时候减少一点查询量</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 查询节点的 id 作为 parentId 调用 buildTree</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">buildTree</span> = (<span class="params">nodes, parentId = <span class="literal">null</span></span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> nodes</span><br><span class="line">        .<span class="title function_">filter</span>(<span class="function"><span class="params">node</span> =&gt;</span> node.<span class="property">parent_id</span> === parentId) <span class="comment">// 返回的是子节点集合。当返回集合为空时自动结束【结束条件】</span></span><br><span class="line">        .<span class="title function_">map</span>(<span class="function"><span class="params">node</span> =&gt;</span> (&#123;</span><br><span class="line">            ...node,</span><br><span class="line">            <span class="attr">children</span>: <span class="title function_">buildTree</span>(nodes, node.<span class="property">id</span>) <span class="comment">// 继续构建子节点</span></span><br><span class="line">        &#125;));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h6 id="查询所有祖先节点"><a href="#查询所有祖先节点" class="headerlink" title="查询所有祖先节点"></a>查询所有祖先节点</h6><p>node.id &#x3D; curNode.pid</p>
+<h5 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h5><p>用于处理大型或深层次的树结构数据，核心是仅在需要时加载特定部分的数据，而不是一次性加载整个树结构</p>
+<p>结合分页和懒加载：当用户尝试展开一个节点时，懒加载该节点的子节点，如果子节点数量众多，应用分页逻辑</p>
+<h6 id="分页加载-Pagination"><a href="#分页加载-Pagination" class="headerlink" title="分页加载 Pagination"></a>分页加载 Pagination</h6><p>适用于有大量子节点的情况。为子节点设置分页</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">loadChildren</span> = <span class="keyword">async</span> (<span class="params">parentId, pageNumber, pageSize</span>) =&gt; &#123;</span><br><span class="line">    <span class="comment">// 根据parentId, pageNumber, pageSize从数据库加载子节点</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h6 id="懒加载-Lazy-Loading"><a href="#懒加载-Lazy-Loading" class="headerlink" title="懒加载 Lazy Loading"></a>懒加载 Lazy Loading</h6><p>仅在用户尝试访问特定节点时才加载该节点的子节点</p>
+<ol>
+<li><p><strong>在树结构中标记可展开的节点</strong></p>
+<p>在构建初始树结构时，对于每个节点，如果它有子节点，则标记为“可展开”，但不立即加载子节点。</p>
+</li>
+<li><p><strong>按需加载子节点</strong></p>
+<p>当用户尝试展开节点时，通过一个API请求来加载该节点的子节点</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title function_">expandNode</span> = <span class="keyword">async</span> (<span class="params">nodeId</span>) =&gt; &#123;</span><br><span class="line">    <span class="comment">// 根据nodeId从数据库加载子节点</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>更新树结构</strong></p>
+<p>将加载的子节点添加到树中相应的位置</p>
+</li>
+</ol>
+<h4 id="闭包表-closure-table"><a href="#闭包表-closure-table" class="headerlink" title="闭包表 closure table"></a>闭包表 closure table</h4><p>用于存储和查询<strong>树形</strong>或<strong>层级</strong>结构数据</p>
+<h5 id="特点-2"><a href="#特点-2" class="headerlink" title="特点"></a>特点</h5><ul>
+<li><p>优点</p>
+<ul>
+<li><p>查询效率高，支持高效的树遍历和查询操作</p>
+<blockquote>
+<p>避免递归或迭代遍历，查询效率高<br>空间换时间</p>
+</blockquote>
+</li>
+<li><p>支持复杂的层级关系</p>
+</li>
+</ul>
+</li>
+<li><p>缺点</p>
+<ul>
+<li><p>占用空间多</p>
+<p>需要维护没对祖先和后代的关系</p>
+</li>
+<li><p>维护成本高</p>
+<p>插入或删除节点时，需要更新多条记录</p>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="应用场景-1"><a href="#应用场景-1" class="headerlink" title="应用场景"></a>应用场景</h5><p>复杂的层级结构</p>
+<blockquote>
+<p>非严格树形结构，可以包含多个父节点</p>
+</blockquote>
+<p>适用于需要频繁查询层级关系的场景</p>
+<blockquote>
+<p>读操作远多于写操作的场景</p>
+</blockquote>
+<p>权限管理系统</p>
+<ul>
+<li><p>表示和查询用户的<strong>角色继承</strong>和<strong>权限层级</strong></p>
+<blockquote>
+<p>一个角色可以继承下级角色的权限</p>
+<p>一个权限可以包含多项低级权限</p>
+<p>可以灵活的添加、移除、修改角色和权限</p>
+</blockquote>
+</li>
+<li><p>表设计</p>
+<ol>
+<li>role 表</li>
+<li>permission 表</li>
+<li>role_permission 表</li>
+<li>role_hierarchy 表</li>
+<li>permission_hierarchy 表</li>
+</ol>
+</li>
+<li><p>查询角色A的所有权限（包括继承的）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> p.<span class="operator">*</span></span><br><span class="line"><span class="keyword">from</span> permission p</span><br><span class="line"><span class="keyword">join</span> role_permission rp <span class="keyword">on</span> p.id <span class="operator">=</span> rp.permission_id</span><br><span class="line"><span class="keyword">join</span> role_hierarchy rh <span class="keyword">on</span> rh.descendant_id <span class="operator">=</span> rp.role_id <span class="keyword">and</span> rh.ancestor_id <span class="operator">=</span> roleAId;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> p.<span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> permissions p</span><br><span class="line"><span class="keyword">JOIN</span> role_permissions rp <span class="keyword">ON</span> p.id <span class="operator">=</span> rp.permission_id</span><br><span class="line"><span class="keyword">JOIN</span> role_hierarchy rh <span class="keyword">ON</span> rp.role_id <span class="operator">=</span> rh.descendant_id</span><br><span class="line"><span class="keyword">WHERE</span> rh.ancestor_id <span class="operator">=</span> :roleAId;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h5 id="结构-1"><a href="#结构-1" class="headerlink" title="结构"></a>结构</h5><p>通常有两张表：一张是实体表（entity table）另一张是闭包表（closure table）</p>
+<ul>
+<li>实体表通常包含节点的基本信息，如节点ID、名称等。</li>
+<li>闭包表存储节点间的层级关系</li>
+</ul>
+<p>实体表</p>
+<ul>
+<li><p>ID</p>
+<p>节点ID</p>
+</li>
+</ul>
+<p>闭包表</p>
+<ul>
+<li><p>祖先节点 ancestor</p>
+<p>表示层级关系中的上级节点</p>
+</li>
+<li><p>后代节点 descendant</p>
+<p>表示层级关系中的下级节点</p>
+</li>
+<li><p>路径长度 depth</p>
+<p>表示从祖先节点到后代节点的跳数，直接父子关系，路径长度为1</p>
+</li>
+</ul>
+<h5 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h5><p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202403191248044.png"></p>
+<p>获取358所有后代</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>ancestor</th>
+<th>descendant</th>
+<th>depth</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>358</td>
+<td>358</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>358</td>
+<td>708</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>358</td>
+<td>710</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>358</td>
+<td>709</td>
+<td>2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>358</td>
+<td>720</td>
+<td>2</td>
+</tr>
+</tbody></table>
+<p>获取720所有祖先</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>ancestor</th>
+<th>descendant</th>
+<th>depth</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>358</td>
+<td>720</td>
+<td>2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>720</td>
+<td>720</td>
+<td>0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>708</td>
+<td>720</td>
+<td>1</td>
+</tr>
+</tbody></table>
+<h5 id="操作-1"><a href="#操作-1" class="headerlink" title="操作"></a>操作</h5><h6 id="插入节点"><a href="#插入节点" class="headerlink" title="插入节点"></a>插入节点</h6><ul>
+<li><p>插入当前节点，depth&#x3D;0</p>
+</li>
+<li><p>插入时是知道当前节点的祖先节点id的</p>
+</li>
+<li><p>找出当前节点父节点的所有祖先节点</p>
+<p>descendant &#x3D; ancestor_id</p>
+</li>
+<li><p>插入父节点的所有祖先节点作为<strong>间接祖先</strong>与当前节点的层级关系，注意 depth 的变化</p>
+</li>
+</ul>
+<h6 id="获取祖先节点"><a href="#获取祖先节点" class="headerlink" title="获取祖先节点"></a>获取祖先节点</h6><ul>
+<li>descendant &#x3D; find_id</li>
+<li>如果不包含自己则 depath &gt;0</li>
+<li>直接祖先节点，depth &#x3D;1</li>
+</ul>
+<h6 id="获取后代节点"><a href="#获取后代节点" class="headerlink" title="获取后代节点"></a>获取后代节点</h6><ul>
+<li>ancestor &#x3D; find_id</li>
+<li>如果不包含自己则 depath &gt;0</li>
+<li>直接后代节点，depth &#x3D;1</li>
+</ul>
+<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><h4 id="层级关系"><a href="#层级关系" class="headerlink" title="层级关系"></a>层级关系</h4><h5 id="单表"><a href="#单表" class="headerlink" title="单表"></a>单表</h5><p>每条记录通过父子字段维护层级关系，其他字段记录该层级的数据</p>
+<table>
+<thead>
+<tr>
+<th>config_id</th>
+<th>parent_id</th>
+<th>name</th>
+<th>value</th>
+<th>level</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>NULL</td>
+<td>学校配置</td>
+<td>NULL</td>
+<td>school</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>运动配置</td>
+<td>配置值</td>
+<td>device</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>如果需要构建层级关系，通过sql递归查询影响性能。</p>
+<p>要一把查出来在程序中构建，因此可以加一个level字段，表示需要构建层级关系的root节点，便于一把查出该root的所有节点在程序中构建</p>
+</li>
+</ul>
+<h5 id="双表"><a href="#双表" class="headerlink" title="双表"></a>双表</h5><p>一张（父子）表用来记录层级关系</p>
+<table>
+<thead>
+<tr>
+<th>level_id</th>
+<th>parent_id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>NULL</td>
+<td>学校配置</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>运动配置</td>
+</tr>
+</tbody></table>
+<p>一张表记录每个层级的数据，通过一个层级字段来表示所属层级</p>
+<table>
+<thead>
+<tr>
+<th>item_id</th>
+<th>level_id</th>
+<th>key</th>
+<th>value</th>
+<th>…</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>2</td>
+<td>运动类型</td>
+<td>篮球</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>构建层级关系</p>
+<p>双表情况下，较容易构建层级关系。先通过 层级关系表 找出所有层级（数据量不大），再根据层级id去 层级数据表 中查对应层级的数据</p>
+</li>
+<li><p>便于维护复杂层级关系和大量的层级数据</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/851fe353eea0/" rel="prev" title="企微自建应用-考勤">
+      <i class="fa fa-chevron-left"></i> 企微自建应用-考勤
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/c27009fa758d/" rel="next" title="分页查询总结">
+      分页查询总结 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E8%A1%A8"><span class="nav-text">设计表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E5%90%8D"><span class="nav-text">表名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E6%AE%B5%E5%90%8D"><span class="nav-text">字段名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%97%E4%BD%99%E5%AD%97%E6%AE%B5"><span class="nav-text">冗余字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E9%97%B4%E8%A1%A8"><span class="nav-text">中间表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E5%85%B3%E7%B3%BB"><span class="nav-text">关联关系</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E4%B8%80"><span class="nav-text">一对一</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E5%AF%B9%E5%A4%9A"><span class="nav-text">一对多</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#PG"><span class="nav-text">PG</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#MySQL"><span class="nav-text">MySQL</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-text">设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E8%A1%A8"><span class="nav-text">关联表</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-text">特点</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%88%B6%E5%AD%90%E8%A1%A8"><span class="nav-text">父子表</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%89%B9%E7%82%B9-1"><span class="nav-text">特点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BB%93%E6%9E%84"><span class="nav-text">结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C"><span class="nav-text">操作</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E7%9B%B4%E6%8E%A5%E5%AD%90%E8%8A%82%E7%82%B9"><span class="nav-text">查询直接子节点</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E5%AD%90%E5%AD%99%E8%8A%82%E7%82%B9"><span class="nav-text">查询所有子孙节点</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E7%A5%96%E5%85%88%E8%8A%82%E7%82%B9"><span class="nav-text">查询所有祖先节点</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BC%98%E5%8C%96"><span class="nav-text">优化</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E5%8A%A0%E8%BD%BD-Pagination"><span class="nav-text">分页加载 Pagination</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%87%92%E5%8A%A0%E8%BD%BD-Lazy-Loading"><span class="nav-text">懒加载 Lazy Loading</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AD%E5%8C%85%E8%A1%A8-closure-table"><span class="nav-text">闭包表 closure table</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%89%B9%E7%82%B9-2"><span class="nav-text">特点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%BB%93%E6%9E%84-1"><span class="nav-text">结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B"><span class="nav-text">示例</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C-1"><span class="nav-text">操作</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E8%8A%82%E7%82%B9"><span class="nav-text">插入节点</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E7%A5%96%E5%85%88%E8%8A%82%E7%82%B9"><span class="nav-text">获取祖先节点</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%90%8E%E4%BB%A3%E8%8A%82%E7%82%B9"><span class="nav-text">获取后代节点</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%BA%E6%99%AF"><span class="nav-text">场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B1%82%E7%BA%A7%E5%85%B3%E7%B3%BB"><span class="nav-text">层级关系</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8D%95%E8%A1%A8"><span class="nav-text">单表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%8C%E8%A1%A8"><span class="nav-text">双表</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

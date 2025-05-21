@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="架构  Node bindlings: 是C++与JavaScript沟通的桥梁, 封装了V8和Libuv的细节，向上层提供API。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node.js 特性">
+<meta property="og:url" content="http://example.com/p/4641fe266b4d/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="架构  Node bindlings: 是C++与JavaScript沟通的桥梁, 封装了V8和Libuv的细节，向上层提供API。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20230802223815.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210726211204.png">
+<meta property="article:published_time" content="2023-07-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.767Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20230802223815.png">
+
+<link rel="canonical" href="http://example.com/p/4641fe266b4d/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Node.js 特性 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/4641fe266b4d/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Node.js 特性
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-07-09 00:00:00" itemprop="dateCreated datePublished" datetime="2023-07-09T00:00:00+08:00">2023-07-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Node-js/" itemprop="url" rel="index"><span itemprop="name">Node.js</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20230802223815.png"></p>
+<ul>
+<li>Node bindlings: 是C++与JavaScript沟通的桥梁, 封装了V8和Libuv的细节，向上层提供API。</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ul>
+<li><p>对于I&#x2F;O密集型的应用，能提供高效的性能</p>
+<blockquote>
+<p>文件读取、网络请求等任务</p>
+</blockquote>
+<ul>
+<li><p>网络应用</p>
+<p>API服务器，实时通信服务</p>
+</li>
+<li><p>文件操作</p>
+</li>
+</ul>
+</li>
+<li><p>对于CPU密集型的任务，会阻塞事件循环，降低性能</p>
+<ul>
+<li><p>复杂的计算和数据处理，通常需要连续的、不间断的CPU时间来执行，将占据整个主线程，导致异步操作无法及时处理，阻塞事件循环，使程序无法及时响应，降低程序的性能</p>
+</li>
+<li><p>可以使用单独的线程或进程去处理CPU密集型计算，避免阻塞主线程及事件循环</p>
+<blockquote>
+<p>线程：worker_threads（在一个 Node.js 进程中创建多个线程）</p>
+<p>进程：child_process（创建新的进程）</p>
+<p>集群：cluster（在多个 CPU 核上运行 Node.js 应用）</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="单线程"><a href="#单线程" class="headerlink" title="单线程"></a>单线程</h2><ul>
+<li>一个 Node.js 应用只在一个进程上运行，使用一个线程来执行 JavaScript 代码</li>
+</ul>
+<h3 id="call-stack"><a href="#call-stack" class="headerlink" title="call stack"></a>call stack</h3><blockquote>
+<p>Call Stack 和 Execution Context Stack 是同一个东西，即 LIFO 队列，<a target="_blank" rel="noopener" href="https://stackoverflow.com/a/55140367">用于存储代码执行期间创建的上下文</a></p>
+</blockquote>
+<ul>
+<li>当调用一个函数时，该函数的返回地址、参数、局部变量都会被压栈（push）。如果当前函数又调用了其他函数，则其他函数的相关数据也会放入调用栈。当函数返回的时候，就会被出栈（pop），返回值被赋值给局部变量。然后该局部变量也会被压栈。</li>
+<li>当函数执行完后，该函数中的局部变量会被出栈（pop），然后该变量就消失了（仅限number string boolean），如果是对象、数组等的值存储在堆（heap）中。变量只是指向它们的指针，传递变量只是传递的指针，使指针的值在不同的栈帧中可变。当函数从栈中弹出时，只弹出了指向对象的指针，而实际值在堆中，由垃圾回收器回收。</li>
+</ul>
+<h2 id="异步非阻塞I-O"><a href="#异步非阻塞I-O" class="headerlink" title="异步非阻塞I&#x2F;O"></a>异步非阻塞I&#x2F;O</h2><ul>
+<li><p>异步指异步获取结果，但是代码还是同步执行的</p>
+</li>
+<li><p>通过回调函数异步获取（Promise本质也是回调，只是解决了回调地狱，提高了代码的可读性）</p>
+<blockquote>
+<p>例如 async方法中的代码、await后面表达式中的代码、Promise传入的executor中的代码，都会同步执行，只是回调函数会进入事件循环异步执行，例如 async方法中await下面行的代码、setTimeout中传入的回调、promise.then方法中传入的回调</p>
+</blockquote>
+</li>
+<li><p>通过事件循环实现</p>
+</li>
+</ul>
+<h2 id="事件驱动"><a href="#事件驱动" class="headerlink" title="事件驱动"></a>事件驱动</h2><ol>
+<li><p>主线程执行同步代码的过程中，将异步任务及其回调函数卸载到系统内核</p>
+</li>
+<li><p>由libuv 通过<strong>工作队列</strong>、<strong>线程池</strong>等机制执行异步任务，异步任务完成后，根据异步任务的类型将其回调函数放入事件循环的<strong>回调队列</strong>中</p>
+<blockquote>
+<p>异步任务完成后才将回调加入队列</p>
+</blockquote>
+</li>
+<li><p>主线程空闲时，从事件循环中获取回调函数，压入<strong>调用栈</strong>（Call Stack）执行</p>
+</li>
+</ol>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/20210726211204.png"></p>
+<h3 id="libuv"><a href="#libuv" class="headerlink" title="libuv"></a>libuv</h3><ul>
+<li>node 事件循环底层由 libuv 实现</li>
+</ul>
+<h4 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h4><ul>
+<li><p>默认大小为 4，但可以在启动时通过 <a target="_blank" rel="noopener" href="https://docs.libuv.org/en/latest/threadpool.html">UV_THREADPOOL_SIZE</a> 环境变量来更改。增加线程池的大小能够缩短运行异步方法的多次调用的总时间</p>
+</li>
+<li><p>支持多个异步操作并发执行</p>
+<blockquote>
+<p>例如支持 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise#promise_concurrency">promise concurrency</a> 的 Promise.all 依赖于线程池实现</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="工作队列"><a href="#工作队列" class="headerlink" title="工作队列"></a><a target="_blank" rel="noopener" href="https://docs.libuv.org/en/stable/guide/threads.html#id1">工作队列</a></h4><ul>
+<li><p><code>uv_queue_work</code>  函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">loop = <span class="built_in">uv_default_loop</span>();</span><br><span class="line"># 获取libuv提供的 默认事件循环对象</span><br><span class="line"><span class="built_in">uv_queue_work</span>(loop, &amp;req[i], fib, after_fib);</span><br><span class="line"><span class="meta"># loop 即事件循环</span></span><br><span class="line"><span class="meta"># req[i] 异步工作请求</span></span><br><span class="line"># 执行fib函数，即异步任务</span><br><span class="line"># 执行after_fib函数，即异步任务完成后的回调函数</span><br><span class="line"><span class="built_in">uv_run</span>(loop, UV_RUN_DEFAULT);</span><br><span class="line"># 以默认模式运行 libuv 的事件循环，开始处理异步操作和回调函数。</span><br><span class="line"># 即 uv_run 函数会一直运行，直到事件循环中没有未完成的任务或调用 uv_stop 停止事件循环</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>将异步任务（fib）放入libuv的工作队列中执行</p>
+</li>
+<li><p>执行完后，根据异步任务的类型，将回调函数（after_fib）放入事件循环对应的队列中</p>
+<blockquote>
+<p>例如 setImmediate 的回调将放入 check阶段的队列中</p>
+</blockquote>
+</li>
+<li><p>先获取事件循环对象，主线程同步代码执行完毕后才运行</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="事件循环"><a href="#事件循环" class="headerlink" title="事件循环"></a>事件循环</h3><ul>
+<li><p><a target="_blank" rel="noopener" href="https://docs.libuv.org/en/stable/guide/basics.html#default-loop">nodejs 使用libuv提供的默认循环</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uv_loop_t *loop = uv_default_loop()</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在单线程上运行</p>
+</li>
+<li><p>由函数<code>uv_run</code>控制，nodejs程序启动后，通过一个 while true 循环，在主线程上运行</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 整个程序运行逻辑可以按如下方式理解</span></span><br><span class="line"><span class="function">function <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">// run synchronous code </span></span><br><span class="line">    <span class="built_in">uv_run</span>(loop, UV_RUN_DEFAULT); <span class="comment">// 同步代码执行完之后才调用 uv_run 开始事件循环</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">main</span>()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>参考  <a target="_blank" rel="noopener" href="https://stackoverflow.com/a/68362271">Does the event loop run on same thread as the JS main thread?</a></p>
+</blockquote>
+<blockquote>
+<p>当我们在回调函数里执行 while(1) {}, 整个服务都无法响应了</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="阶段"><a href="#阶段" class="headerlink" title="阶段"></a>阶段</h4><ul>
+<li>共6个阶段，每个阶段有自己特定的操作并维护一个FIFO回调队列，执行不同类型的回调</li>
+<li>事件循环进入到一个阶段时，会执行该阶段特定的操作及队列中的回调，直到队列为空或达到最大执行数量限制。然后进入下一阶段</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">   ┌───────────────────────────┐</span><br><span class="line">┌─&gt;│           timers          │</span><br><span class="line">│  └─────────────┬─────────────┘</span><br><span class="line">│  ┌─────────────┴─────────────┐ </span><br><span class="line">│  │     pending callbacks     │</span><br><span class="line">│  └─────────────┬─────────────┘</span><br><span class="line">│  ┌─────────────┴─────────────┐</span><br><span class="line">│  │       idle, prepare       │</span><br><span class="line">│  └─────────────┬─────────────┘      ┌───────────────┐</span><br><span class="line">│  ┌─────────────┴─────────────┐      │   incoming:   │</span><br><span class="line">│  │           poll            │&lt;─────┤  connections, │</span><br><span class="line">│  └─────────────┬─────────────┘      │   data, etc.  │</span><br><span class="line">│  ┌─────────────┴─────────────┐      └───────────────┘</span><br><span class="line">│  │           check           │</span><br><span class="line">│  └─────────────┬─────────────┘</span><br><span class="line">│  ┌─────────────┴─────────────┐</span><br><span class="line">└──┤      close callbacks      │</span><br><span class="line">   └───────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h5 id="timers"><a href="#timers" class="headerlink" title="timers"></a>timers</h5><ul>
+<li><p>执行由 <code>setTimeout()</code> 和 <code>setInterval()</code> 调度的回调</p>
+</li>
+<li><p>设定的执行时间是最快执行时间，一般会比预期时间要晚</p>
+<p>实际执行时间由 poll 阶段控制</p>
+<blockquote>
+<p>进入 poll 阶段，如果队列为空，会等待，直到达到最快timer的阈值</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">someAsyncOperation</span>(<span class="params">callback</span>) &#123;</span><br><span class="line">  <span class="comment">// Assume this takes 95ms to complete</span></span><br><span class="line">  fs.<span class="title function_">readFile</span>(<span class="string">&#x27;/path/to/file&#x27;</span>, callback);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> timeoutScheduled = <span class="title class_">Date</span>.<span class="title function_">now</span>();</span><br><span class="line"></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> delay = <span class="title class_">Date</span>.<span class="title function_">now</span>() - timeoutScheduled;</span><br><span class="line"></span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`<span class="subst">$&#123;delay&#125;</span>ms have passed since I was scheduled`</span>);</span><br><span class="line">&#125;, <span class="number">100</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// do someAsyncOperation which takes 95 ms to complete</span></span><br><span class="line"><span class="title function_">someAsyncOperation</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> startCallback = <span class="title class_">Date</span>.<span class="title function_">now</span>();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// do something that will take 10ms...</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="title class_">Date</span>.<span class="title function_">now</span>() - startCallback &lt; <span class="number">10</span>) &#123;</span><br><span class="line">    <span class="comment">// do nothing</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>事件循环进入 timer 阶段，没有到达的timer，继续下一阶段</li>
+<li>进入 poll 阶段，由于<code>fs.readFile</code>  尚未完成，回调队列为空，因此node将阻塞在该阶段，直到达到最快timer的阈值（即预期等待100ms）。当等待95ms后<code>fs.readFile</code>完成，回调函数被加入队列中并执行，耗时10ms。回调完成时，队列为空，node将检查是否有达到的timer，发现已经有一个达到，然后回到timer阶段执行其回调，此时timer回调函数在105ms后才执行</li>
+<li>libuv 会限制 poll 阶段的最大等待时间，最大值依赖于系统</li>
+</ul>
+</li>
+</ul>
+<h5 id="pending-callback"><a href="#pending-callback" class="headerlink" title="pending callback"></a>pending callback</h5><ul>
+<li><p>执行延迟到下一个循环迭代的 I&#x2F;O 回调，例如一些系统调用错误，比如网络 stream, pipe, tcp, udp通信的错误 callback</p>
+<blockquote>
+<p>大多数情况下，所有 I&#x2F;O 回调都会在轮询阶段执行。然而，在某些情况下，有些回调会被推迟到下一个循环</p>
+<p>如果TCP socket 在尝试连接时收到 ECONNREFUSED 错误，一些*nix系统希望等待报告错误，这些回调会在 pending callback 执行</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="idle-prepare"><a href="#idle-prepare" class="headerlink" title="idle, prepare"></a>idle, prepare</h5><ul>
+<li>仅系统内部使用</li>
+</ul>
+<h5 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h5><p>poll阶段有两个功能:</p>
+<ul>
+<li><p>计算最长阻塞时间并等待传入的回调（连接或请求等）</p>
+<blockquote>
+<p>node会计算最快达到的timer时间，然后阻塞在该阶段</p>
+</blockquote>
+</li>
+<li><p>处理 poll 队列的事件</p>
+<blockquote>
+<p>执行除 close callback、timer callback、setImmediate callback 之外的所有回调。</p>
+</blockquote>
+</li>
+</ul>
+<p>当进入到poll阶段，并且没有设定 timers 时，会发生以下两种情况</p>
+<ol>
+<li><p>poll队列不为空</p>
+<p>Event Loop 将同步的执行poll queue里的callback，直到queue为空或者执行的callback到达上限</p>
+</li>
+<li><p>poll队列为空</p>
+<ol>
+<li>如果代码设定了<code>setImmediate()</code>, Event Loop将结束poll阶段，进入到<code>check</code>阶段执行<code>setImmediate()</code>的回调</li>
+<li>如果代码没有设定<code>setImmediate()</code>，Event Loop将阻塞在该阶段，等待回调添加到队列中，然后立即执行</li>
+</ol>
+</li>
+</ol>
+<p>当进入到poll阶段，并且设定了timers</p>
+<ul>
+<li>一旦 poll 队列为空，Event Loop会检查是否有已经到达的timer，如果有，Event Loop将回到timer阶段并执行那些timer的callback</li>
+</ul>
+<h5 id="check"><a href="#check" class="headerlink" title="check"></a>check</h5><ul>
+<li>执行 <code>setImmediate()</code> 调度的回调</li>
+</ul>
+<h5 id="close-callback"><a href="#close-callback" class="headerlink" title="close callback"></a>close callback</h5><ul>
+<li><p>执行关闭事件的回调</p>
+<blockquote>
+<p>例如<code>socket.on(&#39;close&#39;, ...)</code></p>
+</blockquote>
+</li>
+</ul>
+<h3 id="setImmediate-vs-setTimeout"><a href="#setImmediate-vs-setTimeout" class="headerlink" title="setImmediate vs setTimeout"></a>setImmediate vs setTimeout</h3><h4 id="setTimeout"><a href="#setTimeout" class="headerlink" title="setTimeout"></a>setTimeout</h4><ul>
+<li><p>在指定时间后执行</p>
+<p>设置的时间是最快执行时间，实际执行时间要 &gt;&#x3D; 设定的时间，因为实际执行时间由 poll 阶段控制</p>
+</li>
+</ul>
+<h4 id="setImmediate"><a href="#setImmediate" class="headerlink" title="setImmediate"></a>setImmediate</h4><ul>
+<li><p>在当前循环 poll 阶段后执行</p>
+</li>
+<li><p>将操作放在下一轮循环中执行</p>
+<p>不阻塞当前上下文向 当前微任务队列中 添加的微任务（执行）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">tryCallAsync</span>(<span class="params">fn, ...args</span>) &#123;</span><br><span class="line">    <span class="keyword">await</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="title function_">setImmediate</span>(resolve);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="keyword">return</span> <span class="title function_">fn</span>(...args);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// use setImmediate to ensure all sync logic will run in the next loop</span></span><br><span class="line"><span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> <span class="title function_">setImmediate</span>(resolve)).<span class="title function_">then</span>(<span class="function">() =&gt;</span> &#123; <span class="comment">// 下面的回调将异步执行</span></span><br><span class="line">    <span class="title class_">Auth</span>.<span class="title function_">handleCaptchaSuccess</span>(type, account, sendType)</span><br><span class="line">        .<span class="title function_">catch</span>(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">        logger.<span class="title function_">error</span>(<span class="string">&#x27;Fail to handle captcha success&#x27;</span>, err)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>参考</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://stackoverflow.com/a/65530832">https://stackoverflow.com/a/65530832</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/eggjs/egg/blob/3d5f1dcead122fe5bba70386ab38cc082fedb27c/app/extend/context.js#L229">Run async function in the background</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="执行顺序"><a href="#执行顺序" class="headerlink" title="执行顺序"></a>执行顺序</h4><ul>
+<li><p>在主模块（非IO循环中）注册</p>
+<p>执行顺序不确定，与进程性能有关</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// timeout_vs_immediate.js</span></span><br><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;timeout&#x27;</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;immediate&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在回调函数中注册</p>
+<p>先执行 immediate 再执行 timeout</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">setTimeout</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;timeout&#x27;</span>)</span><br><span class="line">    &#125;, <span class="number">0</span>)</span><br><span class="line">    <span class="title function_">setImmediate</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;immediate&#x27;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;, <span class="number">0</span>)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="浏览器事件循环"><a href="#浏览器事件循环" class="headerlink" title="浏览器事件循环"></a>浏览器事件循环</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://cnodejs.org/topic/5a9108d78d6e16e56bb80882">不要混淆nodejs和浏览器中的event loop</a></p>
+</blockquote>
+<h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><h5 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h5><ul>
+<li>nodejs的event是基于libuv实现</li>
+<li>浏览器的event loop，在<a target="_blank" rel="noopener" href="https://www.w3.org/TR/html5/webappapis.html#event-loops">html5的规范</a>中定义，由浏览器厂商实现</li>
+</ul>
+<h5 id="任务"><a href="#任务" class="headerlink" title="任务"></a>任务</h5><p>宏任务</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>浏览器</th>
+<th>Node</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>I&#x2F;O</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>setTimeout</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>setInterval</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>setImmediate</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>requestAnimationFrame</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+</tbody></table>
+<p>微任务</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>浏览器</th>
+<th>Node</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>process.nextTick</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>MutationObserver</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Promise.then(catch finally)</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/93e2f7de1f2f/" rel="prev" title="ChatGPT">
+      <i class="fa fa-chevron-left"></i> ChatGPT
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/c463ee512f0a/" rel="next" title="nextTick vs microtask">
+      nextTick vs microtask <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84"><span class="nav-text">架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E7%BA%BF%E7%A8%8B"><span class="nav-text">单线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#call-stack"><span class="nav-text">call stack</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E9%9D%9E%E9%98%BB%E5%A1%9EI-O"><span class="nav-text">异步非阻塞I&#x2F;O</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E9%A9%B1%E5%8A%A8"><span class="nav-text">事件驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#libuv"><span class="nav-text">libuv</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E6%B1%A0"><span class="nav-text">线程池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E9%98%9F%E5%88%97"><span class="nav-text">工作队列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="nav-text">事件循环</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%98%B6%E6%AE%B5"><span class="nav-text">阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#timers"><span class="nav-text">timers</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#pending-callback"><span class="nav-text">pending callback</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#idle-prepare"><span class="nav-text">idle, prepare</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#poll"><span class="nav-text">poll</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#check"><span class="nav-text">check</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#close-callback"><span class="nav-text">close callback</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setImmediate-vs-setTimeout"><span class="nav-text">setImmediate vs setTimeout</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#setTimeout"><span class="nav-text">setTimeout</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#setImmediate"><span class="nav-text">setImmediate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-text">执行顺序</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF"><span class="nav-text">浏览器事件循环</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8C%BA%E5%88%AB"><span class="nav-text">区别</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0"><span class="nav-text">实现</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1"><span class="nav-text">任务</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="文件上传服务端 通过 multer 处理 formdata  接口签名验证 不能通过 SignGuard 验证签名，因为 Guards are executed after all middleware, but before any interceptor or pipe。而 multer 是在 Interceptors 中才解析上传数据的，因此在 SignGuard 中无法获取到 req bo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NestJS 文件上传下载">
+<meta property="og:url" content="http://example.com/p/356d38cedd15/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="文件上传服务端 通过 multer 处理 formdata  接口签名验证 不能通过 SignGuard 验证签名，因为 Guards are executed after all middleware, but before any interceptor or pipe。而 multer 是在 Interceptors 中才解析上传数据的，因此在 SignGuard 中无法获取到 req bo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-29T03:05:43.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.762Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/p/356d38cedd15/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>NestJS 文件上传下载 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/356d38cedd15/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NestJS 文件上传下载
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-10-29 11:05:43" itemprop="dateCreated datePublished" datetime="2023-10-29T11:05:43+08:00">2023-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NestJS/" itemprop="url" rel="index"><span itemprop="name">NestJS</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h2><h3 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h3><ul>
+<li><p>通过 multer 处理 formdata</p>
+</li>
+<li><p>接口签名验证</p>
+<p>不能通过 SignGuard 验证签名，因为 Guards are executed <strong>after</strong> all middleware, but <strong>before</strong> any interceptor or pipe。而 multer 是在 Interceptors 中才解析上传数据的，因此在 SignGuard 中无法获取到 req body</p>
+</li>
+</ul>
+<span id="more"></span>
+<h4 id="普通文件"><a href="#普通文件" class="headerlink" title="普通文件"></a>普通文件</h4><p>图片、txt 等</p>
+<ul>
+<li>文件较小，使用默认的内存存储，在服务层处理</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// controller</span></span><br><span class="line">  @<span class="title class_">Version</span>(<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">  @<span class="title class_">Post</span>(<span class="string">&#x27;file_upload&#x27;</span>)</span><br><span class="line">  <span class="comment">// @UseGuards(SignGuard)</span></span><br><span class="line">  @<span class="title class_">UseInterceptors</span>(<span class="title class_">FileInterceptor</span>(<span class="string">&#x27;file&#x27;</span>))</span><br><span class="line">  <span class="keyword">async</span> <span class="title function_">fileUpload</span>(<span class="params">@Body() body, @UploadedFile() file: Express.Multer.File</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!file) &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">HttpErrorResponse</span>(</span><br><span class="line">        <span class="title class_">ApiErrorCode</span>.<span class="property">DATA_ERR</span>,</span><br><span class="line">        <span class="string">&#x27;上传文件为空，请重新选择&#x27;</span>,</span><br><span class="line">      );</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">signCheck</span>(body.<span class="property">timestamp</span>, body.<span class="property">sign</span>, body.<span class="property">algo</span>)) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="property">commonService</span>.<span class="title function_">fileUpload</span>(file, body);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">HttpUnauthorizedError</span>(<span class="string">&#x27;签名校验失败&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// service</span></span><br><span class="line">  <span class="keyword">async</span> <span class="title function_">fileUpload</span>(<span class="params">file: Express.Multer.File, body</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> fileName = body.<span class="property">file_name</span> || file.<span class="property">originalname</span></span><br><span class="line">    <span class="keyword">const</span> extName = <span class="title function_">extname</span>(file.<span class="property">originalname</span>).<span class="title function_">slice</span>(<span class="number">1</span>).<span class="title function_">toLowerCase</span>()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> <span class="attr">encoding</span>: <span class="title class_">BufferEncoding</span> = <span class="string">&#x27;utf8&#x27;</span></span><br><span class="line">    <span class="keyword">if</span> ([<span class="string">&#x27;jpg&#x27;</span>, <span class="string">&#x27;png&#x27;</span>, <span class="string">&#x27;jpeg&#x27;</span>].<span class="title function_">includes</span>(extName)) &#123;</span><br><span class="line">      encoding = <span class="string">&#x27;binary&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> filePath = <span class="title function_">join</span>(<span class="title function_">cwd</span>(), <span class="string">&#x27;public&#x27;</span>, <span class="title function_">dayjs</span>().<span class="title function_">format</span>(<span class="string">&#x27;YYYY-MM-DD&#x27;</span>))</span><br><span class="line">    <span class="keyword">await</span> fse.<span class="title function_">ensureDir</span>(filePath)</span><br><span class="line">    <span class="keyword">await</span> fse.<span class="title function_">writeFile</span>(<span class="title function_">join</span>(filePath, fileName), file.<span class="property">buffer</span>, &#123; encoding &#125;)</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      <span class="attr">file_name</span>: fileName</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="压缩文件"><a href="#压缩文件" class="headerlink" title="压缩文件"></a>压缩文件</h4><ul>
+<li>文件较大，指定磁盘存储，保存到磁盘再处理</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Controller</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">private readonly service: Service</span>) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    @<span class="title class_">Post</span>(<span class="string">&#x27;studentImg&#x27;</span>)</span><br><span class="line">    @<span class="title class_">UseInterceptors</span>(</span><br><span class="line">        <span class="title class_">FileInterceptor</span>(<span class="string">&#x27;file&#x27;</span>, &#123;</span><br><span class="line">            <span class="comment">// 指定磁盘存储</span></span><br><span class="line">            <span class="attr">storage</span>: multer.<span class="title function_">diskStorage</span>(&#123;</span><br><span class="line">                <span class="attr">destination</span>: <span class="function">(<span class="params">req, _, cb</span>) =&gt;</span> &#123;</span><br><span class="line">                    <span class="comment">// 这里拿不到 body 中的数据，构建 dir 不要用body中的id</span></span><br><span class="line">                    <span class="keyword">const</span> dir = <span class="title function_">join</span>(<span class="string">&#x27;/tmp&#x27;</span>, <span class="string">&#x27;import&#x27;</span>, <span class="title class_">Utils</span>.<span class="title function_">randomString</span>(<span class="number">6</span>));</span><br><span class="line">                    fs.<span class="title function_">ensureDirSync</span>(dir);</span><br><span class="line">                    <span class="title function_">cb</span>(<span class="literal">null</span>, dir);</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">filename</span>: <span class="function">(<span class="params">_, file, cb</span>) =&gt;</span> &#123;</span><br><span class="line">                    <span class="title function_">cb</span>(<span class="literal">null</span>, file.<span class="property">originalname</span>);</span><br><span class="line">                &#125;,</span><br><span class="line">            &#125;),</span><br><span class="line">            <span class="attr">fileFilter</span>: <span class="function">(<span class="params">req, file, cb</span>) =&gt;</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (</span><br><span class="line">                    ![<span class="string">&#x27;application/x-zip-compressed&#x27;</span>, <span class="string">&#x27;application/zip&#x27;</span>].<span class="title function_">includes</span>(</span><br><span class="line">                        file.<span class="property">mimetype</span>,</span><br><span class="line">                    ) ||</span><br><span class="line">                    file.<span class="property">originalname</span>.<span class="title function_">split</span>(<span class="string">&#x27;.&#x27;</span>).<span class="title function_">pop</span>() !== <span class="string">&#x27;zip&#x27;</span></span><br><span class="line">                ) &#123;</span><br><span class="line">                    <span class="title function_">cb</span>(</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">HttpErrorResponse</span>(<span class="title class_">ApiErrorCode</span>.<span class="property">DATA_ERR</span>, <span class="string">&#x27;仅支持zip压缩文件&#x27;</span>),</span><br><span class="line">                        <span class="literal">false</span>,</span><br><span class="line">                    );</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (file.<span class="property">size</span> === <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="title function_">cb</span>(</span><br><span class="line">                        <span class="keyword">new</span> <span class="title class_">HttpErrorResponse</span>(<span class="title class_">ApiErrorCode</span>.<span class="property">DATA_ERR</span>, <span class="string">&#x27;上传文件为空&#x27;</span>),</span><br><span class="line">                        <span class="literal">false</span>,</span><br><span class="line">                    );</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="title function_">cb</span>(<span class="literal">null</span>, <span class="literal">true</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">limits</span>: &#123;</span><br><span class="line">                <span class="comment">// 控制上传文件的大小，multer底层用的流传输，因此内存占用变化不大，可上传GB级文件</span></span><br><span class="line">                <span class="attr">fileSize</span>: <span class="title class_">Conf</span>.<span class="property">fileSizeLimit</span>,</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;),</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">importStudentImg</span>(<span class="params"></span></span><br><span class="line"><span class="params">    	@Body() body: ImportDto,</span></span><br><span class="line"><span class="params">     	@UploadedFile() file: Express.Multer.File,</span></span><br><span class="line"><span class="params">    </span>) &#123;</span><br><span class="line">        <span class="comment">// 选择一个文件，然后再修改这个文件的名称，上传时就找不到这个文件</span></span><br><span class="line">        <span class="comment">// 此时不会执行 FileInterceptor 的回调，这里获取到的 file 为 undefined</span></span><br><span class="line">        <span class="keyword">if</span> (!file) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">HttpErrorResponse</span>(</span><br><span class="line">                <span class="title class_">ApiErrorCode</span>.<span class="property">DATA_ERR</span>,</span><br><span class="line">                <span class="string">&#x27;上传文件为空，请重新选择&#x27;</span>,</span><br><span class="line">            );</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 大文件处理，判断是否满足可处理条件，即可返回。</span></span><br><span class="line">        <span class="comment">// 通过获取处理结果的接口（异步）获取处理结果。</span></span><br><span class="line">        <span class="keyword">const</span> preCheckRet = <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="property">service</span>.<span class="title function_">preImportStudentImg</span>(</span><br><span class="line">            body.<span class="property">id</span>,</span><br><span class="line">            file,</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="attr">state</span>: preCheckRet.<span class="property">isSuccess</span> ? <span class="number">1</span> : <span class="number">0</span>,</span><br><span class="line">            <span class="attr">message</span>: preCheckRet.<span class="property">message</span>,</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// service</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">class</span> <span class="title class_">Service</span> &#123;</span><br><span class="line">  <span class="title function_">constructor</span>(<span class="params">private readonly service: Service</span>) &#123;</span><br><span class="line">    @<span class="title class_">Inject</span>(<span class="string">&#x27;REDIS_CLIENT&#x27;</span>)</span><br><span class="line">    private readonly <span class="attr">redisClient</span>: <span class="title class_">Redis</span>,</span><br><span class="line">  &#125;</span><br><span class="line">  private randomStr = <span class="title class_">Utils</span>.<span class="title function_">randomString</span>(<span class="number">6</span>); <span class="comment">// 防止处理过程中服务器重启导致key没有及时删除</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> <span class="title function_">preImportStudentImg</span>(<span class="params">id: string, file: Express.Multer.File</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> key = <span class="string">`import_img:<span class="subst">$&#123;id&#125;</span>:<span class="subst">$&#123;<span class="variable language_">this</span>.randomStr&#125;</span>`</span>;</span><br><span class="line">    <span class="comment">// 并发控制</span></span><br><span class="line">    <span class="keyword">const</span> isProcessing = <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="property">redisClient</span>.<span class="title function_">get</span>(key);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (isProcessing) &#123;</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">isSuccess</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">message</span>: <span class="string">&#x27;上传失败&#x27;</span>,</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="property">redisClient</span>.<span class="title function_">set</span>(key, <span class="number">1</span>, <span class="number">86400</span>); <span class="comment">// ttl key，控制&#x27;并发控制&#x27;的时间</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">      <span class="comment">// 利用 AdmZip 解压</span></span><br><span class="line">      <span class="keyword">const</span> zip = <span class="keyword">new</span> <span class="title class_">AdmZip</span>(file.<span class="property">path</span>);</span><br><span class="line">      zip.<span class="title function_">getEntries</span>().<span class="title function_">forEach</span>(<span class="function">(<span class="params">entry</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// 转码，windows压缩上传到linux，中文会乱码，导致找不到文件</span></span><br><span class="line">        entry.<span class="property">entryName</span> = iconv.<span class="title function_">decode</span>(entry.<span class="property">rawEntryName</span>, <span class="string">&#x27;gbk&#x27;</span>);</span><br><span class="line">      &#125;);</span><br><span class="line">      zip.<span class="title function_">extractAllTo</span>(file.<span class="property">destination</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 对文件的一些处理逻辑</span></span><br><span class="line">      <span class="keyword">const</span> fileNames = <span class="keyword">await</span> fs.<span class="title function_">readdir</span>(file.<span class="property">destination</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 开始处理</span></span><br><span class="line">      <span class="variable language_">this</span>.<span class="title function_">handleData</span>(xxx,yyy)</span><br><span class="line">      <span class="comment">// 保证一定删除 redis key 和 上传的文件</span></span><br><span class="line">      .<span class="title function_">finally</span>(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">        <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="property">redisClient</span>.<span class="title function_">del</span>(key);</span><br><span class="line">        <span class="keyword">await</span> fs.<span class="title function_">remove</span>(file.<span class="property">destination</span>);</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">isSuccess</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">message</span>: <span class="string">&#x27;上传成功&#x27;</span>,</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">      <span class="comment">// 保证一定删除 redis key 和 上传的文件</span></span><br><span class="line">      <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="property">redisClient</span>.<span class="title function_">del</span>(key);</span><br><span class="line">      <span class="keyword">await</span> fs.<span class="title function_">remove</span>(file.<span class="property">destination</span>);</span><br><span class="line">      <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">isSuccess</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">message</span>: error.<span class="property">message</span>,</span><br><span class="line">      &#125;;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><ul>
+<li>通过 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/form-data">form-data</a> 构建 formdata</li>
+<li>通过 axios POST 上传</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> fileName = uuid.<span class="title function_">v1</span>() + <span class="string">&quot;.jpg&quot;</span>;</span><br><span class="line"><span class="keyword">const</span> formData = <span class="keyword">new</span> <span class="title class_">FormData</span>();</span><br><span class="line">formData.<span class="title function_">append</span>(<span class="string">&quot;file_name&quot;</span>, fileName);</span><br><span class="line">formData.<span class="title function_">append</span>(<span class="string">&quot;timestamp&quot;</span>, timestamp);</span><br><span class="line">formData.<span class="title function_">append</span>(<span class="string">&quot;sign&quot;</span>, sign);</span><br><span class="line">formData.<span class="title function_">append</span>(</span><br><span class="line">  <span class="string">&quot;file&quot;</span>,</span><br><span class="line">  fse.<span class="title function_">createReadStream</span>(<span class="title function_">join</span>(__dirname, <span class="string">&quot;abc.jpg&quot;</span>))</span><br><span class="line">);</span><br><span class="line">formData.<span class="title function_">append</span>(<span class="string">&quot;algo&quot;</span>, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">await</span> <span class="title class_">Axios</span>.<span class="title function_">post</span>(<span class="string">&quot;http://localhost:8801/v1/common/file_upload&quot;</span>, formData, &#123;</span><br><span class="line">  <span class="attr">headers</span>: &#123;</span><br><span class="line">    <span class="comment">// 这里不能手动加 &#x27;Content-Type&#x27;: &#x27;multipart/form-data&#x27;</span></span><br><span class="line">    ...formData.<span class="title function_">getHeaders</span>(),</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件下载"><a href="#文件下载" class="headerlink" title="文件下载"></a>文件下载</h2><h3 id="服务端-1"><a href="#服务端-1" class="headerlink" title="服务端"></a>服务端</h3><ul>
+<li>静态目录下的文件可以直接访问下载，不需要提供接口</li>
+<li>接口需通过 token 或时间戳+签名校验</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">@<span class="title class_">Version</span>(<span class="string">&#x27;1&#x27;</span>)</span><br><span class="line">@<span class="title class_">Get</span>(<span class="string">&#x27;file_download/*&#x27;</span>)</span><br><span class="line"><span class="keyword">async</span> <span class="title function_">fileDownload</span>(<span class="params">@Query() query: DownloadFileDto, @Req() req: Request, @Res() res: Response</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="title function_">signCheck</span>(query.<span class="property">timestamp</span>, query.<span class="property">sign</span>)) &#123;</span><br><span class="line">        <span class="comment">// 解析 path 拿到文件名</span></span><br><span class="line">        <span class="keyword">const</span> fileName = req.<span class="property">path</span>.<span class="title function_">split</span>(<span class="string">&#x27;/&#x27;</span>).<span class="title function_">splice</span>(-<span class="number">2</span>, <span class="number">2</span>).<span class="title function_">join</span>(<span class="string">&#x27;/&#x27;</span>)</span><br><span class="line">        <span class="keyword">const</span> path = <span class="title function_">join</span>(<span class="title function_">cwd</span>(), <span class="string">&#x27;public&#x27;</span>, fileName)</span><br><span class="line">        <span class="keyword">const</span> check = <span class="keyword">await</span> fse.<span class="title function_">exists</span>(path)</span><br><span class="line">        <span class="keyword">if</span> (check) &#123;</span><br><span class="line">            <span class="keyword">return</span> res.<span class="title function_">sendFile</span>(path)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            res.<span class="title function_">status</span>(<span class="number">404</span>).<span class="title function_">send</span>(&#123;</span><br><span class="line">                <span class="attr">message</span>: <span class="string">&#x27;file not found&#x27;</span></span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">HttpUnauthorizedError</span>(<span class="string">&#x27;签名验证失败&#x27;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="客户端-1"><a href="#客户端-1" class="headerlink" title="客户端"></a>客户端</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// const url = &#x27;http://localhost:8801/2024-01-25/0b2dfd20-bb5d-11ee-8738-f36b83f6da50.jpg&#x27; // 静态目录下的文件可以直接下载</span></span><br><span class="line"><span class="keyword">const</span> url =</span><br><span class="line">  <span class="string">&quot;http://localhost:8801/v1/common/file_download/2024-01-25/0b2dfd20-bb5d-11ee-8738-f36b83f6da50.jpg&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title class_">Axios</span>.<span class="title function_">get</span>(url, &#123;</span><br><span class="line">  <span class="attr">params</span>: &#123;</span><br><span class="line">    <span class="attr">sign</span>: <span class="string">&quot;11&quot;</span>,</span><br><span class="line">    <span class="attr">timestamp</span>: <span class="number">12</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 配置了 responseType 情况下，res.data 是一个可读流</span></span><br><span class="line">  <span class="attr">responseType</span>: <span class="string">&quot;stream&quot;</span>,</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">const</span> filepath = <span class="title function_">join</span>(__dirname, <span class="string">&quot;a.jpg&quot;</span>); <span class="comment">// 在dist目录下</span></span><br><span class="line"><span class="keyword">const</span> writer = fse.<span class="title function_">createWriteStream</span>(filepath);</span><br><span class="line"><span class="comment">// res.data 是一个可读流，通过 pipe 方法，将数据从可读流输到可写流</span></span><br><span class="line">res.<span class="property">data</span>.<span class="title function_">pipe</span>(writer);</span><br><span class="line">writer.<span class="title function_">on</span>(<span class="string">&quot;finish&quot;</span>, <span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;download finished&quot;</span>));</span><br><span class="line">writer.<span class="title function_">on</span>(<span class="string">&quot;error&quot;</span>, <span class="function">(<span class="params">err</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;error:&quot;</span>, err));</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/cb44e15daceb/" rel="prev" title="数据一致性问题">
+      <i class="fa fa-chevron-left"></i> 数据一致性问题
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/551885b5f292/" rel="next" title="农行APP支付">
+      农行APP支付 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="nav-text">文件上传</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-text">服务端</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%99%AE%E9%80%9A%E6%96%87%E4%BB%B6"><span class="nav-text">普通文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8E%8B%E7%BC%A9%E6%96%87%E4%BB%B6"><span class="nav-text">压缩文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-text">客户端</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD"><span class="nav-text">文件下载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF-1"><span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF-1"><span class="nav-text">客户端</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

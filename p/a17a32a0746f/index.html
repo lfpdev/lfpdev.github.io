@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="策略Directed Rounding to an integer 定向舍入 原始值x到舍入值y的舍入方向是固定的：指向或远离限制值（0 或 +-无穷大） 1y&#x3D;f(x)  Round upup 有两种解释">
+<meta property="og:type" content="article">
+<meta property="og:title" content="舍入算法">
+<meta property="og:url" content="http://example.com/p/a17a32a0746f/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="策略Directed Rounding to an integer 定向舍入 原始值x到舍入值y的舍入方向是固定的：指向或远离限制值（0 或 +-无穷大） 1y&#x3D;f(x)  Round upup 有两种解释">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-11-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.756Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/p/a17a32a0746f/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>舍入算法 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/a17a32a0746f/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          舍入算法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-11-19 00:00:00" itemprop="dateCreated datePublished" datetime="2022-11-19T00:00:00+08:00">2022-11-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Dev/" itemprop="url" rel="index"><span itemprop="name">Dev</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="策略"><a href="#策略" class="headerlink" title="策略"></a><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Rounding#Rounding_to_the_nearest_integer">策略</a></h2><h3 id="Directed-Rounding-to-an-integer"><a href="#Directed-Rounding-to-an-integer" class="headerlink" title="Directed Rounding to an integer"></a>Directed Rounding to an integer</h3><ul>
+<li><p>定向舍入</p>
+<p>原始值x到舍入值y的舍入方向是固定的：指向或远离限制值（0 或 +-无穷大）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y=f(x)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="Round-up"><a href="#Round-up" class="headerlink" title="Round up"></a>Round up</h4><p>up 有两种解释</p>
+<span id="more"></span>
+<h5 id="toward-positive-infinity"><a href="#toward-positive-infinity" class="headerlink" title="toward positive infinity"></a>toward positive infinity</h5><p>向正无穷取整</p>
+<h6 id="JS-Math-ceil"><a href="#JS-Math-ceil" class="headerlink" title="JS Math.ceil"></a>JS Math.ceil</h6><blockquote>
+<p>23.5 gets rounded to 24, and −23.5 gets rounded to −23</p>
+</blockquote>
+<h5 id="away-from-zero"><a href="#away-from-zero" class="headerlink" title="away from zero"></a>away from zero</h5><p>远离零取整（向无穷取整）</p>
+<blockquote>
+<p>23.2 gets rounded to 24, and −23.2 gets rounded to −24</p>
+</blockquote>
+<h6 id="Big-roundUp"><a href="#Big-roundUp" class="headerlink" title="Big.roundUp"></a><a target="_blank" rel="noopener" href="http://mikemcl.github.io/big.js/#rm">Big.roundUp</a></h6><h4 id="Round-down"><a href="#Round-down" class="headerlink" title="Round down"></a>Round down</h4><p>down 有两种解释</p>
+<h5 id="toward-negative-infinity"><a href="#toward-negative-infinity" class="headerlink" title="toward negative infinity"></a>toward negative infinity</h5><p>向负无穷取整</p>
+<h6 id="JS-Math-floor"><a href="#JS-Math-floor" class="headerlink" title="JS Math.floor"></a>JS Math.floor</h6><blockquote>
+<p>23.5 gets rounded to 23, and −23.5 gets rounded to −24</p>
+</blockquote>
+<h5 id="towards-zero"><a href="#towards-zero" class="headerlink" title="towards zero"></a>towards zero</h5><p>向零取整</p>
+<blockquote>
+<p>23.7 gets rounded to 23, and −23.7 gets rounded to −23</p>
+</blockquote>
+<h6 id="Big-roundDown"><a href="#Big-roundDown" class="headerlink" title="Big.roundDown"></a><a target="_blank" rel="noopener" href="http://mikemcl.github.io/big.js/#rm">Big.roundDown</a></h6><h3 id="Rounding-to-the-nearest-integer"><a href="#Rounding-to-the-nearest-integer" class="headerlink" title="Rounding to the nearest integer"></a>Rounding to the nearest integer</h3><p>四舍六入五判断方向</p>
+<ul>
+<li>小数部分是0.5时，不同的策略有不同的舍入方向</li>
+<li>通常说的四舍五入采用的策略应该是 Round half up toward positive infinity</li>
+</ul>
+<h4 id="Round-half-up"><a href="#Round-half-up" class="headerlink" title="Round half up"></a>Round half up</h4><p>有两种不同的解释</p>
+<h5 id="toward-positive-infinity-1"><a href="#toward-positive-infinity-1" class="headerlink" title="toward positive infinity"></a>toward positive infinity</h5><p>如果距离两个整数的距离相等，则向正无穷方向取整</p>
+<blockquote>
+<p>23.5 gets rounded to 24, and −23.5 gets rounded to −24.</p>
+</blockquote>
+<h6 id="JS-Math-round"><a href="#JS-Math-round" class="headerlink" title="JS Math.round"></a>JS Math.round</h6><p>JS中的 Math.round 采用该策略</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Math</span>.<span class="title function_">round</span>(-<span class="title class_">Infinity</span>); <span class="comment">// -Infinity</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">round</span>(-<span class="number">20.51</span>); <span class="comment">// -21</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">round</span>(-<span class="number">20.5</span>); <span class="comment">// -20</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">round</span>(-<span class="number">0.1</span>); <span class="comment">// -0</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">round</span>(<span class="number">0</span>); <span class="comment">// 0</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">round</span>(<span class="number">20.49</span>); <span class="comment">// 20</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">round</span>(<span class="number">20.5</span>); <span class="comment">// 21</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">round</span>(<span class="number">42</span>); <span class="comment">// 42</span></span><br><span class="line"><span class="title class_">Math</span>.<span class="title function_">round</span>(<span class="title class_">Infinity</span>); <span class="comment">// Infinity</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="away-from-zero-1"><a href="#away-from-zero-1" class="headerlink" title="away from zero"></a>away from zero</h5><p>Rounds towards nearest neighbour. If equidistant, rounds away from zero</p>
+<h6 id="Big-roundHalfUp"><a href="#Big-roundHalfUp" class="headerlink" title="Big.roundHalfUp"></a><a target="_blank" rel="noopener" href="http://mikemcl.github.io/big.js/#rm">Big.roundHalfUp</a></h6><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="title function_">big</span>(-<span class="number">23.5</span>).<span class="title function_">round</span>().<span class="title function_">toString</span>()</span><br><span class="line"><span class="string">&#x27;-24&#x27;</span></span><br><span class="line">&gt; <span class="title class_">Math</span>.<span class="title function_">round</span>(-<span class="number">23.5</span>)</span><br><span class="line">-<span class="number">23</span></span><br></pre></td></tr></table></figure>
+
+<h6 id="PG-numeric-round"><a href="#PG-numeric-round" class="headerlink" title="PG numeric#round"></a>PG numeric#round</h6><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">d72<span class="operator">=</span># <span class="keyword">select</span> round(<span class="number">-23.5</span>::<span class="type">numeric</span>);</span><br><span class="line"> round </span><br><span class="line"><span class="comment">-------</span></span><br><span class="line">   <span class="number">-24</span></span><br><span class="line">(<span class="number">1</span> 行记录)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Round-half-down"><a href="#Round-half-down" class="headerlink" title="Round half down"></a>Round half down</h4><h4 id="Round-half-to-odd"><a href="#Round-half-to-odd" class="headerlink" title="Round half to odd"></a>Round half to odd</h4><p>如果距离两个整数的距离相等，则取奇数</p>
+<blockquote>
+<p>+23.5 becomes +23, as does +22.5</p>
+<p>−23.5 becomes −23, as does −22.5</p>
+</blockquote>
+<h4 id="Round-half-to-even"><a href="#Round-half-to-even" class="headerlink" title="Round half to even"></a>Round half to even</h4><p>Rounds towards nearest neighbour. If equidistant, rounds towards even neighbour.</p>
+<p>如果距离两个整数的距离相等，则取偶数</p>
+<blockquote>
+<p>0.245 舍入为 0.24</p>
+<p>+23.5 becomes +24, as does +24.5;  −23.5 becomes −24, as does −24.5.</p>
+</blockquote>
+<h6 id="银行家舍入法-Banker’s-round"><a href="#银行家舍入法-Banker’s-round" class="headerlink" title="银行家舍入法 Banker’s round"></a>银行家舍入法 Banker’s round</h6><ul>
+<li><p>四舍六入五取偶</p>
+<blockquote>
+<p>0.5 rounds down to 0; 1.5 rounds up to 2</p>
+</blockquote>
+</li>
+<li><p>IEEE 754标准规定的小数舍入标准</p>
+</li>
+<li><p>取最接近的整数，如果有两个最接近的整数，取偶数</p>
+<blockquote>
+<p>舍入位的数值小于5时舍去</p>
+<p>舍入位的数值大于6时进一</p>
+<p>舍入位的数值等于5时，前位数为奇数，则进一得偶数，前位数为偶数，则舍去留偶数</p>
+</blockquote>
+</li>
+</ul>
+<h6 id="PG-real-double-precision-round"><a href="#PG-real-double-precision-round" class="headerlink" title="PG real&#x2F;double precision#round"></a>PG real&#x2F;double precision#round</h6><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">d72<span class="operator">=</span># <span class="keyword">select</span> round(<span class="number">-24.5</span>::<span class="type">real</span>);</span><br><span class="line"> round </span><br><span class="line"><span class="comment">-------</span></span><br><span class="line">   <span class="number">-24</span></span><br><span class="line">(<span class="number">1</span> 行记录)</span><br><span class="line"></span><br><span class="line">d72<span class="operator">=</span># <span class="keyword">select</span> round(<span class="number">-23.5</span>::<span class="type">real</span>);</span><br><span class="line"> round </span><br><span class="line"><span class="comment">-------</span></span><br><span class="line">   <span class="number">-24</span></span><br><span class="line">(<span class="number">1</span> 行记录)</span><br><span class="line"></span><br><span class="line">d72<span class="operator">=</span># <span class="keyword">select</span> round(<span class="number">-24.5</span>::<span class="type">double precision</span>);</span><br><span class="line"> round </span><br><span class="line"><span class="comment">-------</span></span><br><span class="line">   <span class="number">-24</span></span><br><span class="line">(<span class="number">1</span> 行记录)</span><br><span class="line"></span><br><span class="line">d72<span class="operator">=</span># <span class="keyword">select</span> round(<span class="number">-23.5</span>::<span class="type">double precision</span>);</span><br><span class="line"> round </span><br><span class="line"><span class="comment">-------</span></span><br><span class="line">   <span class="number">-24</span></span><br><span class="line">(<span class="number">1</span> 行记录)</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/8a776445f7c3/" rel="prev" title="pg_dump自动备份数据库">
+      <i class="fa fa-chevron-left"></i> pg_dump自动备份数据库
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/40d15b1b4d9f/" rel="next" title="reCAPTCHA">
+      reCAPTCHA <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AD%96%E7%95%A5"><span class="nav-text">策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Directed-Rounding-to-an-integer"><span class="nav-text">Directed Rounding to an integer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Round-up"><span class="nav-text">Round up</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#toward-positive-infinity"><span class="nav-text">toward positive infinity</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#JS-Math-ceil"><span class="nav-text">JS Math.ceil</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#away-from-zero"><span class="nav-text">away from zero</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Big-roundUp"><span class="nav-text">Big.roundUp</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Round-down"><span class="nav-text">Round down</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#toward-negative-infinity"><span class="nav-text">toward negative infinity</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#JS-Math-floor"><span class="nav-text">JS Math.floor</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#towards-zero"><span class="nav-text">towards zero</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Big-roundDown"><span class="nav-text">Big.roundDown</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Rounding-to-the-nearest-integer"><span class="nav-text">Rounding to the nearest integer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Round-half-up"><span class="nav-text">Round half up</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#toward-positive-infinity-1"><span class="nav-text">toward positive infinity</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#JS-Math-round"><span class="nav-text">JS Math.round</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#away-from-zero-1"><span class="nav-text">away from zero</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Big-roundHalfUp"><span class="nav-text">Big.roundHalfUp</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#PG-numeric-round"><span class="nav-text">PG numeric#round</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Round-half-down"><span class="nav-text">Round half down</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Round-half-to-odd"><span class="nav-text">Round half to odd</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Round-half-to-even"><span class="nav-text">Round half to even</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%93%B6%E8%A1%8C%E5%AE%B6%E8%88%8D%E5%85%A5%E6%B3%95-Banker%E2%80%99s-round"><span class="nav-text">银行家舍入法 Banker’s round</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#PG-real-double-precision-round"><span class="nav-text">PG real&#x2F;double precision#round</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

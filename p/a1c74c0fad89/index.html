@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="特点 实时复制、延迟复制 表级复制指定特定的表集合，而不是整个数据库 冲突决策 支持 DDL 复制 跨版本支持">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pglogical">
+<meta property="og:url" content="http://example.com/p/a1c74c0fad89/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="特点 实时复制、延迟复制 表级复制指定特定的表集合，而不是整个数据库 冲突决策 支持 DDL 复制 跨版本支持">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.754Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/p/a1c74c0fad89/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>pglogical | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/a1c74c0fad89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pglogical
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-04-22 00:00:00" itemprop="dateCreated datePublished" datetime="2022-04-22T00:00:00+08:00">2022-04-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Database/" itemprop="url" rel="index"><span itemprop="name">Database</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ul>
+<li>实时复制、延迟复制</li>
+<li>表级复制<br>指定特定的表集合，而不是整个数据库</li>
+<li>冲突决策</li>
+<li>支持 DDL 复制</li>
+<li>跨版本支持<span id="more"></span></li>
+</ul>
+<h2 id="添加插件"><a href="#添加插件" class="headerlink" title="添加插件"></a>添加插件</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CREATE EXTENSION pglogical;</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看支持的函数和表"><a href="#查看支持的函数和表" class="headerlink" title="查看支持的函数和表"></a>查看支持的函数和表</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mydb<span class="operator">=</span># \dx<span class="operator">+</span> pglogical</span><br><span class="line">                                   对象用于扩展 &quot;pglogical&quot;</span><br><span class="line">                                           对象描述                                           </span><br><span class="line"><span class="comment">----------------------------------------------------------------------------------------------</span></span><br><span class="line"> 表 pglogical.depend</span><br><span class="line"> 表 pglogical.local_node</span><br><span class="line"> ...</span><br><span class="line"> 函数 pglogical.xact_commit_timestamp_origin(xid)</span><br><span class="line"> 视图 pglogical.tables</span><br><span class="line">(<span class="number">51</span> 行记录)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h2><h3 id="添加"><a href="#添加" class="headerlink" title="添加"></a>添加</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> pglogical.create_node (node_name :<span class="operator">=</span> <span class="string">&#x27;provider1&#x27;</span>, dsn :<span class="operator">=</span> <span class="string">&#x27;host=192.168.22.37 port=5420 dbname=postgres&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// privider 是 if_name 列的值</span><br><span class="line">select pglogical.drop_node(&#x27;provider&#x27;);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>重新添加节点后需要重新发布</p>
+</blockquote>
+<h3 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select * from pglogical.node_interface;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="复制集"><a href="#复制集" class="headerlink" title="复制集"></a>复制集</h2><p>pglogical 中是 set 复制集。pg 中是 slot 复制槽</p>
+<h3 id="查看-1"><a href="#查看-1" class="headerlink" title="查看"></a>查看</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pglogical.replication_set;</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加-1"><a href="#添加-1" class="headerlink" title="添加"></a>添加</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> pglogical.create_replication_set(<span class="string">&#x27;my_set&#x27;</span>, <span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">true</span>, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除-1"><a href="#删除-1" class="headerlink" title="删除"></a>删除</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> pglogical.drop_replication_set(set_name text);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h2><h3 id="添加-2"><a href="#添加-2" class="headerlink" title="添加"></a>添加</h3><ul>
+<li><p>没有主键的表无法添加到 default 复制集</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lfo<span class="operator">-</span>test<span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">SELECT</span> pglogical.replication_set_add_table(<span class="string">&#x27;default&#x27;</span>,<span class="string">&#x27;pgtest&#x27;</span>);</span><br><span class="line">ERROR:  <span class="keyword">table</span> pgtest cannot be added <span class="keyword">to</span> replication <span class="keyword">set</span> <span class="keyword">default</span></span><br><span class="line">描述:  <span class="keyword">table</span> does <span class="keyword">not</span> have <span class="keyword">PRIMARY</span> KEY <span class="keyword">and</span> given replication <span class="keyword">set</span> <span class="keyword">is</span> configured <span class="keyword">to</span> replicate UPDATEs <span class="keyword">and</span><span class="operator">/</span><span class="keyword">or</span> DELETEs</span><br><span class="line">提示:  <span class="keyword">Add</span> a <span class="keyword">PRIMARY</span> KEY <span class="keyword">to</span> the <span class="keyword">table</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="表到复制集"><a href="#表到复制集" class="headerlink" title="表到复制集"></a>表到复制集</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 添加所有表</span></span><br><span class="line"><span class="keyword">select</span> pglogical.replication_set_add_all_tables(<span class="string">&#x27;复制集&#x27;</span>, <span class="keyword">ARRAY</span>[<span class="string">&#x27;public&#x27;</span>]);</span><br><span class="line"><span class="comment">-- 添加指定表</span></span><br><span class="line"><span class="keyword">select</span> pglogical.replication_set_add_table(set_name:<span class="operator">=</span><span class="string">&#x27;my_set&#x27;</span>,relation:<span class="operator">=</span><span class="string">&#x27;monster&#x27;</span>,synchronize_data:<span class="operator">=</span><span class="literal">true</span>);</span><br><span class="line"><span class="keyword">select</span> pglogical.replication_set_add_table(<span class="string">&#x27;default&#x27;</span>,<span class="string">&#x27;&quot;MESSAGE&quot;&#x27;</span>,<span class="literal">true</span>); <span class="comment">-- 大写需要双引号</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- SELECT pglogical.replication_set_add_all_tables(&#x27;default&#x27;, ARRAY[&#x27;public&#x27;]);</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="序列到复制集"><a href="#序列到复制集" class="headerlink" title="序列到复制集"></a>序列到复制集</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 所有序列</span></span><br><span class="line"><span class="keyword">SELECT</span> pglogical.replication_set_add_all_sequences(<span class="string">&#x27;default&#x27;</span>, <span class="keyword">ARRAY</span>[<span class="string">&#x27;public&#x27;</span>]);</span><br><span class="line"><span class="comment">-- 指定序列</span></span><br><span class="line"><span class="keyword">SELECT</span> pglogical.replication_set_add_sequence(<span class="string">&#x27;default&#x27;</span>, <span class="string">&#x27;&quot;MESSAGE_ID_seq&quot;&#x27;</span>,<span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除-2"><a href="#删除-2" class="headerlink" title="删除"></a>删除</h3><h4 id="复制集中的表"><a href="#复制集中的表" class="headerlink" title="复制集中的表"></a>复制集中的表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pglogical.replication_set_remove_table(<span class="string">&#x27;default&#x27;</span>,<span class="string">&#x27;test&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="复制集中的序列"><a href="#复制集中的序列" class="headerlink" title="复制集中的序列"></a>复制集中的序列</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pglogical.replication_set_remove_sequence(<span class="string">&#x27;default&#x27;</span>,<span class="string">&#x27;test_id_seq&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看-2"><a href="#查看-2" class="headerlink" title="查看"></a>查看</h3><h4 id="复制集中的表-1"><a href="#复制集中的表-1" class="headerlink" title="复制集中的表"></a>复制集中的表</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pglogical.replication_set_table;</span><br><span class="line"></span><br><span class="line">  set_id   <span class="operator">|</span>         set_reloid         <span class="operator">|</span> set_att_list <span class="operator">|</span> set_row_filter </span><br><span class="line"> <span class="number">495597167</span> <span class="operator">|</span> &quot;SERVICE_GROUP&quot;        <span class="operator">|</span>              <span class="operator">|</span> </span><br><span class="line">  <span class="number">44270030</span> <span class="operator">|</span> &quot;MESSAGE&quot;              <span class="operator">|</span>              <span class="operator">|</span></span><br><span class="line">  <span class="comment">-- 通过 set_id 区分表所在的复制集</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="复制集中的序列-1"><a href="#复制集中的序列-1" class="headerlink" title="复制集中的序列"></a>复制集中的序列</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pglogical.replication_set_seq;</span><br></pre></td></tr></table></figure>
+
+<h2 id="订阅"><a href="#订阅" class="headerlink" title="订阅"></a>订阅</h2><ul>
+<li><p>重新添加的订阅，synchronize_data 为 false 时，不会同步重新订阅成功之前添加的记录</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">19 | pgtest | 2022-04-22 18:16:16.629578</span><br><span class="line">20 | pgtest | 2022-04-22 18:16:16.629578</span><br><span class="line">24 | pgtest | 2022-04-22 18:29:18.567585</span><br><span class="line">25 | pgtest | 2022-04-22 18:29:33.451064</span><br></pre></td></tr></table></figure>
+
+<p>可以看到删除原订阅，在发布端添加记录 21，22，23。重新添加订阅，在发布端添加记录 24，25。发现延迟2分钟后，只复制了24，25。</p>
+</li>
+</ul>
+<h3 id="添加-3"><a href="#添加-3" class="headerlink" title="添加"></a>添加</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> pglogical.create_subscription(</span><br><span class="line">  subscription_name :<span class="operator">=</span> <span class="string">&#x27;subscription1&#x27;</span>, </span><br><span class="line">  provider_dsn :<span class="operator">=</span> <span class="string">&#x27;host=192.168.xx.xx port=5420 dbname=postgres&#x27;</span>,</span><br><span class="line">  replication_sets :<span class="operator">=</span> <span class="string">&#x27;&#123;my_set&#125;&#x27;</span>,</span><br><span class="line">  apply_delay :<span class="operator">=</span> <span class="string">&#x27;12:00:00&#x27;</span>,</span><br><span class="line">  synchronize_data :<span class="operator">=</span> <span class="literal">false</span> </span><br><span class="line">);</span><br><span class="line"><span class="comment">-- 注意最后一个参数后面没有 逗号</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>options</p>
+<ul>
+<li><p>synchronize_structure</p>
+<p>不建议开启，默认同步所有表，且表的<strong>角色</strong>需要在订阅端创建，否则同步失败</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/a/65153144">https://stackoverflow.com/a/65153144</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2022-01-04 18:08:35.350 CST [22310] 调试:  forked new backend, pid=26072 socket=11</span><br><span class="line">2022-01-04 18:08:35.353 CST [26072] [未知]@[未知] 调试:  来自 <span class="string">&quot;(anonymous)&quot;</span> 的 SSL 联接</span><br><span class="line">2022-01-04 18:08:35.355 CST [26072] postgres@mydb 注意:  扩展 <span class="string">&quot;pglogical&quot;</span> 已经存在,跳过</span><br><span class="line">2022-01-04 18:08:35.355 CST [22313] 调试:  snapshot of 1+0 running transaction ids (lsn 0/1767B20 oldest xid 558 latest complete 557 next xid 559)</span><br><span class="line">2022-01-04 18:08:35.361 CST [26072] postgres@mydb 调试:  为表 <span class="string">&quot;pg_toast_16589&quot;</span> 串行的建立索引<span class="string">&quot;pg_toast_16589_index&quot;</span></span><br><span class="line">2022-01-04 18:08:35.364 CST [26072] postgres@mydb 错误:  角色 <span class="string">&quot;lfo_backup&quot;</span> 不存在 <span class="comment"># 角色不存在</span></span><br><span class="line">2022-01-04 18:08:35.364 CST [26072] postgres@mydb 语句:  ALTER TABLE public.pgtest OWNER TO lfo_backup;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>synchronize_data </p>
+<p>是否在开始复制之前，同步已存在的历史数据，默认为 true</p>
+<p>如果初次添加订阅，则默认即可</p>
+<p><del>如果半途中删除了订阅重新订阅，则为 false</del></p>
+<blockquote>
+<p>猜测如果为 false，只同步增量数据，不同步历史数据</p>
+<p>2022.04.22 测试，删除原订阅，发布端数据库添加记录，重新订阅（synchronize_date true）可以订阅成功，但是不同步刚才添加的记录</p>
+</blockquote>
+<p>对于数据量比较大的数据库</p>
+<ol>
+<li>添加订阅时设置为 false。后续通过 <code>pglogical.alter_subscription_synchronize </code> or <code>pglogical.alter_subscription_resynchronize_table</code> 来同步</li>
+<li>添加订阅时设置为 true。通过 <code>pglogical.replication_set_add_table</code> 依次将表添加到复制集中</li>
+</ol>
+</li>
+<li><p>apply_delay</p>
+<p>配置延迟反而会特别影响主库，因为会导致主库wal堆积。 逻辑复制本身对主库负载影响很小。强烈建议取消复制延迟12h</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="查看订阅状态"><a href="#查看订阅状态" class="headerlink" title="查看订阅状态"></a>查看订阅状态</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> subscription_name, status <span class="keyword">FROM</span> pglogical.show_subscription_status();</span><br><span class="line">subscription_name <span class="operator">|</span> status</span><br><span class="line"><span class="comment">-------------------+-------------</span></span><br><span class="line">subscription1 <span class="operator">|</span> replicating</span><br></pre></td></tr></table></figure>
+
+<h3 id="查看订阅详细信息"><a href="#查看订阅详细信息" class="headerlink" title="查看订阅详细信息"></a>查看订阅详细信息</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pglogical.subscription;</span><br></pre></td></tr></table></figure>
+
+<h3 id="同步复制集中未同步的表"><a href="#同步复制集中未同步的表" class="headerlink" title="同步复制集中未同步的表"></a>同步复制集中未同步的表</h3><p>同步复制集中未同步的表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pglogical.alter_subscription_synchronize(subscription_name name, <span class="keyword">truncate</span> bool)</span><br><span class="line"><span class="comment">-- select * from pglogical.alter_subscription_synchronize(&#x27;test_delay&#x27;);</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="等待订阅同步完成"><a href="#等待订阅同步完成" class="headerlink" title="等待订阅同步完成"></a>等待订阅同步完成</h3><p>执行<code> pglogical.create_subscription</code> or <code>pglogical.alter_subscription_synchronize</code> 之后调用该方法</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pglogical.wait_for_subscription_sync_complete(subscription_name name)</span><br><span class="line"><span class="comment">-- select * from pglogical.wait_for_subscription_sync_complete(&#x27;backup&#x27;);</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="重新同步某张表"><a href="#重新同步某张表" class="headerlink" title="重新同步某张表"></a>重新同步某张表</h3><ul>
+<li>会先 truncate 该表，再重新同步数据，可以同步重新订阅之前丢失的数据</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pglogical.alter_subscription_resynchronize_table(subscription_name name, relation regclass)</span><br><span class="line"><span class="comment">--  select * from pglogical.alter_subscription_resynchronize_table(&#x27;test_delay&#x27;,&#x27;pgtest&#x27;);</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="等待某张表同步完成"><a href="#等待某张表同步完成" class="headerlink" title="等待某张表同步完成"></a>等待某张表同步完成</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pglogical.wait_for_table_sync_complete(subscription_name name, relation regclass)</span><br></pre></td></tr></table></figure>
+
+<h3 id="等待发布端确认同步请求"><a href="#等待发布端确认同步请求" class="headerlink" title="等待发布端确认同步请求"></a>等待发布端确认同步请求</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> pglogical.wait_slot_confirm_lsn(<span class="keyword">NULL</span>, <span class="keyword">NULL</span>)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>延迟订阅中，发布端在需要同步的表中插入一条记录，然后调用该方法，指定延迟后才会返回结果。</p>
+<p>此时在订阅端调用 <code>wait_for_subscription_sync_complete</code> 方法，等待订阅同步完成</p>
+</li>
+</ul>
+<h3 id="删除-3"><a href="#删除-3" class="headerlink" title="删除"></a>删除</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> pglogical.drop_subscription(<span class="string">&#x27;backup_delay&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="启停订阅"><a href="#启停订阅" class="headerlink" title="启停订阅"></a>启停订阅</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- pglogical.alter_subscription_disable(subscription_name name, immediate bool)</span></span><br><span class="line"><span class="keyword">select</span> pglogical.alter_subscription_disable(<span class="string">&#x27;lfotest_delay&#x27;</span>, <span class="literal">true</span>);</span><br><span class="line"><span class="comment">-- pglogical.alter_subscription_enable(subscription_name name, immediate bool)</span></span><br><span class="line"><span class="keyword">select</span> pglogical.alter_subscription_enable(<span class="string">&#x27;lfotest_delay&#x27;</span>, <span class="literal">true</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="复制槽"><a href="#复制槽" class="headerlink" title="复制槽"></a>复制槽</h2><p>添加订阅会在<strong>发布端</strong>同时添加一个slot，名称格式为 <code>pgl_&lt;db-name&gt;_provider_&lt;subscription_name&gt;</code></p>
+<blockquote>
+<p>pgl_mydb_provider_hptest</p>
+</blockquote>
+<p>发布端查看复制槽不知道是哪个订阅的，可以在订阅端查看订阅状态</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">lfo<span class="operator">-</span>prod<span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pg_replication_slots;</span><br><span class="line"></span><br><span class="line">slot_name                   <span class="operator">|</span>      plugin      <span class="operator">|</span> slot_type <span class="operator">|</span> datoid <span class="operator">|</span>    database     <span class="operator">|</span> temporary <span class="operator">|</span> active <span class="operator">|</span> active_pid <span class="operator">|</span> xmin <span class="operator">|</span> catalog_xmin <span class="operator">|</span> restart_lsn <span class="operator">|</span> confirmed_flush_lsn <span class="operator">|</span> wal_status <span class="operator">|</span> safe_wal_size </span><br><span class="line"><span class="comment">----------------------------------------------+------------------+-----------+--------+-----------------+-----------+--------+------------+------+--------------+-------------+---------------------+------------+---------------</span></span><br><span class="line"> pgl_lfo_backup_provider_lfoe330b6c <span class="operator">|</span> pglogical_output <span class="operator">|</span> logical   <span class="operator">|</span>  <span class="number">16391</span> <span class="operator">|</span> lfo<span class="operator">-</span>prod   <span class="operator">|</span> f         <span class="operator">|</span> f      <span class="operator">|</span>            <span class="operator">|</span>      <span class="operator">|</span>      <span class="number">3730908</span> <span class="operator">|</span> <span class="number">7</span>A<span class="operator">/</span>B0003240 <span class="operator">|</span> <span class="number">7</span>A<span class="operator">/</span>DE006148         <span class="operator">|</span> extended   <span class="operator">|</span>              </span><br><span class="line"> pgl_lfo_review_provider_lforeview  <span class="operator">|</span> pglogical_output <span class="operator">|</span> logical   <span class="operator">|</span>  <span class="number">20575</span> <span class="operator">|</span> lfo<span class="operator">-</span>review <span class="operator">|</span> f         <span class="operator">|</span> t      <span class="operator">|</span>        <span class="number">121</span> <span class="operator">|</span>      <span class="operator">|</span>      <span class="number">3767215</span> <span class="operator">|</span> <span class="number">7</span>B<span class="operator">/</span>DC006958 <span class="operator">|</span> <span class="number">7</span>B<span class="operator">/</span>DC006990         <span class="operator">|</span> reserved   <span class="operator">|</span>              </span><br><span class="line"> pgl_lfo_backup_provider_lfo6cb441d <span class="operator">|</span> pglogical_output <span class="operator">|</span> logical   <span class="operator">|</span>  <span class="number">16391</span> <span class="operator">|</span> lfo<span class="operator">-</span>prod   <span class="operator">|</span> f         <span class="operator">|</span> t      <span class="operator">|</span>        <span class="number">123</span> <span class="operator">|</span>      <span class="operator">|</span>      <span class="number">3767215</span> <span class="operator">|</span> <span class="number">7</span>B<span class="operator">/</span>DC006958 <span class="operator">|</span> <span class="number">7</span>B<span class="operator">/</span>DC006990         <span class="operator">|</span> reserved   <span class="operator">|</span>              </span><br><span class="line">(<span class="number">3</span> 行记录)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>pgl_lfo_backup_provider_lfoe330b6c 和 pgl_lfo_backup_provider_lfo6cb441d 不确定是哪个订阅的</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">lfo<span class="operator">-</span>backup<span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">FROM</span> pglogical.show_subscription_status();</span><br><span class="line"></span><br><span class="line">  subscription_name   <span class="operator">|</span>   status    <span class="operator">|</span> provider_node <span class="operator">|</span>                                                                 provider_dsn                                                                 <span class="operator">|</span>                  slot_name                   <span class="operator">|</span> replication_sets <span class="operator">|</span> forward_origins </span><br><span class="line"><span class="comment">----------------------+-------------+---------------+----------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------+------------------+-----------------</span></span><br><span class="line"> lfobackup_delay <span class="operator">|</span> replicating <span class="operator">|</span> provider      <span class="operator">|</span> host<span class="operator">=</span>pgm<span class="operator">-</span>wz9298od6hkag64s168200.pg.rds.aliyuncs.com port<span class="operator">=</span><span class="number">5432</span> dbname<span class="operator">=</span>lfo<span class="operator">-</span>prod <span class="keyword">user</span><span class="operator">=</span>haopai_prod password<span class="operator">=</span>Sda$<span class="number">39</span>fd(<span class="number">87</span><span class="operator">*</span>(<span class="operator">&amp;</span><span class="number">-3</span><span class="operator">^</span><span class="operator">%</span><span class="operator">!</span><span class="operator">&amp;</span>S<span class="operator">=</span>)H<span class="operator">*</span><span class="operator">&amp;</span><span class="operator">^</span><span class="number">12</span><span class="operator">+</span>@ <span class="operator">|</span> pgl_lfo_backup_provider_lfoe330b6c <span class="operator">|</span> &#123;<span class="keyword">default</span>&#125;        <span class="operator">|</span> &#123;<span class="keyword">all</span>&#125;</span><br><span class="line"> lfobackup_now   <span class="operator">|</span> replicating <span class="operator">|</span> provider      <span class="operator">|</span> host<span class="operator">=</span>pgm<span class="operator">-</span>wz9298od6hkag64s168200.pg.rds.aliyuncs.com port<span class="operator">=</span><span class="number">5432</span> dbname<span class="operator">=</span>lfo<span class="operator">-</span>prod <span class="keyword">user</span><span class="operator">=</span>haopai_prod password<span class="operator">=</span>Sda$<span class="number">39</span>fd(<span class="number">87</span><span class="operator">*</span>(<span class="operator">&amp;</span><span class="number">-3</span><span class="operator">^</span><span class="operator">%</span><span class="operator">!</span><span class="operator">&amp;</span>S<span class="operator">=</span>)H<span class="operator">*</span><span class="operator">&amp;</span><span class="operator">^</span><span class="number">12</span><span class="operator">+</span>@ <span class="operator">|</span> pgl_lfo_backup_provider_lfo6cb441d <span class="operator">|</span> &#123;midnight&#125;       <span class="operator">|</span> &#123;<span class="keyword">all</span>&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>可以看到</p>
+<p>槽 330b6c 是名为 lfobackup_delay的订阅，订阅了 {default}  复制集；</p>
+<p>槽6cb441d是 名为 lfobackup_now 的订阅，订阅了 {midnight}  复制集</p>
+</li>
+</ul>
+<h3 id="查看-3"><a href="#查看-3" class="headerlink" title="查看"></a>查看</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pg_replication_slots;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>active</p>
+<ul>
+<li><code>f</code> ：这个槽当前未被使用，需要删除</li>
+<li><code>t</code>：这个槽当前正在被使用</li>
+</ul>
+</li>
+<li><p>active_pid</p>
+<p>如果槽当前正在被使用，则记录使用这个槽的会话的进程 ID。如果不活动则为<code>NULL</code></p>
+</li>
+<li><p>wal_status</p>
+<ul>
+<li><code>reserved</code> 意味着wal文件小于 <code>max_wal_size</code>。</li>
+<li><code>extended</code>意味着wal文件超出<code>max_wal_size</code>，但文件仍保留，通过复制槽或<code>wal_keep_size</code>。</li>
+<li><code>unreserved</code>意味着该插槽不再保留所需的 WAL 文件，并且将在下一个检查点删除其中一些文件。 此状态可以返回到reserved或extended</li>
+<li><code>lost</code>意味着某些需要的 WAL 文件已被删除，并且此插槽不再可用</li>
+</ul>
+</li>
+</ul>
+<h3 id="删除-4"><a href="#删除-4" class="headerlink" title="删除"></a>删除</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> pg_drop_replication_slot(<span class="string">&#x27;slot_name&#x27;</span>);</span><br><span class="line"><span class="comment">-- select pg_drop_replication_slot(&#x27;pgl_lfo_backup_provider_lfo6cb441d&#x27;); </span></span><br></pre></td></tr></table></figure>
+
+<h4 id="inactive-slot"><a href="#inactive-slot" class="headerlink" title="inactive slot"></a>inactive slot</h4><p>当连接到槽的复制客户端断开连接时，复制槽被标记为 inactive。inactive 的复制槽会导致 WAL 文件被保留，因为它们必须在客户端重新连接并且槽变为 active 时发送到客户端。</p>
+<p>通常不活动的复制槽是由于备份客户端被删除、从属服务器被关闭、升级、故障转移等造成的</p>
+<p>副作用</p>
+<ol>
+<li>会保留wal日志，占用磁盘</li>
+<li>保留旧的事务</li>
+<li>阻止 vacuum 的执行</li>
+</ol>
+<p>查找 inactive slot</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">FROM</span> pg_replication_slots <span class="keyword">WHERE</span> <span class="keyword">NOT</span> active;</span><br></pre></td></tr></table></figure>
+
+<h4 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h4><p>[1] <a target="_blank" rel="noopener" href="https://saifulmuhajir.web.id/postgresql-inactive-replication-slot-the-butterfly-effect/">Inactive Replication Slot: the Butterfly Effect</a></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">lfo<span class="operator">-</span>prod<span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">select</span> pg_drop_replication_slot(<span class="string">&#x27;pgl_mydb_provider_hptest&#x27;</span>);</span><br><span class="line"> pg_drop_replication_slot </span><br><span class="line"><span class="comment">--------------------------</span></span><br><span class="line"> </span><br><span class="line">(<span class="number">1</span> 行记录)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 如果删除失败</span></span><br><span class="line">lfo<span class="operator">-</span>prod<span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">select</span> pg_drop_replication_slot(<span class="string">&#x27;pgl_lfo_backup_provider_lfoe330b6c_c59b23c1&#x27;</span>);</span><br><span class="line">ERROR:  replication slot &quot;pgl_lfo_backup_provider_lfoe330b6c_c59b23c1&quot; <span class="keyword">is</span> active <span class="keyword">for</span> PID <span class="number">6693</span></span><br><span class="line"><span class="comment">-- 则先删除进程</span></span><br><span class="line">lfo<span class="operator">-</span>prod<span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">select</span> pg_terminate_backend(<span class="number">6693</span>);</span><br><span class="line"> pg_terminate_backend </span><br><span class="line"><span class="comment">----------------------</span></span><br><span class="line"> t</span><br><span class="line">(<span class="number">1</span> 行记录)</span><br><span class="line"><span class="comment">-- 再删除就可以了</span></span><br><span class="line">lfo<span class="operator">-</span>prod<span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">select</span> pg_drop_replication_slot(<span class="string">&#x27;pgl_lfo_backup_provider_lfoe330b6c_c59b23c1&#x27;</span>);</span><br><span class="line"> pg_drop_replication_slot </span><br><span class="line"><span class="comment">--------------------------</span></span><br><span class="line"> </span><br><span class="line">(<span class="number">1</span> 行记录)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果两个库表结构不一致会导致逻辑订阅失败，wal 日志堆积，此时需要删除 active 为 f 的复制槽</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> pglogical.drop_subscription(<span class="string">&#x27;subscription1&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">-- subcriber 中执行</span></span><br><span class="line">mydb<span class="operator">=</span># <span class="keyword">SELECT</span> pglogical.drop_subscription(<span class="string">&#x27;hptest&#x27;</span>); <span class="comment">-- 删除订阅</span></span><br><span class="line">警告:  could <span class="keyword">not</span> <span class="keyword">drop</span> slot &quot;pgl_mydb_provider_hptest&quot; <span class="keyword">on</span> provider, you will probably have <span class="keyword">to</span> <span class="keyword">drop</span> it manually</span><br><span class="line"> drop_subscription </span><br><span class="line"><span class="comment">-------------------</span></span><br><span class="line">                 <span class="number">1</span></span><br><span class="line">(<span class="number">1</span> 行记录)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- provider 中执行</span></span><br><span class="line">lfo<span class="operator">-</span>test<span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pg_replication_slots;  <span class="comment">-- 查看复制槽</span></span><br><span class="line">lfo<span class="operator">-</span>test<span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">select</span> pg_drop_replication_slot(<span class="string">&#x27;pgl_mydb_provider_hptest&#x27;</span>);</span><br><span class="line"> pg_drop_replication_slot </span><br><span class="line"><span class="comment">--------------------------</span></span><br><span class="line"> </span><br><span class="line">(<span class="number">1</span> 行记录)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="序列数"><a href="#序列数" class="headerlink" title="序列数"></a>序列数</h2><h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><p>在 provider 上执行</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 查看所有序列表的状态</span></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pglogical.sequence_state; </span><br><span class="line"> seqoid <span class="operator">|</span> cache_size <span class="operator">|</span> last_value </span><br><span class="line"><span class="comment">--------+------------+------------</span></span><br><span class="line">  <span class="number">29127</span> <span class="operator">|</span>       <span class="number">1000</span> <span class="operator">|</span>       <span class="number">3031</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 同步所有序列表</span></span><br><span class="line"><span class="keyword">select</span> pglogical.synchronize_sequence( seqoid ) <span class="keyword">from</span> pglogical.sequence_state; </span><br><span class="line"></span><br><span class="line"><span class="comment">-- 同步单个序列表</span></span><br><span class="line"><span class="keyword">select</span> pglogical.synchronize_sequence(<span class="string">&#x27;public.test_id_seq&#x27;</span>); </span><br></pre></td></tr></table></figure>
+
+<p>序列数定期同步，测试发现实际规则是根据某个序列表 <code>select * from staff_id_seq;</code> 的 last_value 值大于等于 <code>select * from pglogical.sequence_state;</code> 中的 last_value 值时，自动触发同步，延迟 <code>[apply_delay]</code> 时间后，复制到订阅端。并且订阅端序列表的 last_value 值等于发布端该序列表的 last_value 值加1000 [<code>select * from pglogical.sequence_state;</code> 的 <code>cache_size</code> 值]</p>
+<p><strong>参考</strong></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/2ndQuadrant/pglogical/issues/136#issuecomment-608234535">https://github.com/2ndQuadrant/pglogical/issues/136#issuecomment-608234535</a></p>
+<h3 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> setval(<span class="string">&#x27;staff_id_seq&#x27;</span>,<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="DDL同步"><a href="#DDL同步" class="headerlink" title="DDL同步"></a>DDL同步</h2><h3 id="replicate-ddl-command"><a href="#replicate-ddl-command" class="headerlink" title="replicate_ddl_command"></a>replicate_ddl_command</h3><ul>
+<li><p>在 lfo-prod 执行 DDL 语句时需要通过 pglogical 提供的 <a target="_blank" rel="noopener" href="https://github.com/2ndQuadrant/pglogical#additional-functions">replicate_ddl_command</a> 命令执行，会同步到备份数据库。否则备份数据库表结构不一致会导致 逻辑复制 失败，wal 日志堆积，占用磁盘</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> pglogical.replicate_ddl_command(<span class="string">&#x27;create sequence public.customer_id_seq</span></span><br><span class="line"><span class="string">minvalue 1                                                                        </span></span><br><span class="line"><span class="string">maxvalue 9223372036854775807</span></span><br><span class="line"><span class="string">start with 1</span></span><br><span class="line"><span class="string">increment by 1</span></span><br><span class="line"><span class="string">cache 1                                 </span></span><br><span class="line"><span class="string">;&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> pglogical.replicate_ddl_command(<span class="string">&#x27;create table public.customer (</span></span><br><span class="line"><span class="string">  &quot;ID&quot; bigint NOT NULL PRIMARY KEY default nextval(&#x27;&#x27;public.customer_id_seq&#x27;&#x27;),  -- 这里是双单引号</span></span><br><span class="line"><span class="string">  &quot;TYPE&quot; character varying(50) NOT NULL</span></span><br><span class="line"><span class="string">);&#x27;</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>执行完 DDL 之后，需要将表添加到复制集，根据表插入的时间，选择 default 或 midnight 复制集</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> pglogical.replication_set_add_sequence(<span class="string">&#x27;midnight&#x27;</span>,<span class="string">&#x27;&quot;MESSAGE_ID_seq&quot;&#x27;</span>);</span><br><span class="line"><span class="keyword">select</span> pglogical.replication_set_add_table(<span class="string">&#x27;midnight&#x27;</span>,<span class="string">&#x27;&quot;MESSAGE&quot;&#x27;</span>);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>其他示例</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> pglogical.replicate_ddl_command(<span class="string">&#x27;create sequence public.test_id_seq</span></span><br><span class="line"><span class="string">minvalue 1                                                                        </span></span><br><span class="line"><span class="string">maxvalue 9223372036854775807</span></span><br><span class="line"><span class="string">start with 1</span></span><br><span class="line"><span class="string">increment by 1</span></span><br><span class="line"><span class="string">cache 1                                 </span></span><br><span class="line"><span class="string">;&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> pglogical.replicate_ddl_command(<span class="string">&#x27;create table public.test (</span></span><br><span class="line"><span class="string">  &quot;ID&quot; bigint NOT NULL PRIMARY KEY default nextval(&#x27;&#x27;public.test_id_seq&#x27;&#x27;), </span></span><br><span class="line"><span class="string">  &quot;TYPE&quot; character varying(50) NOT NULL</span></span><br><span class="line"><span class="string">);&#x27;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> pglogical.replicate_ddl_command(<span class="string">&#x27;create sequence public.customer_id_seq</span></span><br><span class="line"><span class="string">minvalue 1                                                                        </span></span><br><span class="line"><span class="string">maxvalue 9223372036854775807</span></span><br><span class="line"><span class="string">start with 1</span></span><br><span class="line"><span class="string">increment by 1</span></span><br><span class="line"><span class="string">cache 1                                 </span></span><br><span class="line"><span class="string">;&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> pglogical.replicate_ddl_command(<span class="string">&#x27;create table public.customer (</span></span><br><span class="line"><span class="string">  &quot;ID&quot; bigint NOT NULL PRIMARY KEY default nextval(&#x27;&#x27;public.customer_id_seq&#x27;&#x27;), </span></span><br><span class="line"><span class="string">  &quot;TYPE&quot; character varying(50) NOT NULL</span></span><br><span class="line"><span class="string">);&#x27;</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> pglogical.replicate_ddl_command(<span class="string">&#x27;create sequence public.monster_id_seq</span></span><br><span class="line"><span class="string">minvalue 1                                                                        </span></span><br><span class="line"><span class="string">maxvalue 9223372036854775807</span></span><br><span class="line"><span class="string">start with 1</span></span><br><span class="line"><span class="string">increment by 1</span></span><br><span class="line"><span class="string">cache 1                                 </span></span><br><span class="line"><span class="string">;&#x27;</span>,<span class="string">&#x27;&#123;my_set&#125;&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> pglogical.replicate_ddl_command(<span class="string">&#x27;create table public.monster (</span></span><br><span class="line"><span class="string">  &quot;ID&quot; bigint NOT NULL PRIMARY KEY default nextval(&#x27;&#x27;public.monster_id_seq&#x27;&#x27;), </span></span><br><span class="line"><span class="string">  &quot;TYPE&quot; character varying(50) NOT NULL</span></span><br><span class="line"><span class="string">);&#x27;</span>,<span class="string">&#x27;&#123;my_set&#125;&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="共享库预加载"><a href="#共享库预加载" class="headerlink" title="共享库预加载"></a>共享库预加载</h2><p>Postgresql共享库预加载(Shared Library Preloading) PostgreSQL支持通过动态库的方式扩展PG的功能，pg在使用这些功能时需要预加载相关的共享库。有几种设置可用于将共享库预加载到服务器中</p>
+<h3 id="local-preload-libraries-string"><a href="#local-preload-libraries-string" class="headerlink" title="local_preload_libraries (string)"></a>local_preload_libraries (string)</h3><ul>
+<li><code>用户建立连接时加载</code>，通常使用客户端上的 PGOPOPS 环境变量或使用 ALTER 角色 SET 设置此参数。</li>
+<li>任何用户都可以设置此选项，因此限定只能加载$libdir&#x2F;plugins下面的so文件。可以显示的指定目录，如$libdir&#x2F;plugins&#x2F;passwordcheck；或者只指定库的名字，如passwordcheck。其会自动到$libdir&#x2F;plugins&#x2F;中搜索</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">postgres<span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">alter</span> role test <span class="keyword">set</span> local_preload_libraries<span class="operator">=</span>passwordcheck;</span><br><span class="line"><span class="keyword">ALTER</span> ROLE</span><br><span class="line">postgres<span class="operator">=</span><span class="operator">&gt;</span> <span class="keyword">alter</span> role test <span class="keyword">set</span> local_preload_libraries<span class="operator">=</span><span class="string">&#x27;$libdir/plugins/passwordcheck&#x27;</span>;</span><br><span class="line"><span class="keyword">ALTER</span> ROLE</span><br></pre></td></tr></table></figure>
+
+<h3 id="session-preload-libraries-string"><a href="#session-preload-libraries-string" class="headerlink" title="session_preload_libraries (string)"></a>session_preload_libraries (string)</h3><ul>
+<li><code>用户建立连接时加载</code>这个参数只允许超级用户修改</li>
+<li>能动态加载所有目录下面的so文件，如果未指定相对目录，自动到dynamic_library_path指定的目录中搜索so。</li>
+</ul>
+<h3 id="shared-preload-libraries-string"><a href="#shared-preload-libraries-string" class="headerlink" title="shared_preload_libraries (string)"></a>shared_preload_libraries (string)</h3><ul>
+<li><code>数据库启动时加载</code>，配置shared_preload_libraries参数，必须重启数据库。</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">postgres<span class="operator">=</span># <span class="keyword">alter</span> <span class="keyword">system</span> <span class="keyword">set</span> shared_preload_libraries<span class="operator">=</span>pg_pathman, pg_stat_statements, passwordcheck;</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">SYSTEM</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在连接开始时加载一个或多个共享库，用逗号分隔列表。条目之间的空白会被忽略，如果要在名称中包含空格或逗号，库名需要加双引号。此参数只在服务器启动时生效。如果找不到指定的库，服务器无法启动。</li>
+<li>多个参数不要放在单引号中，如</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">alter system set shared_preload_libraries=&#x27;pg_pathman,pg_stat_statements&#x27;;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>$libdir路径通过以下命令查看</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[pg@pg ~]$ pg_config |grep LIBDIR</span><br><span class="line">LIBDIR = /opt/postgres/lib</span><br><span class="line">PKGLIBDIR = /opt/postgres/lib</span><br></pre></td></tr></table></figure>
+
+<h2 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h2><h3 id="2-4-1"><a href="#2-4-1" class="headerlink" title="2.4.1"></a><a target="_blank" rel="noopener" href="https://github.com/2ndQuadrant/pglogical#pglogical-241">2.4.1</a></h3><p>“snapshot still active” warnings</p>
+<blockquote>
+<p>WARNING: snapshot 0x199ed48 still active</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/44a987be862b/" rel="prev" title="微信支付">
+      <i class="fa fa-chevron-left"></i> 微信支付
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/31c9c61a4f71/" rel="next" title="短信">
+      短信 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E6%8F%92%E4%BB%B6"><span class="nav-text">添加插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%94%AF%E6%8C%81%E7%9A%84%E5%87%BD%E6%95%B0%E5%92%8C%E8%A1%A8"><span class="nav-text">查看支持的函数和表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8A%82%E7%82%B9"><span class="nav-text">节点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0"><span class="nav-text">添加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-text">删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B"><span class="nav-text">查看</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E9%9B%86"><span class="nav-text">复制集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B-1"><span class="nav-text">查看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0-1"><span class="nav-text">添加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4-1"><span class="nav-text">删除</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E5%B8%83"><span class="nav-text">发布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0-2"><span class="nav-text">添加</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A8%E5%88%B0%E5%A4%8D%E5%88%B6%E9%9B%86"><span class="nav-text">表到复制集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E5%88%B0%E5%A4%8D%E5%88%B6%E9%9B%86"><span class="nav-text">序列到复制集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4-2"><span class="nav-text">删除</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E9%9B%86%E4%B8%AD%E7%9A%84%E8%A1%A8"><span class="nav-text">复制集中的表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E9%9B%86%E4%B8%AD%E7%9A%84%E5%BA%8F%E5%88%97"><span class="nav-text">复制集中的序列</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B-2"><span class="nav-text">查看</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E9%9B%86%E4%B8%AD%E7%9A%84%E8%A1%A8-1"><span class="nav-text">复制集中的表</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E9%9B%86%E4%B8%AD%E7%9A%84%E5%BA%8F%E5%88%97-1"><span class="nav-text">复制集中的序列</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A2%E9%98%85"><span class="nav-text">订阅</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0-3"><span class="nav-text">添加</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E8%AE%A2%E9%98%85%E7%8A%B6%E6%80%81"><span class="nav-text">查看订阅状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E8%AE%A2%E9%98%85%E8%AF%A6%E7%BB%86%E4%BF%A1%E6%81%AF"><span class="nav-text">查看订阅详细信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5%E5%A4%8D%E5%88%B6%E9%9B%86%E4%B8%AD%E6%9C%AA%E5%90%8C%E6%AD%A5%E7%9A%84%E8%A1%A8"><span class="nav-text">同步复制集中未同步的表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%89%E5%BE%85%E8%AE%A2%E9%98%85%E5%90%8C%E6%AD%A5%E5%AE%8C%E6%88%90"><span class="nav-text">等待订阅同步完成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%87%8D%E6%96%B0%E5%90%8C%E6%AD%A5%E6%9F%90%E5%BC%A0%E8%A1%A8"><span class="nav-text">重新同步某张表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%89%E5%BE%85%E6%9F%90%E5%BC%A0%E8%A1%A8%E5%90%8C%E6%AD%A5%E5%AE%8C%E6%88%90"><span class="nav-text">等待某张表同步完成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AD%89%E5%BE%85%E5%8F%91%E5%B8%83%E7%AB%AF%E7%A1%AE%E8%AE%A4%E5%90%8C%E6%AD%A5%E8%AF%B7%E6%B1%82"><span class="nav-text">等待发布端确认同步请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4-3"><span class="nav-text">删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%81%9C%E8%AE%A2%E9%98%85"><span class="nav-text">启停订阅</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E6%A7%BD"><span class="nav-text">复制槽</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B-3"><span class="nav-text">查看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A0%E9%99%A4-4"><span class="nav-text">删除</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#inactive-slot"><span class="nav-text">inactive slot</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-text">参考</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E6%95%B0"><span class="nav-text">序列数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%8C%E6%AD%A5"><span class="nav-text">同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE"><span class="nav-text">设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DDL%E5%90%8C%E6%AD%A5"><span class="nav-text">DDL同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#replicate-ddl-command"><span class="nav-text">replicate_ddl_command</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%BA%93%E9%A2%84%E5%8A%A0%E8%BD%BD"><span class="nav-text">共享库预加载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#local-preload-libraries-string"><span class="nav-text">local_preload_libraries (string)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#session-preload-libraries-string"><span class="nav-text">session_preload_libraries (string)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#shared-preload-libraries-string"><span class="nav-text">shared_preload_libraries (string)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%88%E6%9C%AC"><span class="nav-text">版本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-1"><span class="nav-text">2.4.1</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

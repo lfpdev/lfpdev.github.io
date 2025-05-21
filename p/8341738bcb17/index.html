@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="脚本一些场景下的预处理和后处理脚本">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JMeter 有用的脚本">
+<meta property="og:url" content="http://example.com/p/8341738bcb17/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="脚本一些场景下的预处理和后处理脚本">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-03-10T12:38:50.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.775Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/p/8341738bcb17/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>JMeter 有用的脚本 | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/8341738bcb17/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JMeter 有用的脚本
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-03-10 20:38:50" itemprop="dateCreated datePublished" datetime="2024-03-10T20:38:50+08:00">2024-03-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Test/" itemprop="url" rel="index"><span itemprop="name">Test</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h2><p>一些场景下的预处理和后处理脚本</p>
+<span id="more"></span>
+<h3 id="BeanShell-只执行一次脚本"><a href="#BeanShell-只执行一次脚本" class="headerlink" title="BeanShell 只执行一次脚本"></a>BeanShell 只执行一次脚本</h3><ul>
+<li><p>背景</p>
+<p>线程组中，默认每个线程都会执行一次脚本。对于获取类接口，只想处理一次响应</p>
+</li>
+<li><p>脚本</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">threadName</span> <span class="operator">=</span> Thread.currentThread().getName();</span><br><span class="line"><span class="type">FileWriter</span> <span class="variable">fstream</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileWriter</span>(<span class="string">&quot;/home/lfp/JMeter/device_list.csv&quot;</span>,<span class="literal">true</span>);</span><br><span class="line"><span class="type">BufferedWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedWriter</span>(fstream);</span><br><span class="line"><span class="comment">// 通过线程名称，达到只处理一次的效果</span></span><br><span class="line"><span class="comment">// 当前线程组中，线程编号格式为：线程组idx-线程idx，例如 &#x27;8-12&#x27;，&#x27;-1&#x27;就表示第一个线程</span></span><br><span class="line"><span class="keyword">if</span>(threadName.endsWith(<span class="string">&quot;-1&quot;</span>))&#123; </span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;<span class="number">51</span>; i++)&#123; <span class="comment">// 这里的个数需要与返回list的长度相同</span></span><br><span class="line">		log.info(<span class="string">&quot;==id====&gt;&quot;</span>+vars.get(<span class="string">&quot;device_id_&quot;</span>+i));</span><br><span class="line">		log.info(<span class="string">&quot;==name==&gt;&quot;</span>+vars.get(<span class="string">&quot;device_name_&quot;</span>+i));</span><br><span class="line">		out.write(vars.get(<span class="string">&quot;device_id_&quot;</span>+i)+<span class="string">&#x27;,&#x27;</span>);</span><br><span class="line">		out.write(vars.get(<span class="string">&quot;device_name_&quot;</span>+i)+<span class="string">&#x27;\n&#x27;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">out.close();</span><br><span class="line">fstream.close();</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="BeanShell-生成请求参数并保存CSV"><a href="#BeanShell-生成请求参数并保存CSV" class="headerlink" title="BeanShell 生成请求参数并保存CSV"></a>BeanShell 生成请求参数并保存CSV</h3><ul>
+<li><p>背景</p>
+<p>后面的请求需要用到当前请求中动态生成的参数</p>
+</li>
+<li><p>传递给Beanshell 的参数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Parameters:$&#123;__UUID()&#125; $&#123;__RandomString(5,qwertyuiop)&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将通过 JMeter函数动态生成的值传递给 bsh.args。注意两个变量之间用<strong>空格</strong>分开</p>
+</li>
+<li><p>脚本</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">deviceId</span> <span class="operator">=</span> bsh.args[<span class="number">0</span>];</span><br><span class="line">log.info(<span class="string">&quot;pre==========&gt;&quot;</span>+deviceId);</span><br><span class="line"><span class="type">String</span> <span class="variable">deviceName</span> <span class="operator">=</span> bsh.args[<span class="number">1</span>];</span><br><span class="line">log.info(<span class="string">&quot;pre==========&gt;&quot;</span>+deviceName);</span><br><span class="line"></span><br><span class="line"><span class="type">FileWriter</span> <span class="variable">fstream</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FileWriter</span>(<span class="string">&quot;/home/lfp/JMeter/device_list.csv&quot;</span>,<span class="literal">true</span>);</span><br><span class="line"><span class="type">BufferedWriter</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BufferedWriter</span>(fstream);</span><br><span class="line"></span><br><span class="line">out.write(deviceId+<span class="string">&#x27;,&#x27;</span>);</span><br><span class="line">out.write(deviceName+<span class="string">&#x27;\n&#x27;</span>);</span><br><span class="line"></span><br><span class="line">out.close();</span><br><span class="line">fstream.close();</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="JSR223-预处理CSV文件构建JSON对象"><a href="#JSR223-预处理CSV文件构建JSON对象" class="headerlink" title="JSR223 预处理CSV文件构建JSON对象"></a>JSR223 预处理CSV文件构建JSON对象</h3><ul>
+<li><p>背景</p>
+<p>需要从 csv 中读取数据构造请求体中用到的数组，但是通过 JMeter vars 变量只能传递字符串，因此直接构建一个JSON字符串，请求消息体通过 <code>$&#123;jsonRequestBody&#125;</code> 引用</p>
+</li>
+<li><p>脚本语言选择 groovy</p>
+</li>
+</ul>
+<p>脚本</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> groovy.json.JsonBuilder</span><br><span class="line"></span><br><span class="line"><span class="comment">// CSV文件路径</span></span><br><span class="line">String csvFilePath = <span class="string">&quot;/home/lfp/JMeter/device_list.csv&quot;</span></span><br><span class="line"></span><br><span class="line">List&lt;String&gt; dataList = []</span><br><span class="line"></span><br><span class="line"><span class="comment">// 读取CSV文件</span></span><br><span class="line"><span class="keyword">new</span> File(csvFilePath).eachLine &#123; line -&gt;</span><br><span class="line">    <span class="comment">// CSV文件以逗号分隔，这里只读取每行的第一个字段</span></span><br><span class="line">    String data = line.split(<span class="string">&quot;,&quot;</span>)[<span class="number">0</span>]</span><br><span class="line">    dataList.add(data)</span><br><span class="line">&#125;</span><br><span class="line">log.info(<span class="string">&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&quot;</span>+dataList);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 随机选择10个</span></span><br><span class="line">dataList.shuffle();</span><br><span class="line">List&lt;String&gt; deviceList = dataList.take(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构建JSON对象</span></span><br><span class="line"><span class="keyword">def</span> json = <span class="keyword">new</span> JsonBuilder()</span><br><span class="line">json &#123;</span><br><span class="line">    device_id_list deviceList</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将JSON对象转换为字符串</span></span><br><span class="line">String jsonString = json.toString()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 存储JSON字符串到JMeter变量，在请求体中使用</span></span><br><span class="line">vars.put(<span class="string">&quot;jsonRequestBody&quot;</span>, jsonString)</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/2f3af5d11bbc/" rel="prev" title="JMeter 测试用例">
+      <i class="fa fa-chevron-left"></i> JMeter 测试用例
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/0c4c03d5744a/" rel="next" title="queryRunner管理事务">
+      queryRunner管理事务 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC"><span class="nav-text">脚本</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BeanShell-%E5%8F%AA%E6%89%A7%E8%A1%8C%E4%B8%80%E6%AC%A1%E8%84%9A%E6%9C%AC"><span class="nav-text">BeanShell 只执行一次脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BeanShell-%E7%94%9F%E6%88%90%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0%E5%B9%B6%E4%BF%9D%E5%AD%98CSV"><span class="nav-text">BeanShell 生成请求参数并保存CSV</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSR223-%E9%A2%84%E5%A4%84%E7%90%86CSV%E6%96%87%E4%BB%B6%E6%9E%84%E5%BB%BAJSON%E5%AF%B9%E8%B1%A1"><span class="nav-text">JSR223 预处理CSV文件构建JSON对象</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

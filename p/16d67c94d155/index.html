@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="clamscan 通过 ClamAV 扫描文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="clamscan">
+<meta property="og:url" content="http://example.com/p/16d67c94d155/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="clamscan 通过 ClamAV 扫描文件">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.763Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/p/16d67c94d155/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>clamscan | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/16d67c94d155/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          clamscan
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-07 00:00:00" itemprop="dateCreated datePublished" datetime="2022-07-07T00:00:00+08:00">2022-07-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Node-js-Eco/" itemprop="url" rel="index"><span itemprop="name">Node.js Eco</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>clamscan 通过 ClamAV 扫描文件</p>
+<span id="more"></span>
+
+<h1 id="clamav"><a href="#clamav" class="headerlink" title="clamav"></a>clamav</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/Cisco-Talos/clamav">github</a></li>
+</ul>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="package"><a href="#package" class="headerlink" title="package"></a>package</h3><h4 id="debain"><a href="#debain" class="headerlink" title="debain"></a>debain</h4><h5 id="clamav-1"><a href="#clamav-1" class="headerlink" title="clamav"></a>clamav</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install clamav</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>建议安装：<br>clamav-docs libclamunrar9<br>下列【新】软件包将被安装：<br>clamav clamav-base clamav-freshclam libclamav9 libllvm3.9 libmspack0 libtfm1</p>
+</blockquote>
+<ul>
+<li><p>安装后出现进程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clamav   10856     1  0 10:57 ?        00:00:00 /usr/bin/freshclam -d --foreground=true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>&#x2F;etc&#x2F;clamav 没有 clamd.conf 配置文件</p>
+</li>
+<li><p>没有 clamconf 命令</p>
+</li>
+</ul>
+<h5 id="clamav-daemon"><a href="#clamav-daemon" class="headerlink" title="clamav-daemon"></a>clamav-daemon</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install clamav-daemon</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>建议安装：<br>clamav-docs daemon<br>下列【新】软件包将被安装：<br>clamav-daemon clamdscan</p>
+</blockquote>
+<ul>
+<li><p>安装后出现进程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clamav   15402     1 10 11:22 ?        00:00:11 /usr/sbin/clamd --foreground=true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>&#x2F;etc&#x2F;clamav 出现 clamd.conf 配置文件</p>
+</li>
+<li><p>有 clamconf 命令</p>
+</li>
+</ul>
+<h3 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h3><p>宿主机创建目录用于 socket 映射</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /var/lib/clamav/sockets</span><br></pre></td></tr></table></figure>
+
+<p>启动命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker run -it --<span class="built_in">rm</span> \</span><br><span class="line">	--name clam \</span><br><span class="line">	--mount <span class="built_in">type</span>=<span class="built_in">bind</span>,<span class="built_in">source</span>=/var/lib/clamav,target=/var/lib/clamav \</span><br><span class="line">	--mount <span class="built_in">type</span>=<span class="built_in">bind</span>,<span class="built_in">source</span>=/var/lib/clamav/sockets,target=/run/clamav \</span><br><span class="line">	--mount <span class="built_in">type</span>=<span class="built_in">bind</span>,<span class="built_in">source</span>=/path/to/upload/file,target=/path/to/upload/file \</span><br><span class="line">	clamav/clamav:stable_base</span><br></pre></td></tr></table></figure>
+
+<p>进入容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it clamav sh</span><br><span class="line"><span class="comment"># 修改配置文件  /etc/clamav/clamd.conf 将 LocalSocket 修改为以下地址</span></span><br><span class="line">LocalSocket /var/lib/clamav/sockets/clamd.sock</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>镜像是使用alpine制作的，不能使用 bash</p>
+</blockquote>
+<p>退出容器重启</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart clamav</span><br></pre></td></tr></table></figure>
+
+<p>clamscan 配置 socket 为 &#x2F;var&#x2F;lib&#x2F;clamav&#x2F;sockets&#x2F;clamd.sock</p>
+<h2 id="卸载"><a href="#卸载" class="headerlink" title="卸载"></a>卸载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo apt remove clamav-daemon</span><br><span class="line">sudo apt autoremove</span><br><span class="line"></span><br><span class="line">sudo <span class="built_in">rm</span> -rf /var/lib/clamav</span><br><span class="line">sudo <span class="built_in">rm</span> -rf /etc/clamav/</span><br><span class="line">sudo <span class="built_in">rm</span> -rf /var/log/clamav/</span><br><span class="line">sudo <span class="built_in">rm</span>  -rf /var/run/clamav</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h2><h3 id="log-file"><a href="#log-file" class="headerlink" title="log file"></a>log file</h3><p>&#x2F;var&#x2F;log&#x2F;clamav&#x2F;clamav.log</p>
+<p>下载后自动创建</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-rw-r-----  1 clamav adm       0 7月   7 17:45 clamav.log</span><br><span class="line">-rw-r-----  1 clamav clamav 1603 7月   7 17:45 freshclam.log</span><br></pre></td></tr></table></figure>
+
+<h3 id="database-directory"><a href="#database-directory" class="headerlink" title="database directory"></a>database directory</h3><p>&#x2F;var&#x2F;lib&#x2F;clamav</p>
+<p>下载后自动创建</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-rw-r--r--  1 clamav clamav    293670 7月   7 17:45 bytecode.cvd</span><br><span class="line">-rw-r--r--  1 clamav clamav  59017537 7月   7 17:45 daily.cvd</span><br><span class="line">-rw-r--r--  1 clamav clamav        69 7月   7 17:45 freshclam.dat</span><br><span class="line">-rw-r--r--  1 clamav clamav 170479789 7月   7 17:45 main.cvd</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>没有socket</li>
+</ul>
+<h3 id="config"><a href="#config" class="headerlink" title="config"></a>config</h3><p>&#x2F;etc&#x2F;clamav&#x2F;clamd.conf</p>
+<p>&#x2F;etc&#x2F;clamav&#x2F;freshclam.conf</p>
+<p>下载后自动创建</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-rw-r--r--   1 root   root  1994 7月   7 17:45 clamd.conf</span><br><span class="line">-r--r--r--   1 clamav adm    682 7月   7 17:45 freshclam.conf</span><br><span class="line">drwxr-xr-x   2 root   root  4096 5月  13 00:40 onerrorexecute.d/</span><br><span class="line">drwxr-xr-x   2 root   root  4096 5月  13 00:40 onupdateexecute.d/</span><br><span class="line">drwxr-xr-x   2 root   root  4096 5月  13 00:40 virusevent.d/</span><br></pre></td></tr></table></figure>
+
+<h3 id="socket"><a href="#socket" class="headerlink" title="socket"></a>socket</h3><p>&#x2F;var&#x2F;run&#x2F;clamav</p>
+<p>启动 clamd 之后会出现</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">srw-rw-rw-  1 clamav clamav    0 7月   7 18:47 clamd.ctl=</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="clamd"><a href="#clamd" class="headerlink" title="clamd"></a>clamd</h3><h4 id="detail"><a href="#detail" class="headerlink" title="detail"></a>detail</h4><h5 id="LocalSocket"><a href="#LocalSocket" class="headerlink" title="LocalSocket"></a>LocalSocket</h5><p>ubuntu 上为 &#x2F;var&#x2F;run&#x2F;clamav&#x2F;clamd.ctl</p>
+<p>docker 中为 &#x2F;run&#x2F;clamav&#x2F;clamd.sock</p>
+<h5 id="ConcurrentDatabaseReload"><a href="#ConcurrentDatabaseReload" class="headerlink" title="ConcurrentDatabaseReload"></a>ConcurrentDatabaseReload</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ConcurrentDatabaseReload no</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>ClamAV 0.103.0  新增</p>
+</li>
+<li><p>yes default</p>
+</li>
+<li><p>非阻塞数据库重新加载【默认】，不阻塞数据扫描，数据库更新时会临时消耗两倍的内存</p>
+<p>禁用该功能，则数据库更新时会阻塞数据扫描，直到数据库更新完成</p>
+</li>
+</ul>
+<h5 id="ExitOnOOM"><a href="#ExitOnOOM" class="headerlink" title="ExitOnOOM"></a>ExitOnOOM</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ExitOnOOM yes</span><br></pre></td></tr></table></figure>
+
+<p>out of memory 时退出 clamd 进程</p>
+<h3 id="freshclam"><a href="#freshclam" class="headerlink" title="freshclam"></a>freshclam</h3><h4 id="detail-1"><a href="#detail-1" class="headerlink" title="detail"></a>detail</h4><h5 id="UpdateLogFile"><a href="#UpdateLogFile" class="headerlink" title="UpdateLogFile"></a>UpdateLogFile</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UpdateLogFile /var/log/clamav/freshclam.log</span><br></pre></td></tr></table></figure>
+
+<h5 id="TestDatabases-no"><a href="#TestDatabases-no" class="headerlink" title="TestDatabases no"></a>TestDatabases no</h5><ul>
+<li>限制内存使用</li>
+</ul>
+<h5 id="Checks-12"><a href="#Checks-12" class="headerlink" title="Checks 12"></a>Checks 12</h5><ul>
+<li>限制检查更新次数</li>
+</ul>
+<h5 id="ScriptedUpdates-yes"><a href="#ScriptedUpdates-yes" class="headerlink" title="ScriptedUpdates yes"></a>ScriptedUpdates yes</h5><ul>
+<li>脚本跟新，仅更新差异部分</li>
+</ul>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><h3 id="usr-bin-目录下"><a href="#usr-bin-目录下" class="headerlink" title="# &#x2F;usr&#x2F;bin 目录下"></a># &#x2F;usr&#x2F;bin 目录下</h3><h3 id="clamconf"><a href="#clamconf" class="headerlink" title="clamconf"></a>clamconf</h3><p>一个工具，用于检查或生成ClamAV配置文件，并收集帮助远程调试问题可能需要的附加信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">clamconf -g freshclam.conf &gt; freshclam.conf</span><br><span class="line">clamconf -g clamd.conf &gt; clamd.conf</span><br><span class="line">clamconf -g clamav-milter.conf &gt; clamav-milter.conf</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>在 &#x2F;etc&#x2F;clamav 目录下创建时，需要先切换到 root 用户(<code>sudo su</code>)。临时sudo不行</p>
+<p>创建的是 example 配置文件。全部配置都是注释的，用来了解配置。</p>
+<p>安装 clamav-daemon 时会自动创建一个 clamd.conf，是配置好的</p>
+</blockquote>
+<h3 id="clamscan"><a href="#clamscan" class="headerlink" title="clamscan"></a>clamscan</h3><p>一个命令行程序，用于扫描文件或目录，不需要 clamd 守护进程</p>
+<h3 id="clamdscan"><a href="#clamdscan" class="headerlink" title="clamdscan"></a>clamdscan</h3><p>一个通过clamd扫描文件和目录的命令行程序</p>
+<blockquote>
+<p>需要先启动 clamd 否则报错</p>
+<p>ERROR: Could not connect to clamd on LocalSocket &#x2F;var&#x2F;run&#x2F;clamav&#x2F;clamd.ctl: Connection refused</p>
+</blockquote>
+<h3 id="clamdtop"><a href="#clamdtop" class="headerlink" title="clamdtop"></a>clamdtop</h3><p>一个用于监视clamd的命令行GUI</p>
+<h3 id="clamsubmit"><a href="#clamsubmit" class="headerlink" title="clamsubmit"></a>clamsubmit</h3><h3 id="freshclam-1"><a href="#freshclam-1" class="headerlink" title="freshclam"></a>freshclam</h3><p>签名数据库(cvd)升级工具</p>
+<blockquote>
+<p>由Cisco-Talos签名并发布的压缩的ClamAV特征库归档文件</p>
+</blockquote>
+<h3 id="usr-sbin-目录下"><a href="#usr-sbin-目录下" class="headerlink" title="# &#x2F;usr&#x2F;sbin 目录下"></a># &#x2F;usr&#x2F;sbin 目录下</h3><h3 id="clamd-1"><a href="#clamd-1" class="headerlink" title="clamd"></a>clamd</h3><p>守护进程</p>
+<p>一个多线程守护进程，侦听网络套接字或unix套接字上的扫描请求。clamd的客户端应用包括clamdtop、clamdscan、clamave -milter和clamonacc。</p>
+<blockquote>
+<p>通过 sudo 启动，否则无法访问日志文件</p>
+<p>ERROR: Can’t open &#x2F;var&#x2F;log&#x2F;clamav&#x2F;clamav.log in append mode (check permissions!).<br>ERROR: Can’t initialize the internal logger</p>
+</blockquote>
+<h3 id="查看版本"><a href="#查看版本" class="headerlink" title="查看版本"></a>查看版本</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">clamdscan --version</span><br><span class="line">clamscan --versin</span><br><span class="line">ClamAV 0.103.6/26577/Sun Jun 19 16:06:45 2022</span><br></pre></td></tr></table></figure>
+
+<h2 id="服务管理"><a href="#服务管理" class="headerlink" title="服务管理"></a>服务管理</h2><p>&#x2F;lib&#x2F;systemd&#x2F;system 目录下</p>
+<ul>
+<li>clamav-daemon.service</li>
+<li>clamav-freshclam.service</li>
+</ul>
+<h2 id="病毒数据库"><a href="#病毒数据库" class="headerlink" title="病毒数据库"></a>病毒数据库</h2><ul>
+<li><code>.cvd</code>文件</li>
+</ul>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><h3 id="测试病毒文件"><a href="#测试病毒文件" class="headerlink" title="测试病毒文件"></a>测试病毒文件</h3><p><a target="_blank" rel="noopener" href="https://www.eicar.org/download-anti-malware-testfile/">https://www.eicar.org/download-anti-malware-testfile/</a> 下载测试病毒文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X5O!P%@AP[4\PZX54(P^)7CC)7&#125;$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="上传文档扫描"><a href="#上传文档扫描" class="headerlink" title="上传文档扫描"></a>上传文档扫描</h3><p>对上传到 Cloud Storage 的文档进行自动恶意软件扫描</p>
+<p><a target="_blank" rel="noopener" href="https://cloud.google.com/architecture/automating-malware-scanning-for-documents-uploaded-to-cloud-storage?hl=zh-cn#architecture">https://cloud.google.com/architecture/automating-malware-scanning-for-documents-uploaded-to-cloud-storage?hl=zh-cn#architecture</a></p>
+<h1 id="clamscan-1"><a href="#clamscan-1" class="headerlink" title="clamscan"></a>clamscan</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/kylefarris/clamscan">github</a></li>
+</ul>
+<h2 id="启动clamav"><a href="#启动clamav" class="headerlink" title="启动clamav"></a>启动clamav</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">clamd // 启动扫描守护进程</span><br><span class="line">freshclam -d // 启动更新病毒数据库进程</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h2><h3 id="socket-1"><a href="#socket-1" class="headerlink" title="socket"></a>socket</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用本地socket 【推荐】</span></span><br><span class="line">  <span class="attr">clamdscan</span>: &#123;</span><br><span class="line">    <span class="attr">socket</span>: process.<span class="property">env</span>.<span class="property">CLAMAV_SOCKET</span>,</span><br><span class="line">    <span class="attr">multiscan</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">// 最终配置</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">removeInfected</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">quarantineInfected</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">scanLog</span>: <span class="literal">null</span>,</span><br><span class="line">  <span class="attr">debugMode</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">fileList</span>: <span class="literal">null</span>,</span><br><span class="line">  <span class="attr">scanRecursively</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="attr">clamscan</span>: &#123;</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&quot;/usr/bin/clamscan&quot;</span>,</span><br><span class="line">    <span class="attr">scanArchives</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">db</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">active</span>: <span class="literal">true</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">clamdscan</span>: &#123;</span><br><span class="line">    <span class="attr">socket</span>: <span class="string">&quot;/var/run/clamav/clamd.ctl&quot;</span>,</span><br><span class="line">    <span class="attr">host</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">port</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">timeout</span>: <span class="number">60000</span>,</span><br><span class="line">    <span class="attr">localFallback</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">path</span>: <span class="string">&quot;/usr/bin/clamdscan&quot;</span>,</span><br><span class="line">    <span class="attr">configFile</span>: <span class="literal">null</span>,</span><br><span class="line">    <span class="attr">multiscan</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">reloadDb</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">active</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">bypassTest</span>: <span class="literal">false</span>,</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">preference</span>: <span class="string">&quot;clamdscan&quot;</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>配置环境变量</p>
+<p>CLAMAV_SOCKET&#x3D;”&#x2F;var&#x2F;run&#x2F;clamav&#x2F;clamd.ctl”</p>
+<blockquote>
+<p>需要在配置文件中看一下不同运行环境下socket的地址。docker 中为 &#x2F;run&#x2F;clamav&#x2F;clamd.socket</p>
+<p>如果通过 docker 镜像启动 clamav，则socket地址为 &#x2F;var&#x2F;lib&#x2F;clamav&#x2F;sockets&#x2F;clamd.sock</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="clamscan-clamdscan"><a href="#clamscan-clamdscan" class="headerlink" title="clamscan&#x2F;clamdscan"></a>clamscan&#x2F;clamdscan</h3><ul>
+<li><p>使用二进制的时候，如果文件名包含空格，则在命令行执行的时候会报错（找不到文件）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 文件路径，字符串格式不会转义，可以正常保存文件</span></span><br><span class="line"><span class="string">&quot;.../path/to/upload/file/261_560/3d100.png (1).jpg&quot;</span></span><br><span class="line"><span class="comment"># 但是拼接到命令行执行时，会将空格转义，导致找不到文件</span></span><br><span class="line">/usr/bin/clamdscan --no-summary --fdpass --multiscan .../path/to/upload/file/261_560/3d100.png\\ (1).jpg</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/eb75ed415f3d/" rel="prev" title="腾讯验证码">
+      <i class="fa fa-chevron-left"></i> 腾讯验证码
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/dea57591d174/" rel="next" title="字符和编码">
+      字符和编码 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#clamav"><span class="nav-text">clamav</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#package"><span class="nav-text">package</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#debain"><span class="nav-text">debain</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#clamav-1"><span class="nav-text">clamav</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#clamav-daemon"><span class="nav-text">clamav-daemon</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#docker"><span class="nav-text">docker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%B8%E8%BD%BD"><span class="nav-text">卸载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95"><span class="nav-text">文件目录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#log-file"><span class="nav-text">log file</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#database-directory"><span class="nav-text">database directory</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#config"><span class="nav-text">config</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#socket"><span class="nav-text">socket</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE"><span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#clamd"><span class="nav-text">clamd</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#detail"><span class="nav-text">detail</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#LocalSocket"><span class="nav-text">LocalSocket</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ConcurrentDatabaseReload"><span class="nav-text">ConcurrentDatabaseReload</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ExitOnOOM"><span class="nav-text">ExitOnOOM</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#freshclam"><span class="nav-text">freshclam</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#detail-1"><span class="nav-text">detail</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#UpdateLogFile"><span class="nav-text">UpdateLogFile</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#TestDatabases-no"><span class="nav-text">TestDatabases no</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Checks-12"><span class="nav-text">Checks 12</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ScriptedUpdates-yes"><span class="nav-text">ScriptedUpdates yes</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-text">命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#usr-bin-%E7%9B%AE%E5%BD%95%E4%B8%8B"><span class="nav-text"># &#x2F;usr&#x2F;bin 目录下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clamconf"><span class="nav-text">clamconf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clamscan"><span class="nav-text">clamscan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clamdscan"><span class="nav-text">clamdscan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clamdtop"><span class="nav-text">clamdtop</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clamsubmit"><span class="nav-text">clamsubmit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#freshclam-1"><span class="nav-text">freshclam</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#usr-sbin-%E7%9B%AE%E5%BD%95%E4%B8%8B"><span class="nav-text"># &#x2F;usr&#x2F;sbin 目录下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clamd-1"><span class="nav-text">clamd</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%89%88%E6%9C%AC"><span class="nav-text">查看版本</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="nav-text">服务管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%97%85%E6%AF%92%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-text">病毒数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-text">应用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%97%85%E6%AF%92%E6%96%87%E4%BB%B6"><span class="nav-text">测试病毒文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%BC%A0%E6%96%87%E6%A1%A3%E6%89%AB%E6%8F%8F"><span class="nav-text">上传文档扫描</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#clamscan-1"><span class="nav-text">clamscan</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8clamav"><span class="nav-text">启动clamav</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE-1"><span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#socket-1"><span class="nav-text">socket</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#clamscan-clamdscan"><span class="nav-text">clamscan&#x2F;clamdscan</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

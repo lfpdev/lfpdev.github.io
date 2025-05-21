@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="简介介绍Stable Diffusion 的原理、安装及WebUI和ComfyUI的使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文生图-Stable-Diffusion">
+<meta property="og:url" content="http://example.com/p/489bb49e7a9a/index.html">
+<meta property="og:site_name" content="你笑了">
+<meta property="og:description" content="简介介绍Stable Diffusion 的原理、安装及WebUI和ComfyUI的使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202409022214545.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202409022230840.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202409022254954.png">
+<meta property="og:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202409022256990.png">
+<meta property="article:published_time" content="2024-07-28T08:54:25.000Z">
+<meta property="article:modified_time" content="2025-01-06T04:12:56.749Z">
+<meta property="article:author" content="Li">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202409022214545.png">
+
+<link rel="canonical" href="http://example.com/p/489bb49e7a9a/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>文生图-Stable-Diffusion | 你笑了</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">你笑了</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">你的笑，是星星跳跃浪花的笑</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/p/489bb49e7a9a/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Li">
+      <meta itemprop="description" content="Node.js 开发">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="你笑了">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          文生图-Stable-Diffusion
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2024-07-28 16:54:25" itemprop="dateCreated datePublished" datetime="2024-07-28T16:54:25+08:00">2024-07-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/AIGC/" itemprop="url" rel="index"><span itemprop="name">AIGC</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>介绍Stable Diffusion 的原理、安装及WebUI和ComfyUI的使用</p>
+<span id="more"></span>
+<p><strong>定义</strong>：<a target="_blank" rel="noopener" href="https://github.com/CompVis/stable-diffusion">A latent text-to-image diffusion model</a></p>
+<h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h2><ol>
+<li><p>操作复杂，可控制性较高</p>
+</li>
+<li><p>单次生成的质量较MJ差</p>
+<blockquote>
+<p>每次生成图片的质量是随机的，不是线性递增的</p>
+<p>质量高低取决于模型是否用过与提示词相关的图像来训练</p>
+<p>质量：指图像的整体效果，包括分辨率、清晰度、颜色准确性、细节保留等因素</p>
+<p>画质：指图像中视觉细节的清晰度和精确性，属于图片质量的一部分</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><p>适合基于原图进行局部修改</p>
+<p>工作方式：不用太在意提示词，一次生成大量图片，稍后进行挑选</p>
+<h2 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h2><h3 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h3><p>可以分为两个主要阶段：</p>
+<ol>
+<li><strong>添加噪声阶段</strong>（前向扩散过程）：从清晰的图像开始，模型逐步向图像中添加噪声，直到图像变成纯噪声。这一过程用于训练模型学习如何生成噪声分布。</li>
+<li><strong>去除噪声阶段</strong>（反向扩散过程）：从纯噪声开始，模型逐步去除噪声，最终生成逼真的图像。这个过程是模型生成图像的核心。</li>
+</ol>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202409022214545.png"></p>
+<h3 id="编码器"><a href="#编码器" class="headerlink" title="编码器"></a>编码器</h3><p><strong>文本编码器</strong></p>
+<ul>
+<li><strong>作用</strong>: 将输入的文本提示转换为适合模型使用的特征向量。这个特征向量表示了文本的语义信息，并将其作为条件输入到扩散模型中，指导图像生成过程。</li>
+</ul>
+<p><strong>图像编码器</strong></p>
+<ul>
+<li><strong>作用</strong>: 用于将图像输入编码成特征表示。这些特征表示可以与文本编码结合，用于指导特定风格或特征的图像生成</li>
+</ul>
+<h3 id="解码器"><a href="#解码器" class="headerlink" title="解码器"></a>解码器</h3><ul>
+<li><strong>作用</strong>: 将隐藏的特征表示转换为最终的输出图像</li>
+</ul>
+<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><p>整合包：包括stable diffusion、ui（webui or comfyui）、模型、插件，知名的有：<a target="_blank" rel="noopener" href="https://space.bilibili.com/12566101/channel/seriesdetail?sid=3930565">B站-秋葉aaaki</a></p>
+<h3 id="在线"><a href="#在线" class="headerlink" title="在线"></a>在线</h3><p><a target="_blank" rel="noopener" href="https://www.liblib.art/">https://www.liblib.art</a></p>
+<p>适合已经知道目标图像风格的场景，直接选择模型去画</p>
+<h3 id="云服务器部署"><a href="#云服务器部署" class="headerlink" title="云服务器部署"></a>云服务器部署</h3><p>适合大量生成图片</p>
+<h4 id="AutoDL部署"><a href="#AutoDL部署" class="headerlink" title="AutoDL部署"></a>AutoDL部署</h4><p>步骤</p>
+<ol>
+<li><p>进入 <a target="_blank" rel="noopener" href="https://www.autodl.com/home">AutoDL 主页</a></p>
+</li>
+<li><p>进入主页上的<a target="_blank" rel="noopener" href="https://www.codewithgpu.com/image">算法社区</a></p>
+</li>
+<li><p>选择镜像</p>
+<p>WebUI: <a target="_blank" rel="noopener" href="https://www.codewithgpu.com/i/AUTOMATIC1111/stable-diffusion-webui/tzwm_sd_webui_A1111">https://www.codewithgpu.com/i/AUTOMATIC1111/stable-diffusion-webui/tzwm_sd_webui_A1111</a></p>
+<p>ComfyUI: <a target="_blank" rel="noopener" href="https://www.codewithgpu.com/i/comfyanonymous/ComfyUI/tzwm_ComfyUI">https://www.codewithgpu.com/i/comfyanonymous/ComfyUI/tzwm_ComfyUI</a></p>
+</li>
+<li><p>点击右侧：AutoDL创建实例</p>
+</li>
+<li><p>选择计费方式、地区、GPU型号等</p>
+</li>
+<li><p>点击立即创建</p>
+<blockquote>
+<p>需实名认证并充钱</p>
+</blockquote>
+</li>
+<li><p>创建成功后，点击快捷工具下面的 JupyterLab，进入服务器页面，点击重启，开始部署</p>
+</li>
+<li><p>部署成功后，点击快捷工具下面的自定义服务，下载隧道工具，安装启动后，填上指令、密码，点击代理，访问下面的本地路径即可</p>
+</li>
+<li><p>不使用时记得及时<strong>关机</strong>，否则继续扣费</p>
+</li>
+</ol>
+<h3 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h3><p><a target="_blank" rel="noopener" href="https://github.com/AUTOMATIC1111/stable-diffusion-webui">https://github.com/AUTOMATIC1111/stable-diffusion-webui</a></p>
+<p>以下配置生成图片速度 10-20秒</p>
+<ul>
+<li><p>win10 专业版</p>
+</li>
+<li><p>显卡 4060TI</p>
+</li>
+<li><p>显存 &gt;&#x3D;8GB</p>
+</li>
+<li><p>内存 16GB</p>
+</li>
+<li><p>硬盘 &gt;&#x3D;150GB</p>
+</li>
+</ul>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>通过WebUI和ComfyUI和SD交互</p>
+<h2 id="WebUI"><a href="#WebUI" class="headerlink" title="WebUI"></a>WebUI</h2><p>基于网页的用户界面，操作简单，适合调试各种模型、参数</p>
+<h3 id="文生图步骤"><a href="#文生图步骤" class="headerlink" title="文生图步骤"></a>文生图步骤</h3><ol>
+<li><p>选择对应的模型</p>
+</li>
+<li><p>添加提示词</p>
+</li>
+<li><p>添加参数</p>
+</li>
+<li><p>生成</p>
+</li>
+</ol>
+<h3 id="设置项"><a href="#设置项" class="headerlink" title="设置项"></a>设置项</h3><p>可将当前页面中，下面的所有配置保存为预设样式</p>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202409022230840.png"></p>
+<h4 id="模型选择"><a href="#模型选择" class="headerlink" title="模型选择"></a>模型选择</h4><ul>
+<li>一般添加一个 anything-v5-PrtRE 模型，可以生成任何常见事物的图片</li>
+<li>画人物就选择用人物训练的模型，且人物风格也取决于训练模型的图片</li>
+<li>加载模型的过程中，不要生成图片，会报错</li>
+</ul>
+<h4 id="外挂VAE模型"><a href="#外挂VAE模型" class="headerlink" title="外挂VAE模型"></a>外挂VAE模型</h4><p>在输出图像之前加一层滤镜</p>
+<ul>
+<li>一般用 Automatic（模型通常已内置）</li>
+</ul>
+<h4 id="提示词"><a href="#提示词" class="headerlink" title="提示词"></a>提示词</h4><p><strong>公式</strong>：主题+背景+个性(特别是画面质量）</p>
+<ul>
+<li><p>使用英文，多个提示词之间使用逗号分隔，是否有空格和换行不影响</p>
+</li>
+<li><p>对句子识别不好，通常拆分成词</p>
+</li>
+</ul>
+<h5 id="正向提示词"><a href="#正向提示词" class="headerlink" title="正向提示词"></a>正向提示词</h5><p>描述想要生成的图片</p>
+<h5 id="反向提示词"><a href="#反向提示词" class="headerlink" title="反向提示词"></a>反向提示词</h5><p>词通常有固定的几个</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((nsfw)), (worst quality:2), Low quality, EasyNegative</span><br></pre></td></tr></table></figure>
+
+<h5 id="质量提示词"><a href="#质量提示词" class="headerlink" title="质量提示词"></a>质量提示词</h5><ul>
+<li><p>需要强调画面质量，因为训练模型的图片质量参差不齐</p>
+<ul>
+<li>正向：masterpiece, best quality, ultra-detailed</li>
+<li>反向：nsfw, worst quality, Low quality, EasyNegative, lowres, bad anatomy, bad hands, text, error, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry</li>
+</ul>
+</li>
+<li><p>画风、材质等更多依赖于模型，提示词只是辅助</p>
+<blockquote>
+<p>模型用什么画风、材质的图片训练的，生成的图片就是什么画风、材质的</p>
+</blockquote>
+</li>
+</ul>
+<h5 id="权重"><a href="#权重" class="headerlink" title="权重"></a>权重</h5><p>表示正向或反向的程度</p>
+<p>表示方式</p>
+<ul>
+<li><p>权重值表示，格式<code>提示词:数值</code></p>
+</li>
+<li><p>小括号表示，格式<code>(提示词)</code>，一层括号表示乘以1.1倍，微调增加权重，可添加多个</p>
+</li>
+<li><p>中括号表示，格式<code>[提示词]</code>，一层括号表示乘以0.9倍，微调降低权重，可添加多个</p>
+</li>
+</ul>
+<p>取值范围</p>
+<ul>
+<li><p>默认是1，大于1增加权重，小于1降低权重</p>
+</li>
+<li><p>安全范围是 0.1-2</p>
+</li>
+<li><p>渐变语法，15步以前是白色，15步以后是黄色</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a girl ,long hair[white:yellow:15] </span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="生成参数"><a href="#生成参数" class="headerlink" title="生成参数"></a>生成参数</h4><h5 id="采样方法-sampler"><a href="#采样方法-sampler" class="headerlink" title="采样方法 sampler"></a>采样方法 sampler</h5><p>将最终的潜变量向量转换为图像</p>
+<p>使用带+的改进过的算法生成图片的质量好</p>
+<h5 id="迭代步数-step"><a href="#迭代步数-step" class="headerlink" title="迭代步数 step"></a>迭代步数 step</h5><p>步数越多越耗时</p>
+<p>一般设置成 20-40 ： 低于20较难出现高质量画面，高于40提升较小且时间更长，低于10不可用</p>
+<h5 id="高分辨率修复"><a href="#高分辨率修复" class="headerlink" title="高分辨率修复"></a>高分辨率修复</h5><h5 id="分辨率"><a href="#分辨率" class="headerlink" title="分辨率"></a>分辨率</h5><p>一般最大设置512*512，再由<strong>高分辨率修复</strong>功能放大，或生成后再进行后期处理</p>
+<p>过大的分辨率会产生多个主体和手脚错误</p>
+<blockquote>
+<p>因为训练模型的垫图比较小，而需要生成的图片太大，模型认为可能需要多个人</p>
+</blockquote>
+<h6 id="宽度"><a href="#宽度" class="headerlink" title="宽度"></a>宽度</h6><h6 id="高度"><a href="#高度" class="headerlink" title="高度"></a>高度</h6><h5 id="总批次数"><a href="#总批次数" class="headerlink" title="总批次数"></a>总批次数</h5><p>总共运行多少次</p>
+<h5 id="单批次数"><a href="#单批次数" class="headerlink" title="单批次数"></a>单批次数</h5><p>运行一次生成图片的数量，数值不要太大，容易占满显存，一般设置1-2</p>
+<blockquote>
+<p>页面右下角会显示本次运行过程占用的显存大小</p>
+</blockquote>
+<h5 id="提示词引导系数"><a href="#提示词引导系数" class="headerlink" title="提示词引导系数"></a>提示词引导系数</h5><p>提示词对画面结果的影响，一般为5-10 </p>
+<h5 id="随机数种子"><a href="#随机数种子" class="headerlink" title="随机数种子"></a>随机数种子</h5><p>默认是-1，如果要生成一模一样的图片，需要保持随机数种子一致</p>
+<h2 id="ComfyUI"><a href="#ComfyUI" class="headerlink" title="ComfyUI"></a>ComfyUI</h2><p>一种模块化的、节点式的用户界面，操作复杂，适合定制<strong>工作流</strong></p>
+<h3 id="常用节点"><a href="#常用节点" class="headerlink" title="常用节点"></a>常用节点</h3><h4 id="Checkpoint-加载器"><a href="#Checkpoint-加载器" class="headerlink" title="Checkpoint 加载器"></a>Checkpoint 加载器</h4><p>作用</p>
+<ol>
+<li>选择模型</li>
+</ol>
+<h4 id="CLIP-文本编辑器"><a href="#CLIP-文本编辑器" class="headerlink" title="CLIP 文本编辑器"></a>CLIP 文本编辑器</h4><blockquote>
+<p>本质是一个模型，将文字映射为潜空间下的图像</p>
+</blockquote>
+<p>作用：</p>
+<ol>
+<li>输入正向、反向提示词</li>
+</ol>
+<h4 id="K采样器"><a href="#K采样器" class="headerlink" title="K采样器"></a>K采样器</h4><p>作用：</p>
+<ol>
+<li>连接模型、提示词、latent设定</li>
+<li>设置生成参数</li>
+</ol>
+<h4 id="Latent"><a href="#Latent" class="headerlink" title="Latent"></a>Latent</h4><p>作用</p>
+<ol>
+<li>设定潜空间的图像参数</li>
+</ol>
+<h4 id="VAE解码"><a href="#VAE解码" class="headerlink" title="VAE解码"></a>VAE解码</h4><p>作用</p>
+<ol>
+<li>将压缩后的潜在空间的图像特征还原成原始图片</li>
+</ol>
+<h4 id="预览图像"><a href="#预览图像" class="headerlink" title="预览图像"></a>预览图像</h4><h4 id="保存图像"><a href="#保存图像" class="headerlink" title="保存图像"></a>保存图像</h4><h4 id="图像缩放"><a href="#图像缩放" class="headerlink" title="图像缩放"></a>图像缩放</h4><h4 id="图像按系数缩放"><a href="#图像按系数缩放" class="headerlink" title="图像按系数缩放"></a>图像按系数缩放</h4><h3 id="文生图"><a href="#文生图" class="headerlink" title="文生图"></a>文生图</h3><p>步骤</p>
+<ol>
+<li>新建<code>Checkpoint 加载器</code>和<code>K采样器</code>，以 <code>K采样器</code>为中心，前后扩展</li>
+</ol>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202409022254954.png"></p>
+<h3 id="图生图"><a href="#图生图" class="headerlink" title="图生图"></a>图生图</h3><ol>
+<li>图像需要经过VAE编码器才能与潜空间的采样器连接</li>
+<li>调整“降噪”来设置重绘比例，1为完全重绘</li>
+<li>空Latent不能控制图生图， 需要在加载图像后，使用“图像缩放”或 “图像按系数缩放” 来控制，放在“加载图像”和“VAE”编码之间</li>
+</ol>
+<p><img src="https://lifp-image.oss-cn-shenzhen.aliyuncs.com/pic/202409022256990.png"></p>
+<h3 id="使用别人的工作流"><a href="#使用别人的工作流" class="headerlink" title="使用别人的工作流"></a>使用别人的工作流</h3><h4 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h4><ul>
+<li><p>加载 json文件</p>
+<p>如果节点是红色的，管理器，安装缺失的节点，安装，重启</p>
+</li>
+<li><p>工作流截图，先按照截图跑一遍，再单个拆解每个节点的原理</p>
+</li>
+</ul>
+<h4 id="参考工作流"><a href="#参考工作流" class="headerlink" title="参考工作流"></a>参考工作流</h4><p>官方 <a target="_blank" rel="noopener" href="https://comfyanonymous.github.io/ComfyUI_examples/">https://comfyanonymous.github.io/ComfyUI_examples/</a> </p>
+<p>社群 <a target="_blank" rel="noopener" href="https://comfyworkflows.com/">https://comfyworkflows.com/</a></p>
+<p>成熟的工作流 <a target="_blank" rel="noopener" href="https://github.com/cubiq/ComfyUI_Workflows">https://github.com/cubiq/ComfyUI_Workflows</a> </p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/p/be39f81be7c6/" rel="prev" title="文生图-Midjourney">
+      <i class="fa fa-chevron-left"></i> 文生图-Midjourney
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/p/3c8b7dcd7abe/" rel="next" title="音视频创作">
+      音视频创作 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-text">特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-text">应用场景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-text">工作流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%99%A8"><span class="nav-text">编码器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E7%A0%81%E5%99%A8"><span class="nav-text">解码器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2"><span class="nav-text">部署</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%BA%BF"><span class="nav-text">在线</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2"><span class="nav-text">云服务器部署</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AutoDL%E9%83%A8%E7%BD%B2"><span class="nav-text">AutoDL部署</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2"><span class="nav-text">本地部署</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="nav-text">如何使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WebUI"><span class="nav-text">WebUI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E7%94%9F%E5%9B%BE%E6%AD%A5%E9%AA%A4"><span class="nav-text">文生图步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E9%A1%B9"><span class="nav-text">设置项</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9"><span class="nav-text">模型选择</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%96%E6%8C%82VAE%E6%A8%A1%E5%9E%8B"><span class="nav-text">外挂VAE模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA%E8%AF%8D"><span class="nav-text">提示词</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AD%A3%E5%90%91%E6%8F%90%E7%A4%BA%E8%AF%8D"><span class="nav-text">正向提示词</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%8D%E5%90%91%E6%8F%90%E7%A4%BA%E8%AF%8D"><span class="nav-text">反向提示词</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%B4%A8%E9%87%8F%E6%8F%90%E7%A4%BA%E8%AF%8D"><span class="nav-text">质量提示词</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%9D%83%E9%87%8D"><span class="nav-text">权重</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%8F%82%E6%95%B0"><span class="nav-text">生成参数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%87%87%E6%A0%B7%E6%96%B9%E6%B3%95-sampler"><span class="nav-text">采样方法 sampler</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E6%AD%A5%E6%95%B0-step"><span class="nav-text">迭代步数 step</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%AB%98%E5%88%86%E8%BE%A8%E7%8E%87%E4%BF%AE%E5%A4%8D"><span class="nav-text">高分辨率修复</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%88%86%E8%BE%A8%E7%8E%87"><span class="nav-text">分辨率</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#%E5%AE%BD%E5%BA%A6"><span class="nav-text">宽度</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#%E9%AB%98%E5%BA%A6"><span class="nav-text">高度</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%80%BB%E6%89%B9%E6%AC%A1%E6%95%B0"><span class="nav-text">总批次数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8D%95%E6%89%B9%E6%AC%A1%E6%95%B0"><span class="nav-text">单批次数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%BC%95%E5%AF%BC%E7%B3%BB%E6%95%B0"><span class="nav-text">提示词引导系数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%9A%8F%E6%9C%BA%E6%95%B0%E7%A7%8D%E5%AD%90"><span class="nav-text">随机数种子</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ComfyUI"><span class="nav-text">ComfyUI</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E8%8A%82%E7%82%B9"><span class="nav-text">常用节点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Checkpoint-%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-text">Checkpoint 加载器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CLIP-%E6%96%87%E6%9C%AC%E7%BC%96%E8%BE%91%E5%99%A8"><span class="nav-text">CLIP 文本编辑器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#K%E9%87%87%E6%A0%B7%E5%99%A8"><span class="nav-text">K采样器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Latent"><span class="nav-text">Latent</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VAE%E8%A7%A3%E7%A0%81"><span class="nav-text">VAE解码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%84%E8%A7%88%E5%9B%BE%E5%83%8F"><span class="nav-text">预览图像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%9D%E5%AD%98%E5%9B%BE%E5%83%8F"><span class="nav-text">保存图像</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E7%BC%A9%E6%94%BE"><span class="nav-text">图像缩放</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%BE%E5%83%8F%E6%8C%89%E7%B3%BB%E6%95%B0%E7%BC%A9%E6%94%BE"><span class="nav-text">图像按系数缩放</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E7%94%9F%E5%9B%BE"><span class="nav-text">文生图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%BE%E7%94%9F%E5%9B%BE"><span class="nav-text">图生图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%88%AB%E4%BA%BA%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-text">使用别人的工作流</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4"><span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-text">参考工作流</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Li</p>
+  <div class="site-description" itemprop="description">Node.js 开发</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/lfpdev" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;lfpdev" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.cnblogs.com/usmile" title="博客园 → https:&#x2F;&#x2F;www.cnblogs.com&#x2F;usmile" rel="noopener" target="_blank"><i class="fas fa-blog fa-fw"></i>博客园</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">粤ICP备2021129701号 </a>
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2021 – 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Li</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
